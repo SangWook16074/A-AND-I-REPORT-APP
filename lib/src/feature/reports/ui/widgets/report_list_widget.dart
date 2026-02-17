@@ -15,42 +15,60 @@ class ReportListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [_label(), _reports()],
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [_label(context), _reports(context)],
     );
   }
 
-  //
-  Widget _label() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Row(
-          children: [
-            Builder(builder: (context) {
-              return Text(
-                label,
-                style: TextStyle(
-                    color: const Color(0xff000000),
-                    fontSize: ResponsiveLayout.isMobile(context) ? 18 : 22,
-                    fontWeight: FontWeight.w600),
-              );
-            }),
-            const SizedBox(
-              width: 30,
-            ),
-            ReportStatus(type: ReportStatueType.fromEndAt(reports[0].endAt)),
-          ],
-        ),
-      );
+  Widget _label(BuildContext context) {
+    final isMobile = ResponsiveLayout.isMobile(context);
+    final weekStatus = reports.any(
+      (report) =>
+          ReportStatueType.fromEndAt(report.endAt) == ReportStatueType.progress,
+    )
+        ? ReportStatueType.progress
+        : ReportStatueType.done;
 
-  Widget _reports() => Column(
-        children: List.generate(
-            reports.length,
-            (index) => Builder(builder: (context) {
-                  return InkWell(
-                    onTap: () => context.go("/report/${reports[index].id}"),
-                    child: ReportTitleRow(
-                      reportSummary: reports[index],
-                    ),
-                  );
-                })),
+    return Padding(
+      padding:
+          EdgeInsets.only(top: isMobile ? 8 : 10, bottom: isMobile ? 10 : 14),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: const Color(0xFF111827),
+                fontSize: isMobile ? 18 : 22,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          ReportStatus(type: weekStatus),
+        ],
+      ),
+    );
+  }
+
+  Widget _reports(BuildContext context) => Column(
+        children: List.generate(reports.length, (index) {
+          final report = reports[index];
+          final done =
+              ReportStatueType.fromEndAt(report.endAt) == ReportStatueType.done;
+          return Padding(
+            padding:
+                EdgeInsets.only(bottom: index == reports.length - 1 ? 0 : 10),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(14),
+              onTap: () => context.go(
+                  "/report/${report.id}?endAt=${report.endAt.millisecondsSinceEpoch}"),
+              child: ReportTitleRow(
+                reportSummary: report,
+                indexLabel: "${report.week}-${report.seq}.",
+                isDone: done,
+              ),
+            ),
+          );
+        }),
       );
 }

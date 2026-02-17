@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A&amp;I Assignment Detail with Countdown</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#000000",
+                        "background-light": "#f8f9fa",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "Noto Sans KR", "sans-serif"],
+                        mono: ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "8px",
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .nav-tab {
+            @apply text-black dark:text-white font-bold py-4 text-sm tracking-wide border-b-2 border-black dark:border-white transition-all opacity-100;
+        }
+        .nav-tab:hover {
+            @apply opacity-70;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+<div class="fixed top-6 right-6 z-50">
+<button class="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md border border-gray-200 dark:border-gray-700 hover:scale-110 transition-transform" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-icons text-gray-600 dark:text-gray-300">dark_mode</span>
+</button>
+</div>
+<main class="max-w-4xl mx-auto px-6 py-12 md:py-20">
+<div class="bg-white dark:bg-gray-900 rounded-t-2xl border-x border-t border-gray-200 dark:border-gray-800 p-8 md:p-12 pb-0 md:pb-0">
+<header class="flex flex-col mb-8">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center space-x-4">
+<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">터미널 계산기</h1>
+<div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700">
+<span class="text-xs font-medium text-gray-500 dark:text-gray-400">Lv.</span>
+<span class="text-sm font-bold text-gray-800 dark:text-gray-200">하</span>
+</div>
+</div>
+<div class="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="text-sm font-medium tracking-tight">마감까지 <span class="font-mono font-semibold text-gray-900 dark:text-white ml-1">12:45:30</span></span>
+</div>
+</div>
+</header>
+<nav class="flex space-x-12 border-b border-gray-100 dark:border-gray-800">
+<a class="nav-tab" href="#">문제</a>
+<a class="nav-tab opacity-40 border-transparent hover:border-gray-300" href="#">제출</a>
+<a class="nav-tab opacity-40 border-transparent hover:border-gray-300" href="#">결과</a>
+</nav>
+</div>
+<article class="bg-white dark:bg-gray-900 rounded-b-2xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+<div class="p-8 md:p-12">
+<section class="mb-12">
+<div class="flex items-center mb-4">
+<h2 class="text-xl font-bold text-gray-900 dark:text-white">문제 설명</h2>
+</div>
+<hr class="border-gray-100 dark:border-gray-800 mb-6"/>
+<div class="space-y-4 text-gray-600 dark:text-gray-400 leading-relaxed text-sm md:text-base">
+<p>터미널 계산기는 터미널 입력을 통해서 연산된 결과값을 출력하는 프로그램입니다.</p>
+<p>터미널 계산기는 실행이 되면 사용자에게 명령어를 입력받고 계산을 수행합니다. 명령어는 <span class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded font-mono text-gray-900 dark:text-gray-200">[COMMAND] [Value]</span>의 구조를 갖고 있습니다. COMMAND는 각 연산을 의미하고, Value는 연산에 사용되는 값을 의미합니다. 명령어 종류에 따라서 Value는 존재하지 않을 수도 있습니다.</p>
+<p>터미널 계산기는 아래와 같은 연산을 수행합니다. 그 외에 연산을 입력받는 경우에는 명령을 수행하지 않습니다.</p>
+<ul class="list-none space-y-2 mt-4 ml-2">
+<li class="flex items-start">
+<span class="font-mono font-bold mr-3 text-gray-900 dark:text-white">ADD [Value]:</span>
+<span>명령어는 Value를 더하는 연산입니다.</span>
+</li>
+<li class="flex items-start">
+<span class="font-mono font-bold mr-3 text-gray-900 dark:text-white">MINUS [Value]:</span>
+<span>명령어는 Value를 빼는 연산입니다.</span>
+</li>
+<li class="flex items-start">
+<span class="font-mono font-bold mr-3 text-gray-900 dark:text-white">MUL [Value]:</span>
+<span>명령어는 Value를 곱하는 연산입니다.</span>
+</li>
+<li class="flex items-start">
+<span class="font-mono font-bold mr-3 text-gray-900 dark:text-white">DIV [Value]:</span>
+<span>명령어는 Value를 나누는 연산입니다.</span>
+</li>
+<li class="flex items-start">
+<span class="font-mono font-bold mr-3 text-gray-900 dark:text-white">CLOSE:</span>
+<span>명령어는 프로그램을 종료하고 결과값을 출력하는 연산입니다.</span>
+</li>
+</ul>
+<p class="pt-4">터미널 계산기는 초기 값으로 0을 갖습니다.</p>
+<p>CLOSE 명령을 통해 계산이 종료되면 터미널 계산기는 현재 값에 대해서 아래와 같이 출력하게 됩니다.</p>
+<div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg font-mono text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-gray-800">
+                            + [Result], - [Result], [Result]
+                        </div>
+<p class="text-sm opacity-80 italic">여기서, Result는 모든 연산이 끝난 결과값을 의미합니다. 결과값에 대해서 부호는 양수와 음수를 나타내며 0인 경우에는 부호를 출력하지 않습니다. 즉, 부호가 없는 경우는 0밖에 없습니다. 또한, 계산 결과는 모두 정수로 출력해야 합니다.</p>
+</div>
+</section>
+<section class="mb-12">
+<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">문제 요구 사항</h2>
+<hr class="border-gray-100 dark:border-gray-800 mb-6"/>
+<ul class="space-y-3">
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>각 계산 절차를 함수를 통해서 분리해봅시다.</span>
+</li>
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>프로그램의 시작은 <code class="font-mono text-xs bg-gray-100 dark:bg-gray-800 p-1 rounded">main()</code> 함수를 통해서 시작됩니다.</span>
+</li>
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>사용자 명령어를 처리하는 <code class="font-mono text-xs bg-gray-100 dark:bg-gray-800 p-1 rounded">input()</code> 함수를 정의해봅시다.</span>
+</li>
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>계산을 수행하는 <code class="font-mono text-xs bg-gray-100 dark:bg-gray-800 p-1 rounded">calculate()</code> 함수를 정의해봅시다.</span>
+</li>
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>결과를 출력하는 <code class="font-mono text-xs bg-gray-100 dark:bg-gray-800 p-1 rounded">display()</code> 함수를 정의해봅시다.</span>
+</li>
+</ul>
+</section>
+<section class="mb-12">
+<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">학습 정리 목표</h2>
+<hr class="border-gray-100 dark:border-gray-800 mb-6"/>
+<ul class="space-y-3">
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>함수의 정의와 매개변수 활용 능력 향상</span>
+</li>
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>조건문과 반복문을 활용한 로직 설계 이해</span>
+</li>
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>표준 입력(stdin)을 통한 문자열 파싱 이해</span>
+</li>
+<li class="flex items-center text-gray-600 dark:text-gray-400">
+<span class="material-icons text-sm mr-3 text-gray-400">fiber_manual_record</span>
+<span>출력 형식 규격에 따른 데이터 포맷팅 실습</span>
+</li>
+</ul>
+</section>
+<section>
+<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">예제 입출력</h2>
+<hr class="border-gray-100 dark:border-gray-800 mb-8"/>
+<div class="space-y-10">
+<div>
+<h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">예제 입력 1</h3>
+<div class="code-block bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 text-sm leading-6">
+                                ADD 1<br/>
+                                ADD 10<br/>
+                                ADD 10<br/>
+                                CLOSE
+                            </div>
+<h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-6 mb-3">예제 출력 1</h3>
+<div class="code-block bg-gray-100 dark:bg-gray-700 p-4 rounded-xl text-sm font-bold text-primary dark:text-white">
+                                +21
+                            </div>
+</div>
+</div>
+</section>
+</div>
+</article>
+<footer class="mt-16 text-center space-y-4">
+<div class="flex flex-col items-center">
+<span class="text-4xl font-black tracking-tighter text-gray-900 dark:text-white select-none">A&amp;I</span>
+<span class="text-[10px] uppercase tracking-[0.2em] font-semibold text-gray-400 dark:text-gray-500">android and ios develop.</span>
+</div>
+<p class="text-[11px] text-gray-400 dark:text-gray-600">이 사이트는 A&amp;I 회원들을 위한 과제 사이트입니다.</p>
+</footer>
+</main>
+<script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+
+</body></html>

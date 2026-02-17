@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ReportDatailState {
-  Report get report;
+  ViewStatus get status;
+  Report? get report;
   String get errorMsg;
 
   /// Create a copy of ReportDatailState
@@ -30,17 +31,18 @@ mixin _$ReportDatailState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ReportDatailState &&
+            (identical(other.status, status) || other.status == status) &&
             (identical(other.report, report) || other.report == report) &&
             (identical(other.errorMsg, errorMsg) ||
                 other.errorMsg == errorMsg));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, report, errorMsg);
+  int get hashCode => Object.hash(runtimeType, status, report, errorMsg);
 
   @override
   String toString() {
-    return 'ReportDatailState(report: $report, errorMsg: $errorMsg)';
+    return 'ReportDatailState(status: $status, report: $report, errorMsg: $errorMsg)';
   }
 }
 
@@ -50,9 +52,9 @@ abstract mixin class $ReportDatailStateCopyWith<$Res> {
           ReportDatailState value, $Res Function(ReportDatailState) _then) =
       _$ReportDatailStateCopyWithImpl;
   @useResult
-  $Res call({Report report, String errorMsg});
+  $Res call({ViewStatus status, Report? report, String errorMsg});
 
-  $ReportCopyWith<$Res> get report;
+  $ReportCopyWith<$Res>? get report;
 }
 
 /// @nodoc
@@ -68,14 +70,19 @@ class _$ReportDatailStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? report = null,
+    Object? status = null,
+    Object? report = freezed,
     Object? errorMsg = null,
   }) {
     return _then(_self.copyWith(
-      report: null == report
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as ViewStatus,
+      report: freezed == report
           ? _self.report
           : report // ignore: cast_nullable_to_non_nullable
-              as Report,
+              as Report?,
       errorMsg: null == errorMsg
           ? _self.errorMsg
           : errorMsg // ignore: cast_nullable_to_non_nullable
@@ -87,8 +94,12 @@ class _$ReportDatailStateCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ReportCopyWith<$Res> get report {
-    return $ReportCopyWith<$Res>(_self.report, (value) {
+  $ReportCopyWith<$Res>? get report {
+    if (_self.report == null) {
+      return null;
+    }
+
+    return $ReportCopyWith<$Res>(_self.report!, (value) {
       return _then(_self.copyWith(report: value));
     });
   }
@@ -143,6 +154,8 @@ extension ReportDatailStatePatterns on ReportDatailState {
     switch (_that) {
       case _ReportDatailState():
         return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
     }
   }
 
@@ -185,13 +198,14 @@ extension ReportDatailStatePatterns on ReportDatailState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(Report report, String errorMsg)? $default, {
+    TResult Function(ViewStatus status, Report? report, String errorMsg)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ReportDatailState() when $default != null:
-        return $default(_that.report, _that.errorMsg);
+        return $default(_that.status, _that.report, _that.errorMsg);
       case _:
         return orElse();
     }
@@ -212,12 +226,15 @@ extension ReportDatailStatePatterns on ReportDatailState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(Report report, String errorMsg) $default,
+    TResult Function(ViewStatus status, Report? report, String errorMsg)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ReportDatailState():
-        return $default(_that.report, _that.errorMsg);
+        return $default(_that.status, _that.report, _that.errorMsg);
+      case _:
+        throw StateError('Unexpected subclass');
     }
   }
 
@@ -235,12 +252,13 @@ extension ReportDatailStatePatterns on ReportDatailState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(Report report, String errorMsg)? $default,
+    TResult? Function(ViewStatus status, Report? report, String errorMsg)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ReportDatailState() when $default != null:
-        return $default(_that.report, _that.errorMsg);
+        return $default(_that.status, _that.report, _that.errorMsg);
       case _:
         return null;
     }
@@ -250,10 +268,14 @@ extension ReportDatailStatePatterns on ReportDatailState {
 /// @nodoc
 
 class _ReportDatailState implements ReportDatailState {
-  const _ReportDatailState({required this.report, this.errorMsg = ""});
+  const _ReportDatailState(
+      {this.status = ViewStatus.loading, this.report, this.errorMsg = ''});
 
   @override
-  final Report report;
+  @JsonKey()
+  final ViewStatus status;
+  @override
+  final Report? report;
   @override
   @JsonKey()
   final String errorMsg;
@@ -271,17 +293,18 @@ class _ReportDatailState implements ReportDatailState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ReportDatailState &&
+            (identical(other.status, status) || other.status == status) &&
             (identical(other.report, report) || other.report == report) &&
             (identical(other.errorMsg, errorMsg) ||
                 other.errorMsg == errorMsg));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, report, errorMsg);
+  int get hashCode => Object.hash(runtimeType, status, report, errorMsg);
 
   @override
   String toString() {
-    return 'ReportDatailState(report: $report, errorMsg: $errorMsg)';
+    return 'ReportDatailState(status: $status, report: $report, errorMsg: $errorMsg)';
   }
 }
 
@@ -293,10 +316,10 @@ abstract mixin class _$ReportDatailStateCopyWith<$Res>
       __$ReportDatailStateCopyWithImpl;
   @override
   @useResult
-  $Res call({Report report, String errorMsg});
+  $Res call({ViewStatus status, Report? report, String errorMsg});
 
   @override
-  $ReportCopyWith<$Res> get report;
+  $ReportCopyWith<$Res>? get report;
 }
 
 /// @nodoc
@@ -312,14 +335,19 @@ class __$ReportDatailStateCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? report = null,
+    Object? status = null,
+    Object? report = freezed,
     Object? errorMsg = null,
   }) {
     return _then(_ReportDatailState(
-      report: null == report
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as ViewStatus,
+      report: freezed == report
           ? _self.report
           : report // ignore: cast_nullable_to_non_nullable
-              as Report,
+              as Report?,
       errorMsg: null == errorMsg
           ? _self.errorMsg
           : errorMsg // ignore: cast_nullable_to_non_nullable
@@ -331,8 +359,12 @@ class __$ReportDatailStateCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ReportCopyWith<$Res> get report {
-    return $ReportCopyWith<$Res>(_self.report, (value) {
+  $ReportCopyWith<$Res>? get report {
+    if (_self.report == null) {
+      return null;
+    }
+
+    return $ReportCopyWith<$Res>(_self.report!, (value) {
       return _then(_self.copyWith(report: value));
     });
   }

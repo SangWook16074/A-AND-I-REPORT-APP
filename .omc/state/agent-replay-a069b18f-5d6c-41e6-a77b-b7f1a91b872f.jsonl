@@ -1,0 +1,8 @@
+{"t":0,"agent":"6ea0b5b","agent_type":"Explore","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"e9ad618","agent_type":"Plan","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"6ea0b5b","agent_type":"Explore","event":"agent_stop","success":true,"duration_ms":2229}
+{"t":0,"agent":"e9ad618","agent_type":"Plan","event":"agent_stop","success":true,"duration_ms":9900}
+{"t":0,"agent":"0342001","agent_type":"Explore","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"0342001","agent_type":"Explore","event":"agent_stop","success":true,"duration_ms":105208}
+{"t":0,"agent":"7a23680","agent_type":"Explore","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"7a23680","agent_type":"Explore","event":"agent_stop","success":true,"duration_ms":100582}

@@ -113,11 +113,17 @@ GoRouter goRouter(Ref ref) {
         routes: [
           GoRoute(
             path: ':id',
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: ReportDetailUI(
-                id: state.pathParameters['id']!,
-              ),
-            ),
+            pageBuilder: (context, state) {
+              final endAtMs = state.uri.queryParameters['endAt'];
+              return NoTransitionPage(
+                child: ReportDetailUI(
+                  id: state.pathParameters['id']!,
+                  endAt: endAtMs != null
+                      ? DateTime.fromMillisecondsSinceEpoch(int.parse(endAtMs))
+                      : null,
+                ),
+              );
+            },
           ),
         ],
       ),

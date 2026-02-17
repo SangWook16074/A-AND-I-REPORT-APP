@@ -27,24 +27,41 @@ class ReportStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case ReportStatueType.done:
-        return _basic(color: const Color(0xffafafaf));
+        return _basic(
+          backgroundColor: const Color(0xFFF4F4F5),
+          borderColor: const Color(0xFFE4E4E7),
+          textColor: const Color(0xFF71717A),
+        );
       case ReportStatueType.progress:
-        return _basic(color: const Color(0xff7EFF72));
+        return _basic(
+          backgroundColor: const Color(0xFFECFDF3),
+          borderColor: const Color(0xFFA7F3D0),
+          textColor: const Color(0xFF059669),
+        );
     }
   }
 
   Widget _basic({
-    required Color color,
+    required Color backgroundColor,
+    required Color borderColor,
+    required Color textColor,
   }) =>
       Container(
-        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(width: 2, color: color)),
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(width: 1, color: borderColor),
+        ),
         alignment: Alignment.center,
         child: Text(
           type.status,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            color: textColor,
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.7,
+          ),
         ),
       );
 }

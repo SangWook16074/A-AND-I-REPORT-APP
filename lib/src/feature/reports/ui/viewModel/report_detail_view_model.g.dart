@@ -7,7 +7,7 @@ part of 'report_detail_view_model.dart';
 // **************************************************************************
 
 String _$reportDetailViewModelHash() =>
-    r'9b4103e97cecd53e11d5fddb92364820c85895ec';
+    r'ef450afcaa9e8101df2010d3be77fc0cc931746c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,45 +31,24 @@ class _SystemHash {
 }
 
 abstract class _$ReportDetailViewModel
-    extends BuildlessAutoDisposeAsyncNotifier<ReportDatailState> {
+    extends BuildlessAutoDisposeNotifier<ReportDatailState> {
   late final String id;
 
-  FutureOr<ReportDatailState> build(
+  ReportDatailState build(
     String id,
   );
 }
 
-/// 과제 상세 화면의 상태를 관리하는 ViewModel입니다.
-///
-/// [AutoDisposeFamilyAsyncNotifier]를 상속받아 구현되었습니다.
-/// `family` 수정자를 사용하여 [id] 파라미터를 받아 특정 과제의 상세 정보를 로드합니다.
-///
-/// Copied from [ReportDetailViewModel].
+/// See also [ReportDetailViewModel].
 @ProviderFor(ReportDetailViewModel)
 const reportDetailViewModelProvider = ReportDetailViewModelFamily();
 
-/// 과제 상세 화면의 상태를 관리하는 ViewModel입니다.
-///
-/// [AutoDisposeFamilyAsyncNotifier]를 상속받아 구현되었습니다.
-/// `family` 수정자를 사용하여 [id] 파라미터를 받아 특정 과제의 상세 정보를 로드합니다.
-///
-/// Copied from [ReportDetailViewModel].
-class ReportDetailViewModelFamily
-    extends Family<AsyncValue<ReportDatailState>> {
-  /// 과제 상세 화면의 상태를 관리하는 ViewModel입니다.
-  ///
-  /// [AutoDisposeFamilyAsyncNotifier]를 상속받아 구현되었습니다.
-  /// `family` 수정자를 사용하여 [id] 파라미터를 받아 특정 과제의 상세 정보를 로드합니다.
-  ///
-  /// Copied from [ReportDetailViewModel].
+/// See also [ReportDetailViewModel].
+class ReportDetailViewModelFamily extends Family<ReportDatailState> {
+  /// See also [ReportDetailViewModel].
   const ReportDetailViewModelFamily();
 
-  /// 과제 상세 화면의 상태를 관리하는 ViewModel입니다.
-  ///
-  /// [AutoDisposeFamilyAsyncNotifier]를 상속받아 구현되었습니다.
-  /// `family` 수정자를 사용하여 [id] 파라미터를 받아 특정 과제의 상세 정보를 로드합니다.
-  ///
-  /// Copied from [ReportDetailViewModel].
+  /// See also [ReportDetailViewModel].
   ReportDetailViewModelProvider call(
     String id,
   ) {
@@ -102,21 +81,10 @@ class ReportDetailViewModelFamily
   String? get name => r'reportDetailViewModelProvider';
 }
 
-/// 과제 상세 화면의 상태를 관리하는 ViewModel입니다.
-///
-/// [AutoDisposeFamilyAsyncNotifier]를 상속받아 구현되었습니다.
-/// `family` 수정자를 사용하여 [id] 파라미터를 받아 특정 과제의 상세 정보를 로드합니다.
-///
-/// Copied from [ReportDetailViewModel].
-class ReportDetailViewModelProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<ReportDetailViewModel,
-        ReportDatailState> {
-  /// 과제 상세 화면의 상태를 관리하는 ViewModel입니다.
-  ///
-  /// [AutoDisposeFamilyAsyncNotifier]를 상속받아 구현되었습니다.
-  /// `family` 수정자를 사용하여 [id] 파라미터를 받아 특정 과제의 상세 정보를 로드합니다.
-  ///
-  /// Copied from [ReportDetailViewModel].
+/// See also [ReportDetailViewModel].
+class ReportDetailViewModelProvider extends AutoDisposeNotifierProviderImpl<
+    ReportDetailViewModel, ReportDatailState> {
+  /// See also [ReportDetailViewModel].
   ReportDetailViewModelProvider(
     String id,
   ) : this._internal(
@@ -146,7 +114,7 @@ class ReportDetailViewModelProvider
   final String id;
 
   @override
-  FutureOr<ReportDatailState> runNotifierBuild(
+  ReportDatailState runNotifierBuild(
     covariant ReportDetailViewModel notifier,
   ) {
     return notifier.build(
@@ -171,8 +139,8 @@ class ReportDetailViewModelProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<ReportDetailViewModel,
-      ReportDatailState> createElement() {
+  AutoDisposeNotifierProviderElement<ReportDetailViewModel, ReportDatailState>
+      createElement() {
     return _ReportDetailViewModelProviderElement(this);
   }
 
@@ -193,13 +161,13 @@ class ReportDetailViewModelProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin ReportDetailViewModelRef
-    on AutoDisposeAsyncNotifierProviderRef<ReportDatailState> {
+    on AutoDisposeNotifierProviderRef<ReportDatailState> {
   /// The parameter `id` of this provider.
   String get id;
 }
 
 class _ReportDetailViewModelProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<ReportDetailViewModel,
+    extends AutoDisposeNotifierProviderElement<ReportDetailViewModel,
         ReportDatailState> with ReportDetailViewModelRef {
   _ReportDetailViewModelProviderElement(super.provider);
 
