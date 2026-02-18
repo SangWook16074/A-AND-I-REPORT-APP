@@ -13,7 +13,7 @@ abstract class RemoteAuthDatasource {
   /// 로그인 API
   ///
   ///
-  @POST("/api/member/login")
+  @POST("/v1/auth/login")
   @Headers(<String, dynamic>{
     'Content-Type': 'application/json',
   })

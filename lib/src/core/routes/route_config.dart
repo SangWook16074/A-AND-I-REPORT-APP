@@ -3,6 +3,7 @@ import 'package:a_and_i_report_web_server/src/feature/articles/presentation/arti
 import 'package:a_and_i_report_web_server/src/feature/articles/presentation/article_detail_view.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/presentation/article_list_view.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/presentation/article_write_view.dart';
+import 'package:a_and_i_report_web_server/src/feature/activate/ui/activate_page.dart';
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/faq_light_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -84,11 +85,29 @@ GoRouter goRouter(Ref ref) {
         },
       ),
       GoRoute(
+        path: '/login',
+        name: "로그인 | A&I",
+        pageBuilder: (context, state) {
+          html.document.title = "로그인 | A&I";
+          return NoTransitionPage(child: const LoginUI());
+        },
+      ),
+      GoRoute(
         path: '/sign-in',
         name: "로그인 | A&I",
         pageBuilder: (context, state) {
           html.document.title = "로그인 | A&I";
           return NoTransitionPage(child: const LoginUI());
+        },
+      ),
+      GoRoute(
+        path: '/activate',
+        name: "계정 활성화 | A&I",
+        pageBuilder: (context, state) {
+          html.document.title = "계정 활성화 | A&I";
+          return NoTransitionPage(
+            child: ActivatePage(token: state.uri.queryParameters['token']),
+          );
         },
       ),
       GoRoute(

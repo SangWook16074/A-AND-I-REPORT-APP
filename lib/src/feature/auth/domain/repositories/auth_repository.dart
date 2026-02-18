@@ -8,7 +8,7 @@ import 'package:a_and_i_report_web_server/src/feature/auth/data/dtos/login_respo
 abstract class AuthRepository {
   /// 서버에 로그인을 요청합니다.
   ///
-  /// [dto]에 담긴 사용자 정보(ID, PW)를 전송하고, 성공 시 [LoginResponseDto]를 반환합니다.
+  /// [dto]에 담긴 사용자명과 비밀번호를 전송하고, 성공 시 [LoginResponseDto]를 반환합니다.
   Future<LoginResponseDto> login(LoginRequestDto dto);
 
   /// 액세스 토큰을 로컬 저장소(Session Storage 등)에 저장합니다.

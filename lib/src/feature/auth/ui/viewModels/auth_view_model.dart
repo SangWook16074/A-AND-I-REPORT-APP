@@ -55,7 +55,7 @@ class AuthViewModel extends _$AuthViewModel {
       case SignIn():
         try {
           final dto =
-              LoginRequestDto(userId: event.account, password: event.password);
+              LoginRequestDto(username: event.account, password: event.password);
           await ref.read(userLoginUsecaseProvider).call(dto);
           state = state.copyWith(status: AuthenticationStatus.authenticated);
         } catch (e) {

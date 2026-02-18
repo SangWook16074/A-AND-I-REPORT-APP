@@ -33,7 +33,7 @@ class _RemoteAuthDatasource implements RemoteAuthDatasource {
       )
           .compose(
             _dio.options,
-            '/api/member/login',
+            '/v1/auth/login',
             queryParameters: queryParameters,
             data: _data,
           )

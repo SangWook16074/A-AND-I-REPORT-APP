@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'login_request_dto.dart';
+part of 'activate_request_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,82 +13,73 @@ part of 'login_request_dto.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$LoginRequestDto implements DiagnosticableTreeMixin {
-  /// 로그인 사용자명
-  String get username;
+mixin _$ActivateRequestDto {
+  /// 초대 링크의 1회성 활성화 토큰
+  String get token;
 
-  /// 사용자 비밀번호
+  /// 사용자가 설정할 최초 비밀번호
   String get password;
 
-  /// Create a copy of LoginRequestDto
+  /// Create a copy of ActivateRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $LoginRequestDtoCopyWith<LoginRequestDto> get copyWith =>
-      _$LoginRequestDtoCopyWithImpl<LoginRequestDto>(
-          this as LoginRequestDto, _$identity);
+  $ActivateRequestDtoCopyWith<ActivateRequestDto> get copyWith =>
+      _$ActivateRequestDtoCopyWithImpl<ActivateRequestDto>(
+          this as ActivateRequestDto, _$identity);
 
-  /// Serializes this LoginRequestDto to a JSON map.
+  /// Serializes this ActivateRequestDto to a JSON map.
   Map<String, dynamic> toJson();
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties
-      ..add(DiagnosticsProperty('type', 'LoginRequestDto'))
-      ..add(DiagnosticsProperty('username', username))
-      ..add(DiagnosticsProperty('password', password));
-  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is LoginRequestDto &&
-            (identical(other.username, username) ||
-                other.username == username) &&
+            other is ActivateRequestDto &&
+            (identical(other.token, token) || other.token == token) &&
             (identical(other.password, password) ||
                 other.password == password));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, username, password);
+  int get hashCode => Object.hash(runtimeType, token, password);
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LoginRequestDto(username: $username, password: $password)';
+  String toString() {
+    return 'ActivateRequestDto(token: $token, password: $password)';
   }
 }
 
 /// @nodoc
-abstract mixin class $LoginRequestDtoCopyWith<$Res> {
-  factory $LoginRequestDtoCopyWith(
-          LoginRequestDto value, $Res Function(LoginRequestDto) _then) =
-      _$LoginRequestDtoCopyWithImpl;
+abstract mixin class $ActivateRequestDtoCopyWith<$Res> {
+  factory $ActivateRequestDtoCopyWith(
+          ActivateRequestDto value, $Res Function(ActivateRequestDto) _then) =
+      _$ActivateRequestDtoCopyWithImpl;
   @useResult
-  $Res call({String username, String password});
+  $Res call({String token, String password});
 }
 
 /// @nodoc
-class _$LoginRequestDtoCopyWithImpl<$Res>
-    implements $LoginRequestDtoCopyWith<$Res> {
-  _$LoginRequestDtoCopyWithImpl(this._self, this._then);
+class _$ActivateRequestDtoCopyWithImpl<$Res>
+    implements $ActivateRequestDtoCopyWith<$Res> {
+  _$ActivateRequestDtoCopyWithImpl(this._self, this._then);
 
-  final LoginRequestDto _self;
-  final $Res Function(LoginRequestDto) _then;
+  final ActivateRequestDto _self;
+  final $Res Function(ActivateRequestDto) _then;
 
-  /// Create a copy of LoginRequestDto
+  /// Create a copy of ActivateRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? username = null,
+    Object? token = null,
     Object? password = null,
   }) {
     return _then(_self.copyWith(
-      username: null == username
-          ? _self.username
-          : username // ignore: cast_nullable_to_non_nullable
+      token: null == token
+          ? _self.token
+          : token // ignore: cast_nullable_to_non_nullable
               as String,
       password: null == password
           ? _self.password
@@ -98,8 +89,8 @@ class _$LoginRequestDtoCopyWithImpl<$Res>
   }
 }
 
-/// Adds pattern-matching-related methods to [LoginRequestDto].
-extension LoginRequestDtoPatterns on LoginRequestDto {
+/// Adds pattern-matching-related methods to [ActivateRequestDto].
+extension ActivateRequestDtoPatterns on ActivateRequestDto {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -114,12 +105,12 @@ extension LoginRequestDtoPatterns on LoginRequestDto {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_LoginRequestDto value)? $default, {
+    TResult Function(_ActivateRequestDto value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _LoginRequestDto() when $default != null:
+      case _ActivateRequestDto() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -141,11 +132,11 @@ extension LoginRequestDtoPatterns on LoginRequestDto {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_LoginRequestDto value) $default,
+    TResult Function(_ActivateRequestDto value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _LoginRequestDto():
+      case _ActivateRequestDto():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -166,11 +157,11 @@ extension LoginRequestDtoPatterns on LoginRequestDto {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_LoginRequestDto value)? $default,
+    TResult? Function(_ActivateRequestDto value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _LoginRequestDto() when $default != null:
+      case _ActivateRequestDto() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -191,13 +182,13 @@ extension LoginRequestDtoPatterns on LoginRequestDto {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String username, String password)? $default, {
+    TResult Function(String token, String password)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _LoginRequestDto() when $default != null:
-        return $default(_that.username, _that.password);
+      case _ActivateRequestDto() when $default != null:
+        return $default(_that.token, _that.password);
       case _:
         return orElse();
     }
@@ -218,12 +209,12 @@ extension LoginRequestDtoPatterns on LoginRequestDto {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String username, String password) $default,
+    TResult Function(String token, String password) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _LoginRequestDto():
-        return $default(_that.username, _that.password);
+      case _ActivateRequestDto():
+        return $default(_that.token, _that.password);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -243,12 +234,12 @@ extension LoginRequestDtoPatterns on LoginRequestDto {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String username, String password)? $default,
+    TResult? Function(String token, String password)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _LoginRequestDto() when $default != null:
-        return $default(_that.username, _that.password);
+      case _ActivateRequestDto() when $default != null:
+        return $default(_that.token, _that.password);
       case _:
         return null;
     }
@@ -257,96 +248,85 @@ extension LoginRequestDtoPatterns on LoginRequestDto {
 
 /// @nodoc
 @JsonSerializable()
-class _LoginRequestDto with DiagnosticableTreeMixin implements LoginRequestDto {
-  const _LoginRequestDto({this.username = "", this.password = ""});
-  factory _LoginRequestDto.fromJson(Map<String, dynamic> json) =>
-      _$LoginRequestDtoFromJson(json);
+class _ActivateRequestDto implements ActivateRequestDto {
+  const _ActivateRequestDto({required this.token, required this.password});
+  factory _ActivateRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$ActivateRequestDtoFromJson(json);
 
-  /// 로그인 사용자명
+  /// 초대 링크의 1회성 활성화 토큰
   @override
-  @JsonKey()
-  final String username;
+  final String token;
 
-  /// 사용자 비밀번호
+  /// 사용자가 설정할 최초 비밀번호
   @override
-  @JsonKey()
   final String password;
 
-  /// Create a copy of LoginRequestDto
+  /// Create a copy of ActivateRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$LoginRequestDtoCopyWith<_LoginRequestDto> get copyWith =>
-      __$LoginRequestDtoCopyWithImpl<_LoginRequestDto>(this, _$identity);
+  _$ActivateRequestDtoCopyWith<_ActivateRequestDto> get copyWith =>
+      __$ActivateRequestDtoCopyWithImpl<_ActivateRequestDto>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$LoginRequestDtoToJson(
+    return _$ActivateRequestDtoToJson(
       this,
     );
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties
-      ..add(DiagnosticsProperty('type', 'LoginRequestDto'))
-      ..add(DiagnosticsProperty('username', username))
-      ..add(DiagnosticsProperty('password', password));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _LoginRequestDto &&
-            (identical(other.username, username) ||
-                other.username == username) &&
+            other is _ActivateRequestDto &&
+            (identical(other.token, token) || other.token == token) &&
             (identical(other.password, password) ||
                 other.password == password));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, username, password);
+  int get hashCode => Object.hash(runtimeType, token, password);
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LoginRequestDto(username: $username, password: $password)';
+  String toString() {
+    return 'ActivateRequestDto(token: $token, password: $password)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$LoginRequestDtoCopyWith<$Res>
-    implements $LoginRequestDtoCopyWith<$Res> {
-  factory _$LoginRequestDtoCopyWith(
-          _LoginRequestDto value, $Res Function(_LoginRequestDto) _then) =
-      __$LoginRequestDtoCopyWithImpl;
+abstract mixin class _$ActivateRequestDtoCopyWith<$Res>
+    implements $ActivateRequestDtoCopyWith<$Res> {
+  factory _$ActivateRequestDtoCopyWith(
+          _ActivateRequestDto value, $Res Function(_ActivateRequestDto) _then) =
+      __$ActivateRequestDtoCopyWithImpl;
   @override
   @useResult
-  $Res call({String username, String password});
+  $Res call({String token, String password});
 }
 
 /// @nodoc
-class __$LoginRequestDtoCopyWithImpl<$Res>
-    implements _$LoginRequestDtoCopyWith<$Res> {
-  __$LoginRequestDtoCopyWithImpl(this._self, this._then);
+class __$ActivateRequestDtoCopyWithImpl<$Res>
+    implements _$ActivateRequestDtoCopyWith<$Res> {
+  __$ActivateRequestDtoCopyWithImpl(this._self, this._then);
 
-  final _LoginRequestDto _self;
-  final $Res Function(_LoginRequestDto) _then;
+  final _ActivateRequestDto _self;
+  final $Res Function(_ActivateRequestDto) _then;
 
-  /// Create a copy of LoginRequestDto
+  /// Create a copy of ActivateRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? username = null,
+    Object? token = null,
     Object? password = null,
   }) {
-    return _then(_LoginRequestDto(
-      username: null == username
-          ? _self.username
-          : username // ignore: cast_nullable_to_non_nullable
+    return _then(_ActivateRequestDto(
+      token: null == token
+          ? _self.token
+          : token // ignore: cast_nullable_to_non_nullable
               as String,
       password: null == password
           ? _self.password
