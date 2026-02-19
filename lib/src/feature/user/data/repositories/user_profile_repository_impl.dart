@@ -1,14 +1,19 @@
 import 'dart:typed_data';
 
+import 'package:a_and_i_report_web_server/src/feature/auth/domain/repositories/auth_repository.dart';
 import 'package:a_and_i_report_web_server/src/feature/user/data/datasources/user_profile_remote_datasource.dart';
 import 'package:a_and_i_report_web_server/src/feature/user/domain/models/update_my_profile_result.dart';
 import 'package:a_and_i_report_web_server/src/feature/user/domain/repositories/user_profile_repository.dart';
 
 /// 사용자 프로필 저장소 구현체다.
 class UserProfileRepositoryImpl implements UserProfileRepository {
-  UserProfileRepositoryImpl(this.userProfileRemoteDatasource);
+  UserProfileRepositoryImpl(
+    this.userProfileRemoteDatasource,
+    this.authRepository,
+  );
 
   final UserProfileRemoteDatasource userProfileRemoteDatasource;
+  final AuthRepository authRepository;
 
   @override
   Future<UpdateMyProfileResult> updateMyProfile({
@@ -18,7 +23,15 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
     String? profileImageMimeType,
   }) async {
     try {
+      final token = await authRepository.getToken();
+      if (token == null || token.isEmpty) {
+        return const UpdateMyProfileFailure(
+          UpdateMyProfileFailureReason.unauthorized,
+        );
+      }
+
       final user = await userProfileRemoteDatasource.patchMyProfile(
+        authorization: 'Bearer $token',
         nickname: nickname,
         profileImageBytes: profileImageBytes,
         profileImageFileName: profileImageFileName,

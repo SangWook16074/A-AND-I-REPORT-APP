@@ -21,6 +21,7 @@ class UserProfileRemoteDatasource {
 
   /// `/v1/me` 프로필 수정 API를 호출한다.
   Future<User> patchMyProfile({
+    required String authorization,
     required String nickname,
     Uint8List? profileImageBytes,
     String? profileImageFileName,
@@ -43,7 +44,11 @@ class UserProfileRemoteDatasource {
       final response = await dio.patch(
         _buildUrl('/v1/me'),
         data: FormData.fromMap(formDataMap),
-        options: Options(contentType: 'multipart/form-data'),
+        options: Options(
+          headers: {
+            'Authorization': authorization,
+          },
+        ),
       );
 
       return _parseUser(response);

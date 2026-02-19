@@ -3,6 +3,7 @@ import 'package:a_and_i_report_web_server/src/core/models/user.dart';
 /// 내 정보 수정 실패 원인이다.
 enum UpdateMyProfileFailureReason {
   invalidNickname,
+  unauthorized,
   networkError,
   unknown,
 }

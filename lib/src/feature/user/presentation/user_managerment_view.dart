@@ -94,6 +94,8 @@ class UserManagermentViewState extends ConsumerState<UserManagermentView> {
       final failure = result as UpdateMyProfileFailure;
       final errorMessage = switch (failure.reason) {
         UpdateMyProfileFailureReason.invalidNickname => '닉네임을 입력해주세요.',
+        UpdateMyProfileFailureReason.unauthorized =>
+          '로그인 정보가 만료되었습니다. 다시 로그인해주세요.',
         UpdateMyProfileFailureReason.networkError =>
           '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
         UpdateMyProfileFailureReason.unknown => '정보 수정에 실패했습니다. 입력값을 확인해주세요.',
