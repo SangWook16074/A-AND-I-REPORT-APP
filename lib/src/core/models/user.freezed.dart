@@ -17,6 +17,7 @@ mixin _$User {
   String get id;
   String get nickname;
   String get role;
+  String? get profileImageUrl;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -36,16 +37,19 @@ mixin _$User {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.profileImageUrl, profileImageUrl) ||
+                other.profileImageUrl == profileImageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, nickname, role);
+  int get hashCode =>
+      Object.hash(runtimeType, id, nickname, role, profileImageUrl);
 
   @override
   String toString() {
-    return 'User(id: $id, nickname: $nickname, role: $role)';
+    return 'User(id: $id, nickname: $nickname, role: $role, profileImageUrl: $profileImageUrl)';
   }
 }
 
@@ -54,7 +58,7 @@ abstract mixin class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) _then) =
       _$UserCopyWithImpl;
   @useResult
-  $Res call({String id, String nickname, String role});
+  $Res call({String id, String nickname, String role, String? profileImageUrl});
 }
 
 /// @nodoc
@@ -72,6 +76,7 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
     Object? id = null,
     Object? nickname = null,
     Object? role = null,
+    Object? profileImageUrl = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -86,6 +91,10 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _self.role
           : role // ignore: cast_nullable_to_non_nullable
               as String,
+      profileImageUrl: freezed == profileImageUrl
+          ? _self.profileImageUrl
+          : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -183,13 +192,16 @@ extension UserPatterns on User {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String nickname, String role)? $default, {
+    TResult Function(
+            String id, String nickname, String role, String? profileImageUrl)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _User() when $default != null:
-        return $default(_that.id, _that.nickname, _that.role);
+        return $default(
+            _that.id, _that.nickname, _that.role, _that.profileImageUrl);
       case _:
         return orElse();
     }
@@ -210,12 +222,15 @@ extension UserPatterns on User {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String nickname, String role) $default,
+    TResult Function(
+            String id, String nickname, String role, String? profileImageUrl)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _User():
-        return $default(_that.id, _that.nickname, _that.role);
+        return $default(
+            _that.id, _that.nickname, _that.role, _that.profileImageUrl);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -235,12 +250,15 @@ extension UserPatterns on User {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String nickname, String role)? $default,
+    TResult? Function(
+            String id, String nickname, String role, String? profileImageUrl)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _User() when $default != null:
-        return $default(_that.id, _that.nickname, _that.role);
+        return $default(
+            _that.id, _that.nickname, _that.role, _that.profileImageUrl);
       case _:
         return null;
     }
@@ -250,7 +268,11 @@ extension UserPatterns on User {
 /// @nodoc
 @JsonSerializable()
 class _User implements User {
-  const _User({required this.id, required this.nickname, required this.role});
+  const _User(
+      {required this.id,
+      required this.nickname,
+      required this.role,
+      this.profileImageUrl});
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   @override
@@ -259,6 +281,8 @@ class _User implements User {
   final String nickname;
   @override
   final String role;
+  @override
+  final String? profileImageUrl;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -283,16 +307,19 @@ class _User implements User {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.profileImageUrl, profileImageUrl) ||
+                other.profileImageUrl == profileImageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, nickname, role);
+  int get hashCode =>
+      Object.hash(runtimeType, id, nickname, role, profileImageUrl);
 
   @override
   String toString() {
-    return 'User(id: $id, nickname: $nickname, role: $role)';
+    return 'User(id: $id, nickname: $nickname, role: $role, profileImageUrl: $profileImageUrl)';
   }
 }
 
@@ -302,7 +329,7 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$UserCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, String nickname, String role});
+  $Res call({String id, String nickname, String role, String? profileImageUrl});
 }
 
 /// @nodoc
@@ -320,6 +347,7 @@ class __$UserCopyWithImpl<$Res> implements _$UserCopyWith<$Res> {
     Object? id = null,
     Object? nickname = null,
     Object? role = null,
+    Object? profileImageUrl = freezed,
   }) {
     return _then(_User(
       id: null == id
@@ -334,6 +362,10 @@ class __$UserCopyWithImpl<$Res> implements _$UserCopyWith<$Res> {
           ? _self.role
           : role // ignore: cast_nullable_to_non_nullable
               as String,
+      profileImageUrl: freezed == profileImageUrl
+          ? _self.profileImageUrl
+          : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }

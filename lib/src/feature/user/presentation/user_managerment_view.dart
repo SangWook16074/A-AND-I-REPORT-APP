@@ -7,23 +7,118 @@ import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_vi
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/home_theme.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_footer_section.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_top_bar_section.dart';
+import 'package:a_and_i_report_web_server/src/feature/user/domain/models/update_my_profile_result.dart';
 import 'package:a_and_i_report_web_server/src/feature/user/presentation/widgets/user_management_field_label.dart';
 import 'package:a_and_i_report_web_server/src/feature/user/presentation/widgets/user_management_section_title.dart';
 import 'package:a_and_i_report_web_server/src/feature/user/presentation/widgets/user_profile_image_picker.dart';
+import 'package:a_and_i_report_web_server/src/feature/user/providers/user_profile_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// 사용자 계정 정보 관리 화면이다.
-class UserManagermentView extends ConsumerWidget {
+class UserManagermentView extends ConsumerStatefulWidget {
   const UserManagermentView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<UserManagermentView> createState() =>
+      UserManagermentViewState();
+}
+
+class UserManagermentViewState extends ConsumerState<UserManagermentView> {
+  final TextEditingController nicknameController = TextEditingController();
+  UserProfileImageSelection? selectedProfileImage;
+  String? syncedNickname;
+  bool isSubmitting = false;
+
+  @override
+  void dispose() {
+    nicknameController.dispose();
+    super.dispose();
+  }
+
+  void synchronizeNicknameFromState(String? nickname) {
+    if (nickname == null || nickname.isEmpty) {
+      return;
+    }
+
+    final shouldSync = nicknameController.text.isEmpty ||
+        nicknameController.text == syncedNickname;
+    if (!shouldSync) {
+      return;
+    }
+
+    nicknameController.value = TextEditingValue(
+      text: nickname,
+      selection: TextSelection.collapsed(offset: nickname.length),
+    );
+    syncedNickname = nickname;
+  }
+
+  Future<void> submitProfileUpdate(UserViewState userState) async {
+    if (isSubmitting) {
+      return;
+    }
+
+    final nickname = nicknameController.text.trim();
+    setState(() {
+      isSubmitting = true;
+    });
+
+    try {
+      final result = await ref.read(updateMyProfileUsecaseProvider).call(
+            nickname: nickname,
+            profileImageBytes: selectedProfileImage?.bytes,
+            profileImageFileName: selectedProfileImage?.fileName,
+            profileImageMimeType: selectedProfileImage?.mimeType,
+          );
+
+      if (!mounted) {
+        return;
+      }
+
+      if (result is UpdateMyProfileSuccess) {
+        await ref.read(userViewModelProvider.notifier).onEvent(
+              UserViewEvent.myInfoFetched(user: result.user),
+            );
+        if (!mounted) {
+          return;
+        }
+        syncedNickname = result.user.nickname;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('내 정보가 수정되었습니다.')),
+        );
+        return;
+      }
+
+      final failure = result as UpdateMyProfileFailure;
+      final errorMessage = switch (failure.reason) {
+        UpdateMyProfileFailureReason.invalidNickname => '닉네임을 입력해주세요.',
+        UpdateMyProfileFailureReason.networkError =>
+          '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        UpdateMyProfileFailureReason.unknown => '정보 수정에 실패했습니다. 입력값을 확인해주세요.',
+      };
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isSubmitting = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isLoggedIn = ref.watch(authViewModelProvider).status ==
         AuthenticationStatus.authenticated;
     final userState = ref.watch(userViewModelProvider);
-    final nickname = userState.nickname ?? 'User123';
+    final topBarNickname = userState.nickname ?? '동아리원';
+
+    synchronizeNicknameFromState(userState.nickname);
 
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 768;
@@ -44,7 +139,7 @@ class UserManagermentView extends ConsumerWidget {
             surfaceTintColor: Colors.transparent,
             titleSpacing: 0,
             title: HomeTopBarSection(
-              nickname: nickname,
+              nickname: topBarNickname,
               isLoggedIn: isLoggedIn,
               onGoIntro: () => context.go('/promotion'),
               onGoEducation: () => context.go('/report'),
@@ -99,7 +194,14 @@ class UserManagermentView extends ConsumerWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const UserProfileImagePicker(),
+                          UserProfileImagePicker(
+                            profileImageUrl: userState.user?.profileImageUrl,
+                            onImageChanged: (value) {
+                              setState(() {
+                                selectedProfileImage = value;
+                              });
+                            },
+                          ),
                           const SizedBox(width: 20),
                           Expanded(
                             child: Column(
@@ -108,7 +210,7 @@ class UserManagermentView extends ConsumerWidget {
                                 const UserManagementFieldLabel(text: '닉네임'),
                                 const SizedBox(height: 8),
                                 TextFormField(
-                                  initialValue: nickname,
+                                  controller: nicknameController,
                                   decoration: InputDecoration(
                                     hintText: '닉네임을 입력하세요',
                                     isDense: true,
@@ -238,7 +340,9 @@ class UserManagermentView extends ConsumerWidget {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: FilledButton(
-                            onPressed: () {},
+                            onPressed: isSubmitting
+                                ? null
+                                : () => submitProfileUpdate(userState),
                             style: FilledButton.styleFrom(
                               backgroundColor: HomeTheme.primary,
                               foregroundColor: Colors.white,
@@ -254,7 +358,18 @@ class UserManagermentView extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            child: const Text('정보 수정 완료'),
+                            child: isSubmitting
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : const Text('정보 수정 완료'),
                           ),
                         ),
                       ),

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/home_theme.dart';
 import 'package:a_and_i_report_web_server/src/feature/user/presentation/widgets/user_profile_image_compression_service.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,11 @@ class UserProfileImagePicker extends StatefulWidget {
   const UserProfileImagePicker({
     super.key,
     this.onImageChanged,
+    this.profileImageUrl,
   });
 
   final ValueChanged<UserProfileImageSelection>? onImageChanged;
+  final String? profileImageUrl;
 
   @override
   State<UserProfileImagePicker> createState() => UserProfileImagePickerState();
@@ -109,16 +112,10 @@ class UserProfileImagePickerState extends State<UserProfileImagePicker> {
               ),
             ),
             clipBehavior: Clip.antiAlias,
-            child: selectedImageBytes == null
-                ? const Icon(
-                    Icons.account_circle,
-                    size: 64,
-                    color: Color(0xFFCBD5E1),
-                  )
-                : Image.memory(
-                    selectedImageBytes!,
-                    fit: BoxFit.cover,
-                  ),
+            child: UserProfileImageBody(
+              selectedImageBytes: selectedImageBytes,
+              profileImageUrl: widget.profileImageUrl,
+            ),
           ),
           Positioned(
             right: 0,
@@ -158,6 +155,56 @@ class UserProfileImagePickerState extends State<UserProfileImagePicker> {
             ),
         ],
       ),
+    );
+  }
+}
+
+/// 프로필 이미지 본문 표시 위젯이다.
+class UserProfileImageBody extends StatelessWidget {
+  const UserProfileImageBody({
+    super.key,
+    required this.selectedImageBytes,
+    required this.profileImageUrl,
+  });
+
+  final Uint8List? selectedImageBytes;
+  final String? profileImageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    if (selectedImageBytes != null) {
+      return Image.memory(
+        selectedImageBytes!,
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (profileImageUrl != null && profileImageUrl!.isNotEmpty) {
+      return CachedNetworkImage(
+        imageUrl: profileImageUrl!,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: const Color(0xFFF1F5F9),
+          child: const Center(
+            child: SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          ),
+        ),
+        errorWidget: (context, url, error) => const Icon(
+          Icons.account_circle,
+          size: 64,
+          color: Color(0xFFCBD5E1),
+        ),
+      );
+    }
+
+    return const Icon(
+      Icons.account_circle,
+      size: 64,
+      color: Color(0xFFCBD5E1),
     );
   }
 }
