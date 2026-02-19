@@ -138,6 +138,7 @@ class HomeTopBarSection extends StatelessWidget {
                         itemBuilder: (context) => [
                           if (isLoggedIn) ...[
                             PopupMenuItem<String>(
+                              value: "account",
                               enabled: false,
                               height: 52,
                               child: Column(

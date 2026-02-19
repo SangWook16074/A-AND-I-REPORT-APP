@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>내 계정 - A&amp;I</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#2b7cee",
+                "background-light": "#ffffff",
+                "text-main": "#1a1a1a",
+                "text-muted": "#666666",
+              },
+              fontFamily: {
+                "display": ["Space Grotesk", "Noto Sans KR", "sans-serif"],
+                "sans": ["Noto Sans KR", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+          font-family: 'Noto Sans KR', sans-serif;
+        }
+        .font-display {
+          font-family: 'Space Grotesk', 'Noto Sans KR', sans-serif;
+        }
+        .border-subtle {
+          border-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light text-text-main antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="sticky top-0 z-50 w-full border-b border-black/5 bg-white/80 backdrop-blur-md">
+<div class="mx-auto max-w-7xl px-6 lg:px-12">
+<div class="flex h-20 items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined text-2xl">neurology</span>
+</div>
+<a class="text-xl font-bold tracking-tight text-text-main font-display" href="/">A&amp;I</a>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium text-text-muted hover:text-primary transition-colors" href="#">소개</a>
+<a class="text-sm font-medium text-text-muted hover:text-primary transition-colors" href="#">교육</a>
+<a class="text-sm font-medium text-text-muted hover:text-primary transition-colors" href="#">게시글</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3 pr-4 border-r border-black/10">
+<div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">person</span>
+</div>
+<span class="text-sm font-medium text-text-main">User123</span>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-black/5 hover:bg-black/10 text-text-main text-xs font-bold transition-all border border-black/5">
+<span class="material-symbols-outlined text-sm">logout</span>
+<span>로그아웃</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 py-16 px-6 lg:px-12 bg-white">
+<div class="mx-auto max-w-2xl">
+<div class="mb-12">
+<h2 class="text-3xl font-bold tracking-tight text-text-main mb-2">내 계정</h2>
+<p class="text-text-muted">프로필 정보 및 활동 현황을 관리하세요.</p>
+</div>
+<section class="mb-12">
+<h3 class="text-sm font-bold uppercase tracking-widest text-text-muted mb-6 pb-2 border-b border-black/5">프로필 정보</h3>
+<div class="space-y-8">
+<div class="flex items-center gap-6">
+<div class="relative group">
+<div class="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center border border-black/5 overflow-hidden">
+<span class="material-symbols-outlined text-slate-300 text-5xl">account_circle</span>
+</div>
+<button class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white border border-black/10 shadow-sm flex items-center justify-center text-text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</button>
+</div>
+<div class="flex-1">
+<label class="block text-xs font-bold text-text-muted uppercase mb-2">닉네임</label>
+<input class="w-full bg-slate-50 border-black/5 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary" placeholder="닉네임을 입력하세요" type="text" value="User123"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-text-muted uppercase mb-2">이메일 주소</label>
+<input class="w-full bg-slate-50 border-black/5 rounded-lg px-4 py-2.5 text-sm text-text-muted cursor-not-allowed" placeholder="email@example.com" readonly="" type="email" value="user123@example.com"/>
+<p class="mt-2 text-xs text-text-muted/60">이메일 주소는 보안을 위해 수정할 수 없습니다.</p>
+</div>
+</div>
+</section>
+<section class="mb-12">
+<h3 class="text-sm font-bold uppercase tracking-widest text-text-muted mb-6 pb-2 border-b border-black/5">보안</h3>
+<div class="flex items-center justify-between p-4 rounded-xl border border-black/5 bg-slate-50/50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-text-muted">lock_open</span>
+<div>
+<p class="text-sm font-medium text-text-main">비밀번호</p>
+<p class="text-xs text-text-muted">마지막 변경: 3개월 전</p>
+</div>
+</div>
+<button class="px-4 py-2 rounded-lg border border-black/10 bg-white text-xs font-bold text-text-main hover:bg-slate-50 transition-colors">
+                        비밀번호 변경
+                    </button>
+</div>
+</section>
+<section class="mb-12">
+<h3 class="text-sm font-bold uppercase tracking-widest text-text-muted mb-6 pb-2 border-b border-black/5">학습 현황 요약</h3>
+<div class="p-6 rounded-xl border border-black/5 bg-slate-50/50">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">school</span>
+<span class="text-sm font-medium text-text-main">LLM 아키텍처 심화 과정</span>
+</div>
+<span class="text-xs font-bold text-primary">진행 중</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium">
+<span class="text-text-muted">전체 진행률</span>
+<span class="text-text-main">65%</span>
+</div>
+<div class="h-2 w-full bg-black/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 65%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="mb-16">
+<h3 class="text-sm font-bold uppercase tracking-widest text-text-muted mb-6 pb-2 border-b border-black/5">활동 내역</h3>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between py-3 border-b border-black/5 last:border-0">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 rounded-lg bg-slate-100 flex items-center justify-center text-text-muted">
+<span class="material-symbols-outlined text-lg">article</span>
+</div>
+<div>
+<p class="text-sm font-medium text-text-main">'데이터 과학 베스트 프랙티스' 읽음</p>
+<p class="text-xs text-text-muted">2023년 10월 26일</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center justify-between py-3 border-b border-black/5 last:border-0">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 rounded-lg bg-slate-100 flex items-center justify-center text-text-muted">
+<span class="material-symbols-outlined text-lg">assignment_turned_in</span>
+</div>
+<div>
+<p class="text-sm font-medium text-text-main">신경망 기초 과제 제출 완료</p>
+<p class="text-xs text-text-muted">2023년 10월 24일</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center justify-between py-3 border-b border-black/5 last:border-0">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 rounded-lg bg-slate-100 flex items-center justify-center text-text-muted">
+<span class="material-symbols-outlined text-lg">article</span>
+</div>
+<div>
+<p class="text-sm font-medium text-text-main">'신경망의 미래' 읽음</p>
+<p class="text-xs text-text-muted">2023년 10월 22일</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+</section>
+<div class="pt-8 border-t border-black/5 flex justify-end">
+<button class="px-8 py-4 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-all flex items-center gap-2 shadow-lg shadow-primary/20">
+                    정보 수정 완료
+                </button>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-black/5 py-12 px-6 lg:px-12 bg-slate-50/50">
+<div class="mx-auto max-w-7xl flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="h-6 w-6 rounded bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">neurology</span>
+</div>
+<span class="text-sm font-bold text-text-main uppercase tracking-widest font-display">A&amp;I CLUB</span>
+</div>
+<div class="flex gap-8">
+<a class="text-xs font-medium text-text-muted hover:text-text-main transition-colors uppercase tracking-widest" href="#">개인정보 처리방침</a>
+<a class="text-xs font-medium text-text-muted hover:text-text-main transition-colors uppercase tracking-widest" href="#">이용약관</a>
+<a class="text-xs font-medium text-text-muted hover:text-text-main transition-colors uppercase tracking-widest" href="#">문의하기</a>
+</div>
+<p class="text-xs text-text-muted/60 font-medium">
+                © 2023 A&amp;I 커뮤니티. All rights reserved.
+            </p>
+</div>
+</footer>
+</div>
+
+</body></html>
