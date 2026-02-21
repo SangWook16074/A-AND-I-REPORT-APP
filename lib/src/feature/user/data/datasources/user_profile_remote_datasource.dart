@@ -19,7 +19,7 @@ class UserProfileRemoteDatasource {
   final Dio dio;
   final String _baseUrl;
 
-  /// `/v/me` 내 정보 수정 API를 호출한다.
+  /// `/v1/me` 내 정보 수정 API를 호출한다.
   Future<User> updateMyProfile({
     required String authorization,
     required String nickname,
@@ -48,7 +48,7 @@ class UserProfileRemoteDatasource {
       }
 
       final response = await dio.post(
-        _buildUrl('/v/me'),
+        _buildUrl('/v1/me'),
         data: FormData.fromMap(formDataMap),
         options: Options(
           headers: {
