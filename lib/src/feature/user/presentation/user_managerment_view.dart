@@ -169,10 +169,11 @@ class UserManagermentViewState extends ConsumerState<UserManagermentView> {
       return;
     }
 
+    final currentPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
 
-    final password = await showDialog<String>(
+    final passwords = await showDialog<Map<String, String>>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('비밀번호 변경'),
@@ -181,6 +182,15 @@ class UserManagermentViewState extends ConsumerState<UserManagermentView> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              TextFormField(
+                controller: currentPasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: '현재 비밀번호',
+                  hintText: '현재 비밀번호를 입력하세요',
+                ),
+              ),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: newPasswordController,
                 obscureText: true,
@@ -208,8 +218,16 @@ class UserManagermentViewState extends ConsumerState<UserManagermentView> {
           ),
           FilledButton(
             onPressed: () {
+              final currentPassword = currentPasswordController.text.trim();
               final password = newPasswordController.text.trim();
               final confirmPassword = confirmPasswordController.text.trim();
+
+              if (currentPassword.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('현재 비밀번호를 입력해주세요.')),
+                );
+                return;
+              }
 
               if (password.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -225,7 +243,10 @@ class UserManagermentViewState extends ConsumerState<UserManagermentView> {
                 return;
               }
 
-              Navigator.of(dialogContext).pop(password);
+              Navigator.of(dialogContext).pop({
+                'currentPassword': currentPassword,
+                'newPassword': password,
+              });
             },
             child: const Text('변경'),
           ),
@@ -233,10 +254,11 @@ class UserManagermentViewState extends ConsumerState<UserManagermentView> {
       ),
     );
 
+    currentPasswordController.dispose();
     newPasswordController.dispose();
     confirmPasswordController.dispose();
 
-    if (!mounted || password == null || password.isEmpty) {
+    if (!mounted || passwords == null || passwords.isEmpty) {
       return;
     }
 
@@ -246,7 +268,8 @@ class UserManagermentViewState extends ConsumerState<UserManagermentView> {
 
     try {
       final result = await ref.read(changePasswordUsecaseProvider).call(
-            newPassword: password,
+            currentPassword: passwords['currentPassword']!,
+            newPassword: passwords['newPassword']!,
           );
 
       if (!mounted) {
@@ -262,12 +285,12 @@ class UserManagermentViewState extends ConsumerState<UserManagermentView> {
 
       final failure = result as ChangePasswordFailure;
       final errorMessage = switch (failure.reason) {
-        ChangePasswordFailureReason.invalidPassword => '새 비밀번호를 입력해주세요.',
+        ChangePasswordFailureReason.invalidPassword => '비밀번호를 모두 입력해주세요.',
         ChangePasswordFailureReason.unauthorized =>
           '로그인 정보가 만료되었습니다. 다시 로그인해주세요.',
         ChangePasswordFailureReason.networkError =>
           '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-        ChangePasswordFailureReason.unknown => '비밀번호 변경에 실패했습니다.',
+        ChangePasswordFailureReason.unknown => '비밀번호 변경에 실패했습니다. 현재 비밀번호를 확인해주세요.',
       };
 
       ScaffoldMessenger.of(context).showSnackBar(

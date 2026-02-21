@@ -79,19 +79,20 @@ class UserViewModel extends _$UserViewModel {
     final id = map['id']?.toString() ??
         map['userId']?.toString() ??
         map['sub']?.toString();
-    final nickname = map['nickname']?.toString() ??
+    final nickname = map['nickName']?.toString() ??
+        map['nickname']?.toString() ??
+        map['nick_name']?.toString() ??
+        map['displayName']?.toString() ??
         map['username']?.toString() ??
         map['name']?.toString();
     final role = map['role']?.toString();
 
-    if (id == null ||
-        id.isEmpty ||
-        nickname == null ||
-        nickname.isEmpty ||
-        role == null ||
-        role.isEmpty) {
+    if (id == null || id.isEmpty || role == null || role.isEmpty) {
       return null;
     }
+
+    final resolvedNickname =
+        nickname == null || nickname.isEmpty ? '동아리원' : nickname;
 
     final profileImageUrl = map['profileImageUrl']?.toString() ??
         map['profileImagePath']?.toString() ??
@@ -102,7 +103,7 @@ class UserViewModel extends _$UserViewModel {
 
     return User(
       id: id,
-      nickname: nickname,
+      nickname: resolvedNickname,
       role: role,
       profileImageUrl: profileImageUrl,
     );

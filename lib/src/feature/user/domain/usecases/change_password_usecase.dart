@@ -9,17 +9,21 @@ class ChangePasswordUsecase {
 
   /// 내 비밀번호를 변경한다.
   Future<ChangePasswordResult> call({
+    required String currentPassword,
     required String newPassword,
   }) async {
-    final trimmedPassword = newPassword.trim();
-    if (trimmedPassword.isEmpty) {
+    final trimmedCurrentPassword = currentPassword.trim();
+    final trimmedNewPassword = newPassword.trim();
+
+    if (trimmedCurrentPassword.isEmpty || trimmedNewPassword.isEmpty) {
       return const ChangePasswordFailure(
         ChangePasswordFailureReason.invalidPassword,
       );
     }
 
     return userProfileRepository.changePassword(
-      newPassword: trimmedPassword,
+      currentPassword: trimmedCurrentPassword,
+      newPassword: trimmedNewPassword,
     );
   }
 }

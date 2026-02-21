@@ -15,6 +15,7 @@ abstract class UserProfileRepository {
 
   /// 비밀번호를 서버에 반영한다.
   Future<ChangePasswordResult> changePassword({
+    required String currentPassword,
     required String newPassword,
   });
 }

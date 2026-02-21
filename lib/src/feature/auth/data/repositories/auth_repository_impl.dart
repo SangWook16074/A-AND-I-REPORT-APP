@@ -59,8 +59,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
     final id = userData['id']?.toString() ?? userData['userId']?.toString();
     final role = userData['role']?.toString();
-    final nickname =
-        userData['nickname']?.toString() ?? userData['username']?.toString();
+    final nickname = userData['nickName']?.toString() ??
+        userData['nickname']?.toString() ??
+        userData['nick_name']?.toString() ??
+        userData['displayName']?.toString() ??
+        userData['username']?.toString();
     if (id == null || id.isEmpty || role == null || role.isEmpty) {
       throw Exception('유효하지 않은 사용자 응답입니다.');
     }

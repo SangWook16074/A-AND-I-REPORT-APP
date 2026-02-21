@@ -83,45 +83,29 @@ class UserProfileRemoteDatasource {
   /// `/v1/me/password` 비밀번호 변경 API를 호출한다.
   Future<void> changePassword({
     required String authorization,
+    required String currentPassword,
     required String newPassword,
   }) async {
     try {
-      final trimmedPassword = newPassword.trim();
-      if (trimmedPassword.isEmpty) {
+      final trimmedCurrentPassword = currentPassword.trim();
+      final trimmedNewPassword = newPassword.trim();
+
+      if (trimmedCurrentPassword.isEmpty || trimmedNewPassword.isEmpty) {
         throw ChangePasswordRequestException();
       }
 
-      Response<dynamic> response;
-      try {
-        response = await dio.post(
-          _buildUrl('/v1/me/password'),
-          data: {
-            'newPassword': trimmedPassword,
+      final response = await dio.post(
+        _buildUrl('/v1/me/password'),
+        data: {
+          'currentPassword': trimmedCurrentPassword,
+          'newPassword': trimmedNewPassword,
+        },
+        options: Options(
+          headers: {
+            'Authorization': authorization,
           },
-          options: Options(
-            headers: {
-              'Authorization': authorization,
-            },
-          ),
-        );
-      } on DioException catch (error) {
-        final statusCode = error.response?.statusCode;
-        if (statusCode == 400 || statusCode == 422) {
-          response = await dio.post(
-            _buildUrl('/v1/me/password'),
-            data: {
-              'password': trimmedPassword,
-            },
-            options: Options(
-              headers: {
-                'Authorization': authorization,
-              },
-            ),
-          );
-        } else {
-          rethrow;
-        }
-      }
+        ),
+      );
 
       final responseData = response.data;
       if (responseData is! Map<String, dynamic> ||
@@ -187,8 +171,11 @@ class UserProfileRemoteDatasource {
 
     final id = userData['id']?.toString() ?? userData['userId']?.toString();
     final role = userData['role']?.toString();
-    final nickname =
-        userData['nickname']?.toString() ?? userData['username']?.toString();
+    final nickname = userData['nickName']?.toString() ??
+        userData['nickname']?.toString() ??
+        userData['nick_name']?.toString() ??
+        userData['displayName']?.toString() ??
+        userData['username']?.toString();
     if (id == null || role == null || nickname == null || nickname.isEmpty) {
       return null;
     }

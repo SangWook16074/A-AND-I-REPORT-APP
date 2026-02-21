@@ -52,6 +52,7 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
 
   @override
   Future<ChangePasswordResult> changePassword({
+    required String currentPassword,
     required String newPassword,
   }) async {
     try {
@@ -64,6 +65,7 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
 
       await userProfileRemoteDatasource.changePassword(
         authorization: 'Bearer $token',
+        currentPassword: currentPassword,
         newPassword: newPassword,
       );
       return const ChangePasswordSuccess();
