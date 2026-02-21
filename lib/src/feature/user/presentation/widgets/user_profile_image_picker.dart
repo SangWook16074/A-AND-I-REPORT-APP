@@ -54,11 +54,6 @@ class UserProfileImagePickerState extends State<UserProfileImagePicker> {
 
   @override
   Widget build(BuildContext context) {
-    final profileImagePath = widget.profileImageUrl?.trim();
-    final hasProfileImagePath = profileImagePath != null &&
-        profileImagePath.isNotEmpty &&
-        selectedImageBytes == null;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -178,22 +173,6 @@ class UserProfileImagePickerState extends State<UserProfileImagePicker> {
             ],
           ),
         ),
-        if (hasProfileImagePath) ...[
-          const SizedBox(height: 8),
-          SizedBox(
-            width: 160,
-            child: Text(
-              profileImagePath,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 11,
-                height: 1.35,
-                color: HomeTheme.textMuted,
-              ),
-            ),
-          ),
-        ],
       ],
     );
   }
