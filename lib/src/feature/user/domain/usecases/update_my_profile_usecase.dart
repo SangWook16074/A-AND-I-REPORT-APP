@@ -11,20 +11,24 @@ class UpdateMyProfileUsecase {
 
   /// 내 닉네임/프로필 이미지를 수정한다.
   Future<UpdateMyProfileResult> call({
-    required String nickname,
+    String? nickname,
     Uint8List? profileImageBytes,
     String? profileImageFileName,
     String? profileImageMimeType,
   }) async {
-    final trimmedNickname = nickname.trim();
-    if (trimmedNickname.isEmpty) {
+    final trimmedNickname = nickname?.trim();
+    final hasNickname = trimmedNickname != null && trimmedNickname.isNotEmpty;
+    final hasProfileImage =
+        profileImageBytes != null && profileImageBytes.isNotEmpty;
+
+    if (!hasNickname && !hasProfileImage) {
       return const UpdateMyProfileFailure(
         UpdateMyProfileFailureReason.invalidNickname,
       );
     }
 
     return userProfileRepository.updateMyProfile(
-      nickname: trimmedNickname,
+      nickname: hasNickname ? trimmedNickname : null,
       profileImageBytes: profileImageBytes,
       profileImageFileName: profileImageFileName,
       profileImageMimeType: profileImageMimeType,

@@ -18,5 +18,6 @@ abstract class UserViewState with _$UserViewState {
 extension UserViewStateX on UserViewState {
   String? get userId => user?.id;
   String? get nickname => user?.nickname;
+  String? get profileImageUrl => user?.profileImageUrl;
   String? get resolvedRole => user?.role ?? role;
 }

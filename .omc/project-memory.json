@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1771318421049,
+  "lastScanned": 1771417925852,
   "projectRoot": "/Users/hansw/Desktop/WorkingSpace/a_and_i_report_web_server",
   "techStack": {
     "languages": [],
@@ -38,7 +38,7 @@
       "path": "android",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1771318421034,
+      "lastAccessed": 1771417925842,
       "keyFiles": [
         "local.properties"
       ]
@@ -47,7 +47,7 @@
       "path": "assets",
       "purpose": "Static assets",
       "fileCount": 7,
-      "lastAccessed": 1771318421035,
+      "lastAccessed": 1771417925842,
       "keyFiles": [
         "intro_bg.webp",
         "logo.webp",
@@ -60,7 +60,7 @@
       "path": "build",
       "purpose": "Build output",
       "fileCount": 1,
-      "lastAccessed": 1771318421036,
+      "lastAccessed": 1771417925843,
       "keyFiles": [
         "1601e71dd99bcfb4c4a3b4f6ad93b0da.cache.dill.track.dill"
       ]
@@ -69,21 +69,21 @@
       "path": "doc",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1771318421036,
+      "lastAccessed": 1771417925843,
       "keyFiles": []
     },
     "ios": {
       "path": "ios",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1771318421036,
+      "lastAccessed": 1771417925843,
       "keyFiles": []
     },
     "lib": {
       "path": "lib",
       "purpose": "Library code",
       "fileCount": 2,
-      "lastAccessed": 1771318421036,
+      "lastAccessed": 1771417925843,
       "keyFiles": [
         "firebase_options.dart",
         "main.dart"
@@ -93,7 +93,7 @@
       "path": "linux",
       "purpose": null,
       "fileCount": 5,
-      "lastAccessed": 1771318421037,
+      "lastAccessed": 1771417925843,
       "keyFiles": [
         "CMakeLists.txt",
         "main.cc",
@@ -105,7 +105,7 @@
       "path": "macos",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1771318421037,
+      "lastAccessed": 1771417925844,
       "keyFiles": [
         "Podfile"
       ]
@@ -114,7 +114,7 @@
       "path": "public",
       "purpose": "Public files",
       "fileCount": 2,
-      "lastAccessed": 1771318421037,
+      "lastAccessed": 1771417925844,
       "keyFiles": [
         "404.html",
         "index.html"
@@ -124,7 +124,7 @@
       "path": "test",
       "purpose": "Test files",
       "fileCount": 2,
-      "lastAccessed": 1771318421037,
+      "lastAccessed": 1771417925844,
       "keyFiles": [
         "faq_page_test.dart",
         "widget_test.dart"
@@ -134,7 +134,7 @@
       "path": "web",
       "purpose": null,
       "fileCount": 5,
-      "lastAccessed": 1771318421038,
+      "lastAccessed": 1771417925844,
       "keyFiles": [
         "favicon.ico",
         "favicon.png",
@@ -147,7 +147,7 @@
       "path": "windows",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1771318421038,
+      "lastAccessed": 1771417925845,
       "keyFiles": [
         "CMakeLists.txt"
       ]
@@ -156,14 +156,14 @@
       "path": "android/app",
       "purpose": "Application code",
       "fileCount": 0,
-      "lastAccessed": 1771318421038,
+      "lastAccessed": 1771417925845,
       "keyFiles": []
     },
     "doc/api": {
       "path": "doc/api",
       "purpose": "API routes",
       "fileCount": 5,
-      "lastAccessed": 1771318421039,
+      "lastAccessed": 1771417925845,
       "keyFiles": [
         "__404error.html",
         "categories.json",
@@ -174,143 +174,10 @@
       "path": "lib/src",
       "purpose": "Source code",
       "fileCount": 0,
-      "lastAccessed": 1771318421039,
+      "lastAccessed": 1771417925846,
       "keyFiles": []
     }
   },
-  "hotPaths": [
-    {
-      "path": "lib/src/feature/reports/ui/view/problem_io_view.dart",
-      "accessCount": 16,
-      "lastAccessed": 1771318864975,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/view/source_code_submit_view.dart",
-      "accessCount": 15,
-      "lastAccessed": 1771319619941,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/view/report_submit_result_view.dart",
-      "accessCount": 13,
-      "lastAccessed": 1771319100325,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/view/problem_detail_view.dart",
-      "accessCount": 12,
-      "lastAccessed": 1771320182132,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui",
-      "accessCount": 5,
-      "lastAccessed": 1771319160990,
-      "type": "directory"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/view/problem_bullet_list.dart",
-      "accessCount": 4,
-      "lastAccessed": 1771319041526,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/widgets/problem_level_badge.dart",
-      "accessCount": 4,
-      "lastAccessed": 1771319188836,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/view/problem_section_header.dart",
-      "accessCount": 3,
-      "lastAccessed": 1771319032937,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/view/report_detail_ui.dart",
-      "accessCount": 3,
-      "lastAccessed": 1771320079787,
-      "type": "file"
-    },
-    {
-      "path": "",
-      "accessCount": 2,
-      "lastAccessed": 1771319754907,
-      "type": "directory"
-    },
-    {
-      "path": "lib/src/feature/reports/data/entities/report.dart",
-      "accessCount": 2,
-      "lastAccessed": 1771319855152,
-      "type": "file"
-    },
-    {
-      "path": "lib",
-      "accessCount": 2,
-      "lastAccessed": 1771319926993,
-      "type": "directory"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/widgets/report_list_widget.dart",
-      "accessCount": 2,
-      "lastAccessed": 1771320017965,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/core/routes/route_config.dart",
-      "accessCount": 2,
-      "lastAccessed": 1771320040462,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/viewModel/report_detail_view_model.dart",
-      "accessCount": 1,
-      "lastAccessed": 1771318455667,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/viewModel/report_detail_state.dart",
-      "accessCount": 1,
-      "lastAccessed": 1771318455751,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/viewModel/report_submit_view_model.dart",
-      "accessCount": 1,
-      "lastAccessed": 1771318460959,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/view/problem_nav_tabs.dart",
-      "accessCount": 1,
-      "lastAccessed": 1771318466725,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/view/problem_detail_view.html",
-      "accessCount": 1,
-      "lastAccessed": 1771319725909,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/home/data/entities/report_summary.dart",
-      "accessCount": 1,
-      "lastAccessed": 1771319880675,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/core/routes/route_config.g.dart",
-      "accessCount": 1,
-      "lastAccessed": 1771319895101,
-      "type": "file"
-    },
-    {
-      "path": "lib/src/feature/reports/ui/widgets/report_status_widget.dart",
-      "accessCount": 1,
-      "lastAccessed": 1771319967422,
-      "type": "file"
-    }
-  ],
+  "hotPaths": [],
   "userDirectives": []
 }

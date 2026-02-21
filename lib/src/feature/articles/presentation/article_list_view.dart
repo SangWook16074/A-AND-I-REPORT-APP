@@ -21,6 +21,7 @@ class ArticleListView extends ConsumerWidget {
     final canShowWriteButton = isLoggedIn;
     final userState = ref.watch(userViewModelProvider);
     final nickname = userState.nickname ?? '동아리원';
+    final profileImageUrl = userState.profileImageUrl;
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 768;
     final isTablet = width >= 768 && width < 1200;
@@ -45,6 +46,7 @@ class ArticleListView extends ConsumerWidget {
             titleSpacing: 0,
             title: HomeTopBarSection(
               nickname: nickname,
+              profileImageUrl: profileImageUrl,
               isLoggedIn: isLoggedIn,
               onGoIntro: () => context.go('/promotion'),
               onGoEducation: () => context.go('/report'),

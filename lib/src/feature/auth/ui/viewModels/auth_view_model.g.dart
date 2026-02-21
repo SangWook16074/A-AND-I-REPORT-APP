@@ -6,7 +6,7 @@ part of 'auth_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authViewModelHash() => r'b9e12c58eed226b34f797abbf7d25b776f88f820';
+String _$authViewModelHash() => r'0a7ee4725440c1eed5d37bb1a0abccbcf66e2858';
 
 /// 앱 전반의 인증 상태를 관리하는 ViewModel입니다.
 ///

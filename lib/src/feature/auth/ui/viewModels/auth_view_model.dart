@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:a_and_i_report_web_server/src/core/models/user.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/providers/get_user_access_token_usecase_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/providers/delete_user_access_token_usecase_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/providers/user_login_usecase_provider.dart';
@@ -59,23 +58,12 @@ class AuthViewModel extends _$AuthViewModel {
         try {
           final dto = LoginRequestDto(
               username: event.account, password: event.password);
-          final response = await ref.read(userLoginUsecaseProvider).call(dto);
-          final user = response.data?.user;
-          if (user != null) {
-            await ref.read(userViewModelProvider.notifier).onEvent(
-                  UserViewEvent.myInfoFetched(
-                    user: User(
-                      id: user.id,
-                      nickname: user.username,
-                      role: user.role,
-                    ),
-                  ),
-                );
-          } else {
-            await ref
-                .read(userViewModelProvider.notifier)
-                .onEvent(const UserViewEvent.syncFromToken());
-          }
+          final result = await ref.read(userLoginUsecaseProvider).call(dto);
+          await ref.read(userViewModelProvider.notifier).onEvent(
+                UserViewEvent.myInfoFetched(
+                  user: result.user,
+                ),
+              );
           state = state.copyWith(status: AuthenticationStatus.authenticated);
         } catch (e) {
           state = state.copyWith(status: AuthenticationStatus.unauthenticated);
@@ -84,6 +72,9 @@ class AuthViewModel extends _$AuthViewModel {
         break;
       case SignOut():
         await ref.read(deleteUserAccessTokenUsecaseProvider).call();
+        await ref
+            .read(userViewModelProvider.notifier)
+            .onEvent(const UserViewEvent.clear());
         state = state.copyWith(status: AuthenticationStatus.unauthenticated);
         break;
     }

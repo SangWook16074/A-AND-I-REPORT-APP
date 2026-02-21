@@ -18,4 +18,10 @@ abstract class RemoteAuthDatasource {
     'Content-Type': 'application/json',
   })
   Future<LoginResponseDto> login(@Body() LoginRequestDto dto);
+
+  /// 내 정보 조회 API
+  @GET("/v1/me")
+  Future<dynamic> getMyInfo(
+    @Header("Authorization") String authorization,
+  );
 }

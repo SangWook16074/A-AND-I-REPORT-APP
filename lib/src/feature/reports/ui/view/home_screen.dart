@@ -16,52 +16,31 @@ class HomeScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         // 사이트 로고
-        _logo(),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 22.5),
+          child: Logo(),
+        ),
 
         // 사이트 헤더 영역
-        _header(),
+        HomeHeaderView(),
         const SizedBox(
           height: 20,
         ),
         // CS 과제 목록
-        _csReports(),
+        CsReportView(),
         const SizedBox(
           height: 20,
         ),
 
         // BASIC 과정 과제 목록
-        _basicReports(),
+        BasicReportView(),
         const SizedBox(
           height: 100,
         ),
 
         // 사이트 하단 로고
-        _bottom(),
+        BottomLogo(),
       ],
     );
   }
-
-  /// 사이트 로고
-  Widget _logo() => const Padding(
-        padding: EdgeInsets.symmetric(vertical: 22.5),
-        child: Logo(),
-      );
-
-  /// 사이트 헤더 영역
-  ///
-  /// 현재는 과제 개요 텍스트가 렌더링됨.
-  Widget _header() => const HomeHeaderView();
-
-  /// CS 과제 목록
-  ///
-  /// 서버로부터 요청한 과제 중 CS 과제 목록을 보여줌.
-  Widget _csReports() => const CsReportView();
-
-  /// BASIC 과정 과제 목록
-  ///
-  /// 서버로부터 요청한 과제 중 BASIC 과제 목록을 보여줌.
-  Widget _basicReports() => const BasicReportView();
-
-  /// 앱 사이트 하단 로고
-  Widget _bottom() => const BottomLogo();
 }

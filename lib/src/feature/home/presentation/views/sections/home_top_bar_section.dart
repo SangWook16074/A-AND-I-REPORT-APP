@@ -1,11 +1,15 @@
+import 'package:a_and_i_report_web_server/src/core/constants/api_url.dart';
 import 'package:a_and_i_report_web_server/src/core/widgets/logo_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/home_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeTopBarSection extends StatelessWidget {
   const HomeTopBarSection({
     super.key,
     required this.nickname,
+    this.profileImageUrl,
     required this.isLoggedIn,
     required this.onGoIntro,
     required this.onGoEducation,
@@ -16,6 +20,7 @@ class HomeTopBarSection extends StatelessWidget {
   });
 
   final String nickname;
+  final String? profileImageUrl;
   final bool isLoggedIn;
   final VoidCallback onGoIntro;
   final VoidCallback onGoEducation;
@@ -44,8 +49,13 @@ class HomeTopBarSection extends StatelessWidget {
             height: barHeight,
             child: Row(
               children: [
-                LogoImage(
-                  width: logoWidth,
+                InkWell(
+                  onTap: () {
+                    context.go("/");
+                  },
+                  child: LogoImage(
+                    width: logoWidth,
+                  ),
                 ),
                 if (isDesktop) ...[
                   const Spacer(),
@@ -78,8 +88,11 @@ class HomeTopBarSection extends StatelessWidget {
                                       HomeTheme.primary.withValues(alpha: 0.10),
                                   borderRadius: BorderRadius.circular(999),
                                 ),
-                                child: Icon(Icons.person,
-                                    color: HomeTheme.primary, size: 18),
+                                child: TopBarProfileAvatar(
+                                  profileImageUrl: profileImageUrl,
+                                  size: 32,
+                                  iconSize: 18,
+                                ),
                               ),
                               const SizedBox(width: 8),
                               Text(
@@ -138,20 +151,35 @@ class HomeTopBarSection extends StatelessWidget {
                         itemBuilder: (context) => [
                           if (isLoggedIn) ...[
                             PopupMenuItem<String>(
+                              value: "account",
                               enabled: false,
                               height: 52,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    nickname,
-                                    style: const TextStyle(
-                                      color: HomeTheme.textMain,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 13,
-                                    ),
+                                  Row(
+                                    children: [
+                                      TopBarProfileAvatar(
+                                        profileImageUrl: profileImageUrl,
+                                        size: 20,
+                                        iconSize: 12,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          nickname,
+                                          style: const TextStyle(
+                                            color: HomeTheme.textMain,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 13,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                  const SizedBox(height: 2),
                                   Text(
                                     '로그인됨',
                                     style: TextStyle(
@@ -298,6 +326,57 @@ class HomeTopBarSection extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class TopBarProfileAvatar extends StatelessWidget {
+  const TopBarProfileAvatar({
+    super.key,
+    required this.profileImageUrl,
+    this.size = 32,
+    this.iconSize = 18,
+  });
+
+  final String? profileImageUrl;
+  final double size;
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final resolvedImageUrl = _resolveProfileImageUrl(profileImageUrl);
+    if (resolvedImageUrl == null || resolvedImageUrl.isEmpty) {
+      return Icon(Icons.person, color: HomeTheme.primary, size: iconSize);
+    }
+
+    return ClipOval(
+      child: CachedNetworkImage(
+        imageUrl: resolvedImageUrl,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorWidget: (context, url, error) =>
+            Icon(Icons.person, color: HomeTheme.primary, size: iconSize),
+      ),
+    );
+  }
+
+  String? _resolveProfileImageUrl(String? imagePath) {
+    final trimmedImagePath = imagePath?.trim();
+    if (trimmedImagePath == null || trimmedImagePath.isEmpty) {
+      return null;
+    }
+
+    if (trimmedImagePath.startsWith('http://') ||
+        trimmedImagePath.startsWith('https://') ||
+        trimmedImagePath.startsWith('data:')) {
+      return trimmedImagePath;
+    }
+
+    if (baseUrl.trim().isEmpty) {
+      return trimmedImagePath;
+    }
+
+    return Uri.parse(baseUrl).resolve(trimmedImagePath).toString();
   }
 }
 

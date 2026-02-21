@@ -10,6 +10,7 @@ final class DeleteUserAccessTokenUsecaseImpl
   @override
   Future<void> call() async {
     await authRepository.deleteToken();
+    await authRepository.deleteCachedUser();
   }
 }
 
