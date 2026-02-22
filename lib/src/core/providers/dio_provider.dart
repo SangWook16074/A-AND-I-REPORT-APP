@@ -2,10 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:a_and_i_report_web_server/src/core/constants/api_url.dart';
-import 'package:a_and_i_report_web_server/src/core/interceptors/auth_interceptor.dart';
-import 'package:a_and_i_report_web_server/src/feature/auth/providers/auth_repository_provider.dart';
-import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_view_model.dart';
-import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_event.dart';
 
 part 'dio_provider.g.dart';
 
@@ -18,19 +14,6 @@ Dio dio(Ref ref) {
   final dio = Dio(BaseOptions(
     baseUrl: baseUrl,
   ));
-  final authRepository = ref.read(authRepositoryProvider);
-
-  // AuthInterceptor 추가 - 401 발생 시 자동 토큰 갱신
-  dio.interceptors.add(
-    AuthInterceptor(
-      authRepository: authRepository,
-      dio: dio,
-      onTokenExpired: () {
-        // 리프레시 토큰도 만료된 경우 로그아웃 처리
-        ref.read(authViewModelProvider.notifier).onEvent(const SignOut());
-      },
-    ),
-  );
 
   return dio;
 }
