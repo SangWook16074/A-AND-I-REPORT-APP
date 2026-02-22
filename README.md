@@ -29,11 +29,11 @@ flutter pub get
 
 ### 3. 로컬 실행 (Running Locally)
 
-터미널에서 다음 명령어를 사용하여 앱을 실행합니다.
+개발 디버그 환경에서는 아래 명령어로 실행합니다.
 
 ```bash
-# 로컬 백엔드 또는 개발 서버 연결 시
-flutter run -d chrome --dart-define=API_URL=https://your-api-endpoint.com
+# 개발 디버그 환경 (Chrome CORS 우회 + API_URL 지정)
+flutter run -d chrome --web-browser-flag "--disable-web-security" --dart-define=API_URL=https://api.aandiclub.com
 ```
 
 > **Note**: `API_URL`을 설정하지 않으면 API 요청 시 에러가 발생할 수 있습니다.
