@@ -43,9 +43,20 @@ class AuthInterceptor extends QueuedInterceptor {
           ),
         );
 
-        if (response.statusCode == 200 && response.data['success'] == true) {
-          final newAccessToken = response.data['data']['accessToken'];
-          final newRefreshToken = response.data['data']['refreshToken'];
+        // 응답 데이터 안전하게 파싱
+        if (response.statusCode == 200 &&
+            response.data is Map &&
+            response.data['success'] == true &&
+            response.data['data'] is Map) {
+          final data = response.data['data'] as Map;
+          final newAccessToken = data['accessToken'] as String?;
+          final newRefreshToken = data['refreshToken'] as String?;
+
+          if (newAccessToken == null || newRefreshToken == null) {
+            log('토큰 갱신 응답에 토큰이 없음');
+            onTokenExpired();
+            return handler.reject(err);
+          }
 
           // 새 토큰 저장
           await authRepository.saveToken(newAccessToken);
