@@ -9,6 +9,7 @@ part 'activate_command.freezed.dart';
 abstract class ActivateCommand with _$ActivateCommand {
   const factory ActivateCommand({
     required String token,
+    required String username,
     required String password,
   }) = _ActivateCommand;
 }

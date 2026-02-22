@@ -10,9 +10,11 @@ abstract class ActivateState with _$ActivateState {
 
   const factory ActivateState({
     required String? token,
+    required String username,
     required String newPassword,
     required String confirmPassword,
     required ActivateSubmitStatus submitStatus,
+    required String? usernameError,
     required String? newPasswordError,
     required String? confirmPasswordError,
     required String? submitError,
@@ -21,9 +23,11 @@ abstract class ActivateState with _$ActivateState {
   factory ActivateState.initial(String? token) {
     return ActivateState(
       token: token,
+      username: '',
       newPassword: '',
       confirmPassword: '',
       submitStatus: ActivateSubmitStatus.idle,
+      usernameError: null,
       newPasswordError: null,
       confirmPasswordError: null,
       submitError: null,
@@ -38,8 +42,10 @@ abstract class ActivateState with _$ActivateState {
     return !isTokenMissing &&
         !isSubmitting &&
         !isSuccess &&
+        username.isNotEmpty &&
         newPassword.isNotEmpty &&
         confirmPassword.isNotEmpty &&
+        usernameError == null &&
         newPasswordError == null &&
         confirmPasswordError == null;
   }

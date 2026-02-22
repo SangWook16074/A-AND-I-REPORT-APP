@@ -15,9 +15,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ActivateState {
   String? get token;
+  String get username;
   String get newPassword;
   String get confirmPassword;
   ActivateSubmitStatus get submitStatus;
+  String? get usernameError;
   String? get newPasswordError;
   String? get confirmPasswordError;
   String? get submitError;
@@ -36,12 +38,16 @@ mixin _$ActivateState {
         (other.runtimeType == runtimeType &&
             other is ActivateState &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.newPassword, newPassword) ||
                 other.newPassword == newPassword) &&
             (identical(other.confirmPassword, confirmPassword) ||
                 other.confirmPassword == confirmPassword) &&
             (identical(other.submitStatus, submitStatus) ||
                 other.submitStatus == submitStatus) &&
+            (identical(other.usernameError, usernameError) ||
+                other.usernameError == usernameError) &&
             (identical(other.newPasswordError, newPasswordError) ||
                 other.newPasswordError == newPasswordError) &&
             (identical(other.confirmPasswordError, confirmPasswordError) ||
@@ -54,16 +60,18 @@ mixin _$ActivateState {
   int get hashCode => Object.hash(
       runtimeType,
       token,
+      username,
       newPassword,
       confirmPassword,
       submitStatus,
+      usernameError,
       newPasswordError,
       confirmPasswordError,
       submitError);
 
   @override
   String toString() {
-    return 'ActivateState(token: $token, newPassword: $newPassword, confirmPassword: $confirmPassword, submitStatus: $submitStatus, newPasswordError: $newPasswordError, confirmPasswordError: $confirmPasswordError, submitError: $submitError)';
+    return 'ActivateState(token: $token, username: $username, newPassword: $newPassword, confirmPassword: $confirmPassword, submitStatus: $submitStatus, usernameError: $usernameError, newPasswordError: $newPasswordError, confirmPasswordError: $confirmPasswordError, submitError: $submitError)';
   }
 }
 
@@ -75,9 +83,11 @@ abstract mixin class $ActivateStateCopyWith<$Res> {
   @useResult
   $Res call(
       {String? token,
+      String username,
       String newPassword,
       String confirmPassword,
       ActivateSubmitStatus submitStatus,
+      String? usernameError,
       String? newPasswordError,
       String? confirmPasswordError,
       String? submitError});
@@ -97,9 +107,11 @@ class _$ActivateStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? token = freezed,
+    Object? username = null,
     Object? newPassword = null,
     Object? confirmPassword = null,
     Object? submitStatus = null,
+    Object? usernameError = freezed,
     Object? newPasswordError = freezed,
     Object? confirmPasswordError = freezed,
     Object? submitError = freezed,
@@ -109,6 +121,10 @@ class _$ActivateStateCopyWithImpl<$Res>
           ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
       newPassword: null == newPassword
           ? _self.newPassword
           : newPassword // ignore: cast_nullable_to_non_nullable
@@ -121,6 +137,10 @@ class _$ActivateStateCopyWithImpl<$Res>
           ? _self.submitStatus
           : submitStatus // ignore: cast_nullable_to_non_nullable
               as ActivateSubmitStatus,
+      usernameError: freezed == usernameError
+          ? _self.usernameError
+          : usernameError // ignore: cast_nullable_to_non_nullable
+              as String?,
       newPasswordError: freezed == newPasswordError
           ? _self.newPasswordError
           : newPasswordError // ignore: cast_nullable_to_non_nullable
@@ -232,9 +252,11 @@ extension ActivateStatePatterns on ActivateState {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
             String? token,
+            String username,
             String newPassword,
             String confirmPassword,
             ActivateSubmitStatus submitStatus,
+            String? usernameError,
             String? newPasswordError,
             String? confirmPasswordError,
             String? submitError)?
@@ -246,9 +268,11 @@ extension ActivateStatePatterns on ActivateState {
       case _ActivateState() when $default != null:
         return $default(
             _that.token,
+            _that.username,
             _that.newPassword,
             _that.confirmPassword,
             _that.submitStatus,
+            _that.usernameError,
             _that.newPasswordError,
             _that.confirmPasswordError,
             _that.submitError);
@@ -274,9 +298,11 @@ extension ActivateStatePatterns on ActivateState {
   TResult when<TResult extends Object?>(
     TResult Function(
             String? token,
+            String username,
             String newPassword,
             String confirmPassword,
             ActivateSubmitStatus submitStatus,
+            String? usernameError,
             String? newPasswordError,
             String? confirmPasswordError,
             String? submitError)
@@ -287,9 +313,11 @@ extension ActivateStatePatterns on ActivateState {
       case _ActivateState():
         return $default(
             _that.token,
+            _that.username,
             _that.newPassword,
             _that.confirmPassword,
             _that.submitStatus,
+            _that.usernameError,
             _that.newPasswordError,
             _that.confirmPasswordError,
             _that.submitError);
@@ -314,9 +342,11 @@ extension ActivateStatePatterns on ActivateState {
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
             String? token,
+            String username,
             String newPassword,
             String confirmPassword,
             ActivateSubmitStatus submitStatus,
+            String? usernameError,
             String? newPasswordError,
             String? confirmPasswordError,
             String? submitError)?
@@ -327,9 +357,11 @@ extension ActivateStatePatterns on ActivateState {
       case _ActivateState() when $default != null:
         return $default(
             _that.token,
+            _that.username,
             _that.newPassword,
             _that.confirmPassword,
             _that.submitStatus,
+            _that.usernameError,
             _that.newPasswordError,
             _that.confirmPasswordError,
             _that.submitError);
@@ -344,9 +376,11 @@ extension ActivateStatePatterns on ActivateState {
 class _ActivateState extends ActivateState {
   const _ActivateState(
       {required this.token,
+      required this.username,
       required this.newPassword,
       required this.confirmPassword,
       required this.submitStatus,
+      required this.usernameError,
       required this.newPasswordError,
       required this.confirmPasswordError,
       required this.submitError})
@@ -355,11 +389,15 @@ class _ActivateState extends ActivateState {
   @override
   final String? token;
   @override
+  final String username;
+  @override
   final String newPassword;
   @override
   final String confirmPassword;
   @override
   final ActivateSubmitStatus submitStatus;
+  @override
+  final String? usernameError;
   @override
   final String? newPasswordError;
   @override
@@ -381,12 +419,16 @@ class _ActivateState extends ActivateState {
         (other.runtimeType == runtimeType &&
             other is _ActivateState &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.newPassword, newPassword) ||
                 other.newPassword == newPassword) &&
             (identical(other.confirmPassword, confirmPassword) ||
                 other.confirmPassword == confirmPassword) &&
             (identical(other.submitStatus, submitStatus) ||
                 other.submitStatus == submitStatus) &&
+            (identical(other.usernameError, usernameError) ||
+                other.usernameError == usernameError) &&
             (identical(other.newPasswordError, newPasswordError) ||
                 other.newPasswordError == newPasswordError) &&
             (identical(other.confirmPasswordError, confirmPasswordError) ||
@@ -399,16 +441,18 @@ class _ActivateState extends ActivateState {
   int get hashCode => Object.hash(
       runtimeType,
       token,
+      username,
       newPassword,
       confirmPassword,
       submitStatus,
+      usernameError,
       newPasswordError,
       confirmPasswordError,
       submitError);
 
   @override
   String toString() {
-    return 'ActivateState(token: $token, newPassword: $newPassword, confirmPassword: $confirmPassword, submitStatus: $submitStatus, newPasswordError: $newPasswordError, confirmPasswordError: $confirmPasswordError, submitError: $submitError)';
+    return 'ActivateState(token: $token, username: $username, newPassword: $newPassword, confirmPassword: $confirmPassword, submitStatus: $submitStatus, usernameError: $usernameError, newPasswordError: $newPasswordError, confirmPasswordError: $confirmPasswordError, submitError: $submitError)';
   }
 }
 
@@ -422,9 +466,11 @@ abstract mixin class _$ActivateStateCopyWith<$Res>
   @useResult
   $Res call(
       {String? token,
+      String username,
       String newPassword,
       String confirmPassword,
       ActivateSubmitStatus submitStatus,
+      String? usernameError,
       String? newPasswordError,
       String? confirmPasswordError,
       String? submitError});
@@ -444,9 +490,11 @@ class __$ActivateStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? token = freezed,
+    Object? username = null,
     Object? newPassword = null,
     Object? confirmPassword = null,
     Object? submitStatus = null,
+    Object? usernameError = freezed,
     Object? newPasswordError = freezed,
     Object? confirmPasswordError = freezed,
     Object? submitError = freezed,
@@ -456,6 +504,10 @@ class __$ActivateStateCopyWithImpl<$Res>
           ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
       newPassword: null == newPassword
           ? _self.newPassword
           : newPassword // ignore: cast_nullable_to_non_nullable
@@ -468,6 +520,10 @@ class __$ActivateStateCopyWithImpl<$Res>
           ? _self.submitStatus
           : submitStatus // ignore: cast_nullable_to_non_nullable
               as ActivateSubmitStatus,
+      usernameError: freezed == usernameError
+          ? _self.usernameError
+          : usernameError // ignore: cast_nullable_to_non_nullable
+              as String?,
       newPasswordError: freezed == newPasswordError
           ? _self.newPasswordError
           : newPasswordError // ignore: cast_nullable_to_non_nullable

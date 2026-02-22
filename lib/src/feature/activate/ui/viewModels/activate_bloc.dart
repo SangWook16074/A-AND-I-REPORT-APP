@@ -28,6 +28,8 @@ class ActivateBloc extends _$ActivateBloc {
             parameters: {'reason': 'token_missing'},
           );
         }
+      case ActivateUsernameChanged():
+        _onUsernameChanged(event.value);
       case ActivateNewPasswordChanged():
         _onNewPasswordChanged(event.value);
       case ActivateConfirmPasswordChanged():
@@ -35,6 +37,14 @@ class ActivateBloc extends _$ActivateBloc {
       case ActivateSubmitted():
         await _onSubmit();
     }
+  }
+
+  void _onUsernameChanged(String value) {
+    state = state.copyWith(
+      username: value,
+      usernameError: _validateUsername(value),
+      submitError: null,
+    );
   }
 
   void _onNewPasswordChanged(String value) {
@@ -77,17 +87,21 @@ class ActivateBloc extends _$ActivateBloc {
       return;
     }
 
+    final usernameError = _validateUsername(state.username);
     final newPasswordError = _validateNewPassword(state.newPassword);
     final confirmPasswordError = _validateConfirmPassword(
       state.confirmPassword,
       state.newPassword,
     );
     state = state.copyWith(
+      usernameError: usernameError,
       newPasswordError: newPasswordError,
       confirmPasswordError: confirmPasswordError,
       submitError: null,
     );
-    if (newPasswordError != null || confirmPasswordError != null) {
+    if (usernameError != null ||
+        newPasswordError != null ||
+        confirmPasswordError != null) {
       return;
     }
 
@@ -99,6 +113,7 @@ class ActivateBloc extends _$ActivateBloc {
 
     final result = await ref.read(activateAccountUsecaseProvider).call(
           token: state.token,
+          username: state.username,
           password: state.newPassword,
         );
     if (result is ActivateSuccess) {
@@ -127,6 +142,13 @@ class ActivateBloc extends _$ActivateBloc {
         'reason': isNetworkError ? 'network_error' : 'token_invalid_or_expired',
       },
     );
+  }
+
+  String? _validateUsername(String value) {
+    if (value.trim().isEmpty) {
+      return '아이디를 입력하세요.';
+    }
+    return null;
   }
 
   String? _validateNewPassword(String value) {

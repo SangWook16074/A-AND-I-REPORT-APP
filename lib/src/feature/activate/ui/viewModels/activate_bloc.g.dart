@@ -6,7 +6,7 @@ part of 'activate_bloc.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$activateBlocHash() => r'bf39ab70467538f31598bf993e974987db1a6dce';
+String _$activateBlocHash() => r'5919a11e0f87d44bed6b9d8e7bd07f6a79824850';
 
 /// Copied from Dart SDK
 class _SystemHash {

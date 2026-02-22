@@ -9,11 +9,13 @@ part of 'activate_request_dto.dart';
 _ActivateRequestDto _$ActivateRequestDtoFromJson(Map<String, dynamic> json) =>
     _ActivateRequestDto(
       token: json['token'] as String,
+      username: json['username'] as String,
       password: json['password'] as String,
     );
 
 Map<String, dynamic> _$ActivateRequestDtoToJson(_ActivateRequestDto instance) =>
     <String, dynamic>{
       'token': instance.token,
+      'username': instance.username,
       'password': instance.password,
     };

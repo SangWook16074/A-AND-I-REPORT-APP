@@ -10,6 +10,9 @@ abstract class ActivateRequestDto with _$ActivateRequestDto {
     /// 초대 링크의 1회성 활성화 토큰
     required String token,
 
+    /// 사용자가 설정할 계정 아이디
+    required String username,
+
     /// 사용자가 설정할 최초 비밀번호
     required String password,
   }) = _ActivateRequestDto;

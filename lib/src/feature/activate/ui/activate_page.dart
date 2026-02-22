@@ -108,6 +108,23 @@ class _ActivatePageState extends ConsumerState<ActivatePage> {
               const SizedBox(height: 18),
               TextField(
                 enabled: inputsEnabled,
+                textInputAction: TextInputAction.next,
+                cursorColor: HomeTheme.primary,
+                decoration: _inputDecoration(
+                  label: '아이디',
+                  hint: '사용할 아이디를 입력하세요',
+                  icon: Icons.person_outline,
+                ).copyWith(errorText: state.usernameError),
+                onChanged: (value) {
+                  bloc.onEvent(ActivateUsernameChanged(value));
+                },
+                onSubmitted: (_) {
+                  FocusScope.of(context).nextFocus();
+                },
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                enabled: inputsEnabled,
                 obscureText: true,
                 textInputAction: TextInputAction.next,
                 cursorColor: HomeTheme.primary,

@@ -15,6 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ActivateCommand {
   String get token;
+  String get username;
   String get password;
 
   /// Create a copy of ActivateCommand
@@ -31,16 +32,18 @@ mixin _$ActivateCommand {
         (other.runtimeType == runtimeType &&
             other is ActivateCommand &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.password, password) ||
                 other.password == password));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, token, password);
+  int get hashCode => Object.hash(runtimeType, token, username, password);
 
   @override
   String toString() {
-    return 'ActivateCommand(token: $token, password: $password)';
+    return 'ActivateCommand(token: $token, username: $username, password: $password)';
   }
 }
 
@@ -50,7 +53,7 @@ abstract mixin class $ActivateCommandCopyWith<$Res> {
           ActivateCommand value, $Res Function(ActivateCommand) _then) =
       _$ActivateCommandCopyWithImpl;
   @useResult
-  $Res call({String token, String password});
+  $Res call({String token, String username, String password});
 }
 
 /// @nodoc
@@ -67,12 +70,17 @@ class _$ActivateCommandCopyWithImpl<$Res>
   @override
   $Res call({
     Object? token = null,
+    Object? username = null,
     Object? password = null,
   }) {
     return _then(_self.copyWith(
       token: null == token
           ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
               as String,
       password: null == password
           ? _self.password
@@ -175,13 +183,14 @@ extension ActivateCommandPatterns on ActivateCommand {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String token, String password)? $default, {
+    TResult Function(String token, String username, String password)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ActivateCommand() when $default != null:
-        return $default(_that.token, _that.password);
+        return $default(_that.token, _that.username, _that.password);
       case _:
         return orElse();
     }
@@ -202,12 +211,12 @@ extension ActivateCommandPatterns on ActivateCommand {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String token, String password) $default,
+    TResult Function(String token, String username, String password) $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ActivateCommand():
-        return $default(_that.token, _that.password);
+        return $default(_that.token, _that.username, _that.password);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -227,12 +236,12 @@ extension ActivateCommandPatterns on ActivateCommand {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String token, String password)? $default,
+    TResult? Function(String token, String username, String password)? $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ActivateCommand() when $default != null:
-        return $default(_that.token, _that.password);
+        return $default(_that.token, _that.username, _that.password);
       case _:
         return null;
     }
@@ -242,10 +251,13 @@ extension ActivateCommandPatterns on ActivateCommand {
 /// @nodoc
 
 class _ActivateCommand implements ActivateCommand {
-  const _ActivateCommand({required this.token, required this.password});
+  const _ActivateCommand(
+      {required this.token, required this.username, required this.password});
 
   @override
   final String token;
+  @override
+  final String username;
   @override
   final String password;
 
@@ -263,16 +275,18 @@ class _ActivateCommand implements ActivateCommand {
         (other.runtimeType == runtimeType &&
             other is _ActivateCommand &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.password, password) ||
                 other.password == password));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, token, password);
+  int get hashCode => Object.hash(runtimeType, token, username, password);
 
   @override
   String toString() {
-    return 'ActivateCommand(token: $token, password: $password)';
+    return 'ActivateCommand(token: $token, username: $username, password: $password)';
   }
 }
 
@@ -284,7 +298,7 @@ abstract mixin class _$ActivateCommandCopyWith<$Res>
       __$ActivateCommandCopyWithImpl;
   @override
   @useResult
-  $Res call({String token, String password});
+  $Res call({String token, String username, String password});
 }
 
 /// @nodoc
@@ -301,12 +315,17 @@ class __$ActivateCommandCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? token = null,
+    Object? username = null,
     Object? password = null,
   }) {
     return _then(_ActivateCommand(
       token: null == token
           ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
               as String,
       password: null == password
           ? _self.password

@@ -5,6 +5,8 @@ part 'activate_event.freezed.dart';
 @freezed
 sealed class ActivateEvent with _$ActivateEvent {
   const factory ActivateEvent.pageOpened() = ActivatePageOpened;
+  const factory ActivateEvent.usernameChanged(String value) =
+      ActivateUsernameChanged;
   const factory ActivateEvent.newPasswordChanged(String value) =
       ActivateNewPasswordChanged;
   const factory ActivateEvent.confirmPasswordChanged(String value) =

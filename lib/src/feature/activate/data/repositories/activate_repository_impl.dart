@@ -14,6 +14,7 @@ class ActivateRepositoryImpl implements ActivateRepository {
     try {
       final request = ActivateRequestDto(
         token: command.token,
+        username: command.username,
         password: command.password,
       );
       await _remoteDatasource.activate(request);

@@ -17,6 +17,9 @@ mixin _$ActivateRequestDto {
   /// 초대 링크의 1회성 활성화 토큰
   String get token;
 
+  /// 사용자가 설정할 계정 아이디
+  String get username;
+
   /// 사용자가 설정할 최초 비밀번호
   String get password;
 
@@ -37,17 +40,19 @@ mixin _$ActivateRequestDto {
         (other.runtimeType == runtimeType &&
             other is ActivateRequestDto &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.password, password) ||
                 other.password == password));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, token, password);
+  int get hashCode => Object.hash(runtimeType, token, username, password);
 
   @override
   String toString() {
-    return 'ActivateRequestDto(token: $token, password: $password)';
+    return 'ActivateRequestDto(token: $token, username: $username, password: $password)';
   }
 }
 
@@ -57,7 +62,7 @@ abstract mixin class $ActivateRequestDtoCopyWith<$Res> {
           ActivateRequestDto value, $Res Function(ActivateRequestDto) _then) =
       _$ActivateRequestDtoCopyWithImpl;
   @useResult
-  $Res call({String token, String password});
+  $Res call({String token, String username, String password});
 }
 
 /// @nodoc
@@ -74,12 +79,17 @@ class _$ActivateRequestDtoCopyWithImpl<$Res>
   @override
   $Res call({
     Object? token = null,
+    Object? username = null,
     Object? password = null,
   }) {
     return _then(_self.copyWith(
       token: null == token
           ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
               as String,
       password: null == password
           ? _self.password
@@ -182,13 +192,14 @@ extension ActivateRequestDtoPatterns on ActivateRequestDto {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String token, String password)? $default, {
+    TResult Function(String token, String username, String password)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ActivateRequestDto() when $default != null:
-        return $default(_that.token, _that.password);
+        return $default(_that.token, _that.username, _that.password);
       case _:
         return orElse();
     }
@@ -209,12 +220,12 @@ extension ActivateRequestDtoPatterns on ActivateRequestDto {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String token, String password) $default,
+    TResult Function(String token, String username, String password) $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ActivateRequestDto():
-        return $default(_that.token, _that.password);
+        return $default(_that.token, _that.username, _that.password);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -234,12 +245,12 @@ extension ActivateRequestDtoPatterns on ActivateRequestDto {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String token, String password)? $default,
+    TResult? Function(String token, String username, String password)? $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ActivateRequestDto() when $default != null:
-        return $default(_that.token, _that.password);
+        return $default(_that.token, _that.username, _that.password);
       case _:
         return null;
     }
@@ -249,13 +260,18 @@ extension ActivateRequestDtoPatterns on ActivateRequestDto {
 /// @nodoc
 @JsonSerializable()
 class _ActivateRequestDto implements ActivateRequestDto {
-  const _ActivateRequestDto({required this.token, required this.password});
+  const _ActivateRequestDto(
+      {required this.token, required this.username, required this.password});
   factory _ActivateRequestDto.fromJson(Map<String, dynamic> json) =>
       _$ActivateRequestDtoFromJson(json);
 
   /// 초대 링크의 1회성 활성화 토큰
   @override
   final String token;
+
+  /// 사용자가 설정할 계정 아이디
+  @override
+  final String username;
 
   /// 사용자가 설정할 최초 비밀번호
   @override
@@ -282,17 +298,19 @@ class _ActivateRequestDto implements ActivateRequestDto {
         (other.runtimeType == runtimeType &&
             other is _ActivateRequestDto &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.password, password) ||
                 other.password == password));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, token, password);
+  int get hashCode => Object.hash(runtimeType, token, username, password);
 
   @override
   String toString() {
-    return 'ActivateRequestDto(token: $token, password: $password)';
+    return 'ActivateRequestDto(token: $token, username: $username, password: $password)';
   }
 }
 
@@ -304,7 +322,7 @@ abstract mixin class _$ActivateRequestDtoCopyWith<$Res>
       __$ActivateRequestDtoCopyWithImpl;
   @override
   @useResult
-  $Res call({String token, String password});
+  $Res call({String token, String username, String password});
 }
 
 /// @nodoc
@@ -321,12 +339,17 @@ class __$ActivateRequestDtoCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? token = null,
+    Object? username = null,
     Object? password = null,
   }) {
     return _then(_ActivateRequestDto(
       token: null == token
           ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
               as String,
       password: null == password
           ? _self.password

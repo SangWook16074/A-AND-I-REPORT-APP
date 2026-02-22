@@ -51,6 +51,7 @@ extension ActivateEventPatterns on ActivateEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ActivatePageOpened value)? pageOpened,
+    TResult Function(ActivateUsernameChanged value)? usernameChanged,
     TResult Function(ActivateNewPasswordChanged value)? newPasswordChanged,
     TResult Function(ActivateConfirmPasswordChanged value)?
         confirmPasswordChanged,
@@ -61,6 +62,8 @@ extension ActivateEventPatterns on ActivateEvent {
     switch (_that) {
       case ActivatePageOpened() when pageOpened != null:
         return pageOpened(_that);
+      case ActivateUsernameChanged() when usernameChanged != null:
+        return usernameChanged(_that);
       case ActivateNewPasswordChanged() when newPasswordChanged != null:
         return newPasswordChanged(_that);
       case ActivateConfirmPasswordChanged() when confirmPasswordChanged != null:
@@ -88,6 +91,7 @@ extension ActivateEventPatterns on ActivateEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ActivatePageOpened value) pageOpened,
+    required TResult Function(ActivateUsernameChanged value) usernameChanged,
     required TResult Function(ActivateNewPasswordChanged value)
         newPasswordChanged,
     required TResult Function(ActivateConfirmPasswordChanged value)
@@ -98,6 +102,8 @@ extension ActivateEventPatterns on ActivateEvent {
     switch (_that) {
       case ActivatePageOpened():
         return pageOpened(_that);
+      case ActivateUsernameChanged():
+        return usernameChanged(_that);
       case ActivateNewPasswordChanged():
         return newPasswordChanged(_that);
       case ActivateConfirmPasswordChanged():
@@ -122,6 +128,7 @@ extension ActivateEventPatterns on ActivateEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ActivatePageOpened value)? pageOpened,
+    TResult? Function(ActivateUsernameChanged value)? usernameChanged,
     TResult? Function(ActivateNewPasswordChanged value)? newPasswordChanged,
     TResult? Function(ActivateConfirmPasswordChanged value)?
         confirmPasswordChanged,
@@ -131,6 +138,8 @@ extension ActivateEventPatterns on ActivateEvent {
     switch (_that) {
       case ActivatePageOpened() when pageOpened != null:
         return pageOpened(_that);
+      case ActivateUsernameChanged() when usernameChanged != null:
+        return usernameChanged(_that);
       case ActivateNewPasswordChanged() when newPasswordChanged != null:
         return newPasswordChanged(_that);
       case ActivateConfirmPasswordChanged() when confirmPasswordChanged != null:
@@ -157,6 +166,7 @@ extension ActivateEventPatterns on ActivateEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? pageOpened,
+    TResult Function(String value)? usernameChanged,
     TResult Function(String value)? newPasswordChanged,
     TResult Function(String value)? confirmPasswordChanged,
     TResult Function()? submitted,
@@ -166,6 +176,8 @@ extension ActivateEventPatterns on ActivateEvent {
     switch (_that) {
       case ActivatePageOpened() when pageOpened != null:
         return pageOpened();
+      case ActivateUsernameChanged() when usernameChanged != null:
+        return usernameChanged(_that.value);
       case ActivateNewPasswordChanged() when newPasswordChanged != null:
         return newPasswordChanged(_that.value);
       case ActivateConfirmPasswordChanged() when confirmPasswordChanged != null:
@@ -193,6 +205,7 @@ extension ActivateEventPatterns on ActivateEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() pageOpened,
+    required TResult Function(String value) usernameChanged,
     required TResult Function(String value) newPasswordChanged,
     required TResult Function(String value) confirmPasswordChanged,
     required TResult Function() submitted,
@@ -201,6 +214,8 @@ extension ActivateEventPatterns on ActivateEvent {
     switch (_that) {
       case ActivatePageOpened():
         return pageOpened();
+      case ActivateUsernameChanged():
+        return usernameChanged(_that.value);
       case ActivateNewPasswordChanged():
         return newPasswordChanged(_that.value);
       case ActivateConfirmPasswordChanged():
@@ -225,6 +240,7 @@ extension ActivateEventPatterns on ActivateEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? pageOpened,
+    TResult? Function(String value)? usernameChanged,
     TResult? Function(String value)? newPasswordChanged,
     TResult? Function(String value)? confirmPasswordChanged,
     TResult? Function()? submitted,
@@ -233,6 +249,8 @@ extension ActivateEventPatterns on ActivateEvent {
     switch (_that) {
       case ActivatePageOpened() when pageOpened != null:
         return pageOpened();
+      case ActivateUsernameChanged() when usernameChanged != null:
+        return usernameChanged(_that.value);
       case ActivateNewPasswordChanged() when newPasswordChanged != null:
         return newPasswordChanged(_that.value);
       case ActivateConfirmPasswordChanged() when confirmPasswordChanged != null:
@@ -262,6 +280,71 @@ class ActivatePageOpened implements ActivateEvent {
   @override
   String toString() {
     return 'ActivateEvent.pageOpened()';
+  }
+}
+
+/// @nodoc
+
+class ActivateUsernameChanged implements ActivateEvent {
+  const ActivateUsernameChanged(this.value);
+
+  final String value;
+
+  /// Create a copy of ActivateEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $ActivateUsernameChangedCopyWith<ActivateUsernameChanged> get copyWith =>
+      _$ActivateUsernameChangedCopyWithImpl<ActivateUsernameChanged>(
+          this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ActivateUsernameChanged &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, value);
+
+  @override
+  String toString() {
+    return 'ActivateEvent.usernameChanged(value: $value)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $ActivateUsernameChangedCopyWith<$Res>
+    implements $ActivateEventCopyWith<$Res> {
+  factory $ActivateUsernameChangedCopyWith(ActivateUsernameChanged value,
+          $Res Function(ActivateUsernameChanged) _then) =
+      _$ActivateUsernameChangedCopyWithImpl;
+  @useResult
+  $Res call({String value});
+}
+
+/// @nodoc
+class _$ActivateUsernameChangedCopyWithImpl<$Res>
+    implements $ActivateUsernameChangedCopyWith<$Res> {
+  _$ActivateUsernameChangedCopyWithImpl(this._self, this._then);
+
+  final ActivateUsernameChanged _self;
+  final $Res Function(ActivateUsernameChanged) _then;
+
+  /// Create a copy of ActivateEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? value = null,
+  }) {
+    return _then(ActivateUsernameChanged(
+      null == value
+          ? _self.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
   }
 }
 
