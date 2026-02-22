@@ -13,7 +13,7 @@ part 'user_view_model.g.dart';
 class UserViewModel extends _$UserViewModel {
   @override
   UserViewState build() {
-    _syncFromToken();
+    Future.microtask(() => _syncFromToken());
     return const UserViewState();
   }
 
