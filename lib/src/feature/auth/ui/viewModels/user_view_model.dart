@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:a_and_i_report_web_server/src/core/models/user.dart';
+import 'package:a_and_i_report_web_server/src/feature/auth/providers/auth_repository_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/providers/delete_cached_user_usecase_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/providers/get_cached_user_usecase_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/providers/get_user_access_token_usecase_provider.dart';
@@ -50,14 +48,23 @@ class UserViewModel extends _$UserViewModel {
         return;
       }
 
-      final cachedUser = await ref.read(getCachedUserUsecaseProvider).call();
-      final resolvedUser = cachedUser;
-      final resolvedRole = resolvedUser?.role;
+      // 캐시된 유저 정보 조회
+      var cachedUser = await ref.read(getCachedUserUsecaseProvider).call();
+
+      // 캐시된 유저가 없으면 서버에서 조회
+      if (cachedUser == null) {
+        final authRepository = ref.read(authRepositoryProvider);
+        final userFromApi = await authRepository.getMyInfo(token);
+
+        // 조회한 유저 정보를 캐시에 저장
+        await ref.read(saveCachedUserUsecaseProvider).call(userFromApi);
+        cachedUser = userFromApi;
+      }
 
       state = state.copyWith(
         status: UserStatus.authenticated,
-        user: resolvedUser,
-        role: resolvedRole,
+        user: cachedUser,
+        role: cachedUser.role,
         errorMsg: null,
       );
     } catch (e) {
