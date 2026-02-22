@@ -29,8 +29,10 @@ final class UserLoginUsecaseImpl implements UserLoginUsecase {
         throw Exception(response.error?.message ?? "로그인에 실패했습니다.");
       }
       final newAccessToken = response.data!.accessToken;
+      final newRefreshToken = response.data!.refreshToken;
 
       await authRepository.saveToken(newAccessToken);
+      await authRepository.saveRefreshToken(newRefreshToken);
       final user = await authRepository.getMyInfo(newAccessToken);
 
       return UserLoginResult(

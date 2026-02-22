@@ -24,4 +24,11 @@ abstract class RemoteAuthDatasource {
   Future<dynamic> getMyInfo(
     @Header("Authorization") String authorization,
   );
+
+  /// 토큰 갱신 API
+  @POST("/v1/auth/refresh")
+  @Headers(<String, dynamic>{
+    'Content-Type': 'application/json',
+  })
+  Future<LoginResponseDto> refreshToken(@Body() Map<String, dynamic> body);
 }

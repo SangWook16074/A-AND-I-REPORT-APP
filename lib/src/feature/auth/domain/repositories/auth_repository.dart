@@ -23,6 +23,15 @@ abstract class AuthRepository {
   /// 로컬 저장소의 액세스 토큰을 삭제합니다. (로그아웃 시 사용)
   Future<void> deleteToken();
 
+  /// 리프레시 토큰을 로컬 저장소에 저장합니다.
+  Future<void> saveRefreshToken(String token);
+
+  /// 로컬 저장소에 저장된 리프레시 토큰을 조회합니다.
+  Future<String?> getRefreshToken();
+
+  /// 로컬 저장소의 리프레시 토큰을 삭제합니다.
+  Future<void> deleteRefreshToken();
+
   /// 액세스 토큰으로 서버의 내 정보를 조회합니다.
   Future<User> getMyInfo(String accessToken);
 

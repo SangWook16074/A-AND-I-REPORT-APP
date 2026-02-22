@@ -42,6 +42,21 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> saveRefreshToken(String token) async {
+    await localAuthRepository.saveRefreshToken(token);
+  }
+
+  @override
+  Future<String?> getRefreshToken() async {
+    return await localAuthRepository.getRefreshToken();
+  }
+
+  @override
+  Future<void> deleteRefreshToken() async {
+    await localAuthRepository.deleteRefreshToken();
+  }
+
+  @override
   Future<User> getMyInfo(String accessToken) async {
     final response =
         await remoteAuthRepository.getMyInfo('Bearer $accessToken');

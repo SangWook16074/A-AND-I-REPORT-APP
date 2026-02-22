@@ -5,6 +5,7 @@ import 'package:web/web.dart';
 
 final class LocalAuthDatasourceImpl implements LocalAuthDatasource {
   static const _tokenKey = 'access-token';
+  static const _refreshTokenKey = 'refresh-token';
   static const _cachedUserKey = 'cached-user';
 
   /// 로컬 스토리지에 jwt 저장
@@ -29,6 +30,24 @@ final class LocalAuthDatasourceImpl implements LocalAuthDatasource {
   @override
   Future<void> deleteUserToken() async {
     window.localStorage.removeItem(_tokenKey);
+  }
+
+  /// 로컬 스토리지에 refresh token 저장
+  @override
+  Future<void> saveRefreshToken(String token) async {
+    window.localStorage.setItem(_refreshTokenKey, token);
+  }
+
+  /// 로컬 스토리지로부터 refresh token 읽어오기
+  @override
+  Future<String?> getRefreshToken() async {
+    return window.localStorage.getItem(_refreshTokenKey);
+  }
+
+  /// 로컬 스토리지로부터 refresh token 삭제
+  @override
+  Future<void> deleteRefreshToken() async {
+    window.localStorage.removeItem(_refreshTokenKey);
   }
 
   @override
