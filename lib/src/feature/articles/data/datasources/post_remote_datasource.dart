@@ -19,6 +19,8 @@ abstract class PostRemoteDatasource {
     String title,
     String contentMarkdown,
     String authorId,
+    String authorNickname,
+    String? authorProfileImageUrl,
     String? status,
     MultipartFile? thumbnail,
   );
@@ -78,7 +80,7 @@ class PostRemoteDatasourceImpl implements PostRemoteDatasource {
     );
 
     final responseData = response.data ?? <String, dynamic>{};
-    return PostListResponseDto.fromJson(responseData);
+    return PostListResponseDto.fromJson(_extractPayload(responseData));
   }
 
   @override
@@ -87,13 +89,20 @@ class PostRemoteDatasourceImpl implements PostRemoteDatasource {
     String title,
     String contentMarkdown,
     String authorId,
+    String authorNickname,
+    String? authorProfileImageUrl,
     String? status,
     MultipartFile? thumbnail,
   ) async {
     final postJson = <String, dynamic>{
       'title': title,
       'contentMarkdown': contentMarkdown,
-      'authorId': authorId,
+      'author': <String, dynamic>{
+        'id': authorId,
+        'nickname': authorNickname,
+        if (authorProfileImageUrl != null && authorProfileImageUrl.isNotEmpty)
+          'profileImageUrl': authorProfileImageUrl,
+      },
       if (status != null && status.isNotEmpty) 'status': status,
     };
     final formDataMap = <String, dynamic>{
@@ -116,7 +125,7 @@ class PostRemoteDatasourceImpl implements PostRemoteDatasource {
     );
 
     final responseData = response.data ?? <String, dynamic>{};
-    return PostResponseDto.fromJson(responseData);
+    return PostResponseDto.fromJson(_extractPayload(responseData));
   }
 
   @override
@@ -129,7 +138,7 @@ class PostRemoteDatasourceImpl implements PostRemoteDatasource {
     );
 
     final responseData = response.data ?? <String, dynamic>{};
-    return PostResponseDto.fromJson(responseData);
+    return PostResponseDto.fromJson(_extractPayload(responseData));
   }
 
   @override
@@ -167,7 +176,7 @@ class PostRemoteDatasourceImpl implements PostRemoteDatasource {
     );
 
     final responseData = response.data ?? <String, dynamic>{};
-    return PostResponseDto.fromJson(responseData);
+    return PostResponseDto.fromJson(_extractPayload(responseData));
   }
 
   @override
@@ -204,6 +213,17 @@ class PostRemoteDatasourceImpl implements PostRemoteDatasource {
     );
 
     final responseData = response.data ?? <String, dynamic>{};
-    return PostListResponseDto.fromJson(responseData);
+    return PostListResponseDto.fromJson(_extractPayload(responseData));
+  }
+
+  Map<String, dynamic> _extractPayload(Map<String, dynamic> responseData) {
+    final data = responseData['data'];
+    if (data is Map<String, dynamic>) {
+      return data;
+    }
+    if (data is Map) {
+      return Map<String, dynamic>.from(data);
+    }
+    return responseData;
   }
 }

@@ -7,6 +7,8 @@ class CreatePostPayload {
     required this.title,
     required this.contentMarkdown,
     required this.authorId,
+    required this.authorNickname,
+    this.authorProfileImageUrl,
     this.status,
     this.imageFileName,
     this.imageBytes,
@@ -20,6 +22,12 @@ class CreatePostPayload {
 
   /// 작성자 ID(UUID)입니다.
   final String authorId;
+
+  /// 작성자 닉네임입니다.
+  final String authorNickname;
+
+  /// 작성자 프로필 이미지 URL입니다.
+  final String? authorProfileImageUrl;
 
   /// 게시글 상태입니다. (예: Draft, Published, Deleted)
   final String? status;

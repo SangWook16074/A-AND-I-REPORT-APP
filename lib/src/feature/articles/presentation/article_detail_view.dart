@@ -1,7 +1,9 @@
 import 'package:a_and_i_report_web_server/src/core/auth/role_policy.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/post.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/presentation/widgets/article_markdown_preview_support.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/providers/article_post_providers.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/ui/viewModels/article_detail_view_model.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/ui/viewModels/article_list_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_state.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_model.dart';
@@ -22,6 +24,60 @@ class ArticleDetailView extends ConsumerWidget {
 
   static final SyntaxHighlighter _codeSyntaxHighlighter =
       ArticleMarkdownCodeSyntaxHighlighter();
+
+  Future<void> _deletePost(
+    BuildContext context,
+    WidgetRef ref, {
+    required String postId,
+  }) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('게시글 삭제'),
+        content: const Text('정말 이 게시글을 삭제하시겠습니까?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('취소'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: const Color(0xFFDC2626),
+            ),
+            child: const Text('삭제'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete != true) {
+      return;
+    }
+
+    try {
+      await ref.read(postRepositoryProvider).deletePost(postId: postId);
+      ref.invalidate(articleListViewModelProvider);
+      if (!context.mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('게시글이 삭제되었습니다.'),
+        ),
+      );
+      context.go('/articles');
+    } catch (_) {
+      if (!context.mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('게시글 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,6 +111,14 @@ class ArticleDetailView extends ConsumerWidget {
               data: (post) => _ArticleDetailContent(
                 post: post,
                 canShowWriteButton: canShowWriteButton,
+                canShowDeleteButton: isLoggedIn &&
+                    userState.userId != null &&
+                    userState.userId == post.author.id,
+                onDelete: () => _deletePost(
+                  context,
+                  ref,
+                  postId: post.id,
+                ),
                 isMobile: isMobile,
                 isTablet: isTablet,
                 markdownStyle: createArticlePreviewMarkdownStyle(context),
@@ -67,7 +131,8 @@ class ArticleDetailView extends ConsumerWidget {
                 ),
               ),
               error: (_, __) => _ArticleDetailError(
-                onRetry: () => ref.invalidate(articleDetailViewModelProvider(id)),
+                onRetry: () =>
+                    ref.invalidate(articleDetailViewModelProvider(id)),
               ),
             ),
           ),
@@ -81,6 +146,8 @@ class _ArticleDetailContent extends StatelessWidget {
   const _ArticleDetailContent({
     required this.post,
     required this.canShowWriteButton,
+    required this.canShowDeleteButton,
+    required this.onDelete,
     required this.isMobile,
     required this.isTablet,
     required this.markdownStyle,
@@ -89,6 +156,8 @@ class _ArticleDetailContent extends StatelessWidget {
 
   final Post post;
   final bool canShowWriteButton;
+  final bool canShowDeleteButton;
+  final Future<void> Function() onDelete;
   final bool isMobile;
   final bool isTablet;
   final MarkdownStyleSheet markdownStyle;
@@ -98,9 +167,15 @@ class _ArticleDetailContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final headingFont = isMobile ? 32.0 : (isTablet ? 40.0 : 46.0);
     final introFont = isMobile ? 17.0 : (isTablet ? 19.0 : 21.0);
-    final normalizedMarkdown = normalizeMarkdownForPreview(post.contentMarkdown);
+    final normalizedMarkdown =
+        normalizeMarkdownForPreview(post.contentMarkdown);
     final intro = _extractIntro(normalizedMarkdown);
-    final thumbnailUrl = _extractFirstImageUrl(normalizedMarkdown);
+    final thumbnailUrl = _resolveThumbnailUrl(
+      thumbnailUrl: post.thumbnailUrl,
+      markdown: normalizedMarkdown,
+    );
+    final authorProfile =
+        _extractValidProfileImageUrl(post.author.profileImage);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,13 +216,31 @@ class _ArticleDetailContent extends StatelessWidget {
           ],
         ),
         SizedBox(height: isMobile ? 10 : 12),
-        if (canShowWriteButton)
+        if (canShowWriteButton || canShowDeleteButton)
           Align(
             alignment: Alignment.centerRight,
-            child: FilledButton.icon(
-              onPressed: () => context.go('/articles/write'),
-              icon: const Icon(Icons.edit, size: 18),
-              label: const Text('블로그 글 작성'),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (canShowDeleteButton)
+                  TextButton(
+                    onPressed: () async {
+                      await onDelete();
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFFDC2626),
+                    ),
+                    child: const Text('삭제'),
+                  ),
+                if (canShowDeleteButton && canShowWriteButton)
+                  const SizedBox(width: 8),
+                if (canShowWriteButton)
+                  FilledButton.icon(
+                    onPressed: () => context.go('/articles/write'),
+                    icon: const Icon(Icons.edit, size: 18),
+                    label: const Text('블로그 글 작성'),
+                  ),
+              ],
             ),
           ),
         SizedBox(height: isMobile ? 18 : 26),
@@ -179,7 +272,11 @@ class _ArticleDetailContent extends StatelessWidget {
               CircleAvatar(
                 radius: isMobile ? 19 : 22,
                 backgroundColor: Colors.black.withValues(alpha: 0.06),
-                child: const Icon(Icons.person, color: HomeTheme.textMuted),
+                backgroundImage:
+                    authorProfile == null ? null : NetworkImage(authorProfile),
+                child: authorProfile == null
+                    ? const Icon(Icons.person, color: HomeTheme.textMuted)
+                    : null,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -187,7 +284,7 @@ class _ArticleDetailContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '작성자 ${post.authorId}',
+                      post.author.nickname,
                       style: TextStyle(
                         color: HomeTheme.textMain,
                         fontSize: isMobile ? 13 : 14,
@@ -229,18 +326,6 @@ class _ArticleDetailContent extends StatelessWidget {
             ],
           ),
         ),
-        if (intro.isNotEmpty) ...[
-          SizedBox(height: isMobile ? 18 : 26),
-          Text(
-            intro,
-            style: TextStyle(
-              color: HomeTheme.textMuted.withValues(alpha: 0.9),
-              fontSize: introFont,
-              fontStyle: FontStyle.italic,
-              height: 1.5,
-            ),
-          ),
-        ],
         if (thumbnailUrl != null) ...[
           SizedBox(height: isMobile ? 18 : 22),
           ClipRRect(
@@ -343,6 +428,36 @@ String _formatKoreanDate(DateTime dateTime) {
   return '${dateTime.year.toString().padLeft(4, '0')}.'
       '${dateTime.month.toString().padLeft(2, '0')}.'
       '${dateTime.day.toString().padLeft(2, '0')}';
+}
+
+String? _extractValidProfileImageUrl(String? rawUrl) {
+  return _extractValidHttpUrl(rawUrl);
+}
+
+String? _resolveThumbnailUrl({
+  required String? thumbnailUrl,
+  required String markdown,
+}) {
+  final fromField = _extractValidHttpUrl(thumbnailUrl);
+  if (fromField != null) {
+    return fromField;
+  }
+  return _extractFirstImageUrl(markdown);
+}
+
+String? _extractValidHttpUrl(String? rawUrl) {
+  final normalized = rawUrl?.trim();
+  if (normalized == null || normalized.isEmpty) {
+    return null;
+  }
+  final uri = Uri.tryParse(normalized);
+  if (uri == null || !uri.hasScheme) {
+    return null;
+  }
+  if (uri.scheme != 'http' && uri.scheme != 'https') {
+    return null;
+  }
+  return normalized;
 }
 
 String _statusLabel(String status) {

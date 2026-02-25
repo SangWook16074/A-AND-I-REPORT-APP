@@ -1,10 +1,12 @@
 import 'package:a_and_i_report_web_server/src/feature/articles/data/datasources/post_remote_datasource.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/data/dtos/post_author_response_dto.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/data/dtos/post_list_response_dto.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/data/dtos/post_response_dto.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/data/datasources/local/local_auth_datasource.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/create_post_payload.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/patch_post_payload.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/post.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/post_author.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/post_page.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/repositories/post_repository.dart';
 import 'package:dio/dio.dart';
@@ -47,6 +49,8 @@ class PostRepositoryImpl implements PostRepository {
       payload.title,
       payload.contentMarkdown,
       payload.authorId,
+      payload.authorNickname,
+      payload.authorProfileImageUrl,
       payload.status,
       imageFile,
     );
@@ -87,7 +91,22 @@ class PostRepositoryImpl implements PostRepository {
     required String postId,
   }) async {
     final authorization = await _resolveAuthorization();
-    return postRemoteDatasource.deletePost(authorization, postId);
+    try {
+      await postRemoteDatasource.deletePost(authorization, postId);
+    } on DioException catch (e) {
+      if (e.response?.statusCode != 403) {
+        rethrow;
+      }
+
+      await postRemoteDatasource.patchPost(
+        authorization,
+        postId,
+        null,
+        null,
+        'Deleted',
+        null,
+      );
+    }
   }
 
   @override
@@ -149,10 +168,22 @@ extension on PostResponseDto {
       id: id,
       title: title,
       contentMarkdown: contentMarkdown,
-      authorId: authorId,
+      thumbnailUrl: thumbnailUrl,
+      author: author.toEntity(),
       status: status,
       createdAt: createdAt,
       updatedAt: updatedAt,
+    );
+  }
+}
+
+extension on PostAuthorResponseDto {
+  /// DTO를 도메인 엔티티로 변환합니다.
+  PostAuthor toEntity() {
+    return PostAuthor(
+      id: id,
+      nickname: nickname,
+      profileImage: profileImage,
     );
   }
 }

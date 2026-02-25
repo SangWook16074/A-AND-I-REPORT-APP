@@ -17,7 +17,8 @@ mixin _$PostResponseDto {
   String get id;
   String get title;
   String get contentMarkdown;
-  String get authorId;
+  String? get thumbnailUrl;
+  PostAuthorResponseDto get author;
   String get status;
   DateTime get createdAt;
   DateTime get updatedAt;
@@ -42,8 +43,9 @@ mixin _$PostResponseDto {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.contentMarkdown, contentMarkdown) ||
                 other.contentMarkdown == contentMarkdown) &&
-            (identical(other.authorId, authorId) ||
-                other.authorId == authorId) &&
+            (identical(other.thumbnailUrl, thumbnailUrl) ||
+                other.thumbnailUrl == thumbnailUrl) &&
+            (identical(other.author, author) || other.author == author) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -54,11 +56,11 @@ mixin _$PostResponseDto {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, contentMarkdown,
-      authorId, status, createdAt, updatedAt);
+      thumbnailUrl, author, status, createdAt, updatedAt);
 
   @override
   String toString() {
-    return 'PostResponseDto(id: $id, title: $title, contentMarkdown: $contentMarkdown, authorId: $authorId, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PostResponseDto(id: $id, title: $title, contentMarkdown: $contentMarkdown, thumbnailUrl: $thumbnailUrl, author: $author, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
@@ -72,10 +74,13 @@ abstract mixin class $PostResponseDtoCopyWith<$Res> {
       {String id,
       String title,
       String contentMarkdown,
-      String authorId,
+      String? thumbnailUrl,
+      PostAuthorResponseDto author,
       String status,
       DateTime createdAt,
       DateTime updatedAt});
+
+  $PostAuthorResponseDtoCopyWith<$Res> get author;
 }
 
 /// @nodoc
@@ -94,7 +99,8 @@ class _$PostResponseDtoCopyWithImpl<$Res>
     Object? id = null,
     Object? title = null,
     Object? contentMarkdown = null,
-    Object? authorId = null,
+    Object? thumbnailUrl = freezed,
+    Object? author = null,
     Object? status = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -112,10 +118,14 @@ class _$PostResponseDtoCopyWithImpl<$Res>
           ? _self.contentMarkdown
           : contentMarkdown // ignore: cast_nullable_to_non_nullable
               as String,
-      authorId: null == authorId
-          ? _self.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
+      thumbnailUrl: freezed == thumbnailUrl
+          ? _self.thumbnailUrl
+          : thumbnailUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      author: null == author
+          ? _self.author
+          : author // ignore: cast_nullable_to_non_nullable
+              as PostAuthorResponseDto,
       status: null == status
           ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -129,6 +139,16 @@ class _$PostResponseDtoCopyWithImpl<$Res>
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
+  }
+
+  /// Create a copy of PostResponseDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PostAuthorResponseDtoCopyWith<$Res> get author {
+    return $PostAuthorResponseDtoCopyWith<$Res>(_self.author, (value) {
+      return _then(_self.copyWith(author: value));
+    });
   }
 }
 
@@ -227,7 +247,8 @@ extension PostResponseDtoPatterns on PostResponseDto {
             String id,
             String title,
             String contentMarkdown,
-            String authorId,
+            String? thumbnailUrl,
+            PostAuthorResponseDto author,
             String status,
             DateTime createdAt,
             DateTime updatedAt)?
@@ -237,8 +258,15 @@ extension PostResponseDtoPatterns on PostResponseDto {
     final _that = this;
     switch (_that) {
       case _PostResponseDto() when $default != null:
-        return $default(_that.id, _that.title, _that.contentMarkdown,
-            _that.authorId, _that.status, _that.createdAt, _that.updatedAt);
+        return $default(
+            _that.id,
+            _that.title,
+            _that.contentMarkdown,
+            _that.thumbnailUrl,
+            _that.author,
+            _that.status,
+            _that.createdAt,
+            _that.updatedAt);
       case _:
         return orElse();
     }
@@ -263,7 +291,8 @@ extension PostResponseDtoPatterns on PostResponseDto {
             String id,
             String title,
             String contentMarkdown,
-            String authorId,
+            String? thumbnailUrl,
+            PostAuthorResponseDto author,
             String status,
             DateTime createdAt,
             DateTime updatedAt)
@@ -272,8 +301,15 @@ extension PostResponseDtoPatterns on PostResponseDto {
     final _that = this;
     switch (_that) {
       case _PostResponseDto():
-        return $default(_that.id, _that.title, _that.contentMarkdown,
-            _that.authorId, _that.status, _that.createdAt, _that.updatedAt);
+        return $default(
+            _that.id,
+            _that.title,
+            _that.contentMarkdown,
+            _that.thumbnailUrl,
+            _that.author,
+            _that.status,
+            _that.createdAt,
+            _that.updatedAt);
     }
   }
 
@@ -295,7 +331,8 @@ extension PostResponseDtoPatterns on PostResponseDto {
             String id,
             String title,
             String contentMarkdown,
-            String authorId,
+            String? thumbnailUrl,
+            PostAuthorResponseDto author,
             String status,
             DateTime createdAt,
             DateTime updatedAt)?
@@ -304,8 +341,15 @@ extension PostResponseDtoPatterns on PostResponseDto {
     final _that = this;
     switch (_that) {
       case _PostResponseDto() when $default != null:
-        return $default(_that.id, _that.title, _that.contentMarkdown,
-            _that.authorId, _that.status, _that.createdAt, _that.updatedAt);
+        return $default(
+            _that.id,
+            _that.title,
+            _that.contentMarkdown,
+            _that.thumbnailUrl,
+            _that.author,
+            _that.status,
+            _that.createdAt,
+            _that.updatedAt);
       case _:
         return null;
     }
@@ -319,7 +363,8 @@ class _PostResponseDto implements PostResponseDto {
       {required this.id,
       required this.title,
       required this.contentMarkdown,
-      required this.authorId,
+      this.thumbnailUrl,
+      required this.author,
       required this.status,
       required this.createdAt,
       required this.updatedAt});
@@ -333,7 +378,9 @@ class _PostResponseDto implements PostResponseDto {
   @override
   final String contentMarkdown;
   @override
-  final String authorId;
+  final String? thumbnailUrl;
+  @override
+  final PostAuthorResponseDto author;
   @override
   final String status;
   @override
@@ -365,8 +412,9 @@ class _PostResponseDto implements PostResponseDto {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.contentMarkdown, contentMarkdown) ||
                 other.contentMarkdown == contentMarkdown) &&
-            (identical(other.authorId, authorId) ||
-                other.authorId == authorId) &&
+            (identical(other.thumbnailUrl, thumbnailUrl) ||
+                other.thumbnailUrl == thumbnailUrl) &&
+            (identical(other.author, author) || other.author == author) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -377,11 +425,11 @@ class _PostResponseDto implements PostResponseDto {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, contentMarkdown,
-      authorId, status, createdAt, updatedAt);
+      thumbnailUrl, author, status, createdAt, updatedAt);
 
   @override
   String toString() {
-    return 'PostResponseDto(id: $id, title: $title, contentMarkdown: $contentMarkdown, authorId: $authorId, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PostResponseDto(id: $id, title: $title, contentMarkdown: $contentMarkdown, thumbnailUrl: $thumbnailUrl, author: $author, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
@@ -397,10 +445,14 @@ abstract mixin class _$PostResponseDtoCopyWith<$Res>
       {String id,
       String title,
       String contentMarkdown,
-      String authorId,
+      String? thumbnailUrl,
+      PostAuthorResponseDto author,
       String status,
       DateTime createdAt,
       DateTime updatedAt});
+
+  @override
+  $PostAuthorResponseDtoCopyWith<$Res> get author;
 }
 
 /// @nodoc
@@ -419,7 +471,8 @@ class __$PostResponseDtoCopyWithImpl<$Res>
     Object? id = null,
     Object? title = null,
     Object? contentMarkdown = null,
-    Object? authorId = null,
+    Object? thumbnailUrl = freezed,
+    Object? author = null,
     Object? status = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -437,10 +490,14 @@ class __$PostResponseDtoCopyWithImpl<$Res>
           ? _self.contentMarkdown
           : contentMarkdown // ignore: cast_nullable_to_non_nullable
               as String,
-      authorId: null == authorId
-          ? _self.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
+      thumbnailUrl: freezed == thumbnailUrl
+          ? _self.thumbnailUrl
+          : thumbnailUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      author: null == author
+          ? _self.author
+          : author // ignore: cast_nullable_to_non_nullable
+              as PostAuthorResponseDto,
       status: null == status
           ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -454,6 +511,16 @@ class __$PostResponseDtoCopyWithImpl<$Res>
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
+  }
+
+  /// Create a copy of PostResponseDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PostAuthorResponseDtoCopyWith<$Res> get author {
+    return $PostAuthorResponseDtoCopyWith<$Res>(_self.author, (value) {
+      return _then(_self.copyWith(author: value));
+    });
   }
 }
 

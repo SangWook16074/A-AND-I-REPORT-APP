@@ -7,7 +7,7 @@ part of 'article_list_view_model.dart';
 // **************************************************************************
 
 String _$articleListViewModelHash() =>
-    r'c599e5f38b5397c6842218fee3cd0940264e5025';
+    r'b57a868699d7b2d50e975105a91095f10156e1ae';
 
 /// 게시글 목록 화면 상태를 관리하는 ViewModel입니다.
 ///

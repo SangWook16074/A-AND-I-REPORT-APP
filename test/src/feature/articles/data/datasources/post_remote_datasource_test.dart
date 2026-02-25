@@ -39,6 +39,8 @@ void main() {
         '제목',
         '본문',
         '11111111-1111-1111-1111-111111111111',
+        '멘토',
+        'https://example.com/profile.png',
         'Published',
         thumbnail,
       );
@@ -60,7 +62,11 @@ void main() {
         <String, dynamic>{
           'title': '제목',
           'contentMarkdown': '본문',
-          'authorId': '11111111-1111-1111-1111-111111111111',
+          'author': <String, dynamic>{
+            'id': '11111111-1111-1111-1111-111111111111',
+            'nickname': '멘토',
+            'profileImageUrl': 'https://example.com/profile.png',
+          },
           'status': 'Published',
         },
       );
@@ -125,20 +131,29 @@ void main() {
 
 Map<String, dynamic> _responseJson() {
   return <String, dynamic>{
-    'id': 'post-id',
-    'title': '제목',
-    'contentMarkdown': '본문',
-    'authorId': '11111111-1111-1111-1111-111111111111',
-    'status': 'Published',
-    'createdAt': DateTime.utc(2026, 1, 1).toIso8601String(),
-    'updatedAt': DateTime.utc(2026, 1, 1).toIso8601String(),
+    'success': true,
+    'data': <String, dynamic>{
+      'id': 'post-id',
+      'title': '제목',
+      'contentMarkdown': '본문',
+      'thumbnailUrl': 'https://example.com/thumbnail.webp',
+      'author': <String, dynamic>{
+        'id': '11111111-1111-1111-1111-111111111111',
+        'nickname': '멘토',
+        'profileImage': 'https://example.com/profile.png',
+      },
+      'status': 'Published',
+      'createdAt': DateTime.utc(2026, 1, 1).toIso8601String(),
+      'updatedAt': DateTime.utc(2026, 1, 1).toIso8601String(),
+    },
+    'error': null,
   };
 }
 
 Future<String> _readMultipartAsString(MultipartFile file) async {
   final bytes = await file.finalize().fold<List<int>>(
-        <int>[],
-        (acc, chunk) => acc..addAll(chunk),
-      );
+    <int>[],
+    (acc, chunk) => acc..addAll(chunk),
+  );
   return utf8.decode(bytes);
 }

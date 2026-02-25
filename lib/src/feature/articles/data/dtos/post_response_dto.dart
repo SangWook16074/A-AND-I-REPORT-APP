@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/data/dtos/post_author_response_dto.dart';
 
 part 'post_response_dto.freezed.dart';
 part 'post_response_dto.g.dart';
@@ -11,7 +12,8 @@ sealed class PostResponseDto with _$PostResponseDto {
     required String id,
     required String title,
     required String contentMarkdown,
-    required String authorId,
+    String? thumbnailUrl,
+    required PostAuthorResponseDto author,
     required String status,
     required DateTime createdAt,
     required DateTime updatedAt,

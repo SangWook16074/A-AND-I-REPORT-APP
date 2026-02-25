@@ -216,9 +216,9 @@ class ArticleCardListSection extends StatelessWidget {
       date: _formatKoreanDate(post.updatedAt),
       title: post.title,
       summary: _extractSummary(post.contentMarkdown),
-      thumbnailUrl: _extractFirstImageUrl(post.contentMarkdown),
-      views: '-',
-      comments: '-',
+      thumbnailUrl: _resolveThumbnailUrl(post),
+      authorNickname: post.author.nickname,
+      authorProfileImage: post.author.profileImage,
       icon: _statusIcon(post.status),
     );
   }
@@ -312,6 +312,33 @@ String? _extractFirstImageUrl(String markdown) {
   return sanitized;
 }
 
+String? _resolveThumbnailUrl(Post post) {
+  final fromField = _extractValidHttpUrl(post.thumbnailUrl);
+  if (fromField != null) {
+    return fromField;
+  }
+  return _extractFirstImageUrl(post.contentMarkdown);
+}
+
+String? _extractValidHttpUrl(String? rawUrl) {
+  final normalized = rawUrl?.trim();
+  if (normalized == null || normalized.isEmpty) {
+    return null;
+  }
+  final uri = Uri.tryParse(normalized);
+  if (uri == null || !uri.hasScheme) {
+    return null;
+  }
+  if (uri.scheme != 'http' && uri.scheme != 'https') {
+    return null;
+  }
+  return normalized;
+}
+
+String? _extractValidProfileImageUrl(String? rawUrl) {
+  return _extractValidHttpUrl(rawUrl);
+}
+
 IconData _statusIcon(String status) {
   switch (status.toLowerCase()) {
     case 'published':
@@ -369,8 +396,8 @@ class ArticleCardView extends StatelessWidget {
     required this.title,
     required this.summary,
     required this.thumbnailUrl,
-    required this.views,
-    required this.comments,
+    required this.authorNickname,
+    required this.authorProfileImage,
     required this.icon,
   });
 
@@ -380,8 +407,8 @@ class ArticleCardView extends StatelessWidget {
   final String title;
   final String summary;
   final String? thumbnailUrl;
-  final String views;
-  final String comments;
+  final String authorNickname;
+  final String? authorProfileImage;
   final IconData icon;
 
   @override
@@ -419,8 +446,8 @@ class ArticleCardView extends StatelessWidget {
               date: date,
               title: title,
               summary: summary,
-              views: views,
-              comments: comments,
+              authorNickname: authorNickname,
+              authorProfileImage: authorProfileImage,
             )
           else
             Expanded(
@@ -429,8 +456,8 @@ class ArticleCardView extends StatelessWidget {
                 date: date,
                 title: title,
                 summary: summary,
-                views: views,
-                comments: comments,
+                authorNickname: authorNickname,
+                authorProfileImage: authorProfileImage,
               ),
             ),
         ],
@@ -506,16 +533,16 @@ class ArticleCardContentView extends StatelessWidget {
     required this.date,
     required this.title,
     required this.summary,
-    required this.views,
-    required this.comments,
+    required this.authorNickname,
+    required this.authorProfileImage,
   });
 
   final String category;
   final String date;
   final String title;
   final String summary;
-  final String views;
-  final String comments;
+  final String authorNickname;
+  final String? authorProfileImage;
 
   @override
   Widget build(BuildContext context) {
@@ -524,6 +551,7 @@ class ArticleCardContentView extends StatelessWidget {
     final isTablet = width >= 768 && width < 1200;
     final titleFont = isMobile ? 22.0 : (isTablet ? 24.0 : 27.0);
     final bodyFont = isMobile ? 13.0 : 14.0;
+    final authorProfile = _extractValidProfileImageUrl(authorProfileImage);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -590,21 +618,22 @@ class ArticleCardContentView extends StatelessWidget {
         SizedBox(height: isMobile ? 8 : 10),
         Row(
           children: [
-            Icon(Icons.visibility, size: 16, color: HomeTheme.textMuted),
-            const SizedBox(width: 4),
-            Text(
-              views,
-              style: TextStyle(
-                color: HomeTheme.textMuted,
-                fontSize: isMobile ? 11 : 12,
-                fontWeight: FontWeight.w600,
-              ),
+            CircleAvatar(
+              radius: isMobile ? 10 : 11,
+              backgroundColor: Colors.black.withValues(alpha: 0.06),
+              backgroundImage:
+                  authorProfile == null ? null : NetworkImage(authorProfile),
+              child: authorProfile == null
+                  ? Icon(
+                      Icons.person,
+                      size: isMobile ? 11 : 12,
+                      color: HomeTheme.textMuted,
+                    )
+                  : null,
             ),
-            const SizedBox(width: 12),
-            Icon(Icons.chat_bubble, size: 14, color: HomeTheme.textMuted),
-            const SizedBox(width: 4),
+            const SizedBox(width: 6),
             Text(
-              comments,
+              authorNickname,
               style: TextStyle(
                 color: HomeTheme.textMuted,
                 fontSize: isMobile ? 11 : 12,

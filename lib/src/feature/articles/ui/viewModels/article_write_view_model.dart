@@ -6,7 +6,10 @@ import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_vi
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/create_post_payload.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/image_upload_payload.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/patch_post_payload.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/post.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/post_author.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/providers/article_post_providers.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/ui/viewModels/article_list_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/ui/viewModels/article_write_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -174,9 +177,8 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
       state = state.copyWith(errorMsg: '본문을 입력해주세요.', successMsg: '');
       return false;
     }
-    final hasThumbnailImage =
-        (state.thumbnailBytes?.isNotEmpty ?? false) &&
-            (state.thumbnailFileName?.isNotEmpty ?? false);
+    final hasThumbnailImage = (state.thumbnailBytes?.isNotEmpty ?? false) &&
+        (state.thumbnailFileName?.isNotEmpty ?? false);
     if (!hasThumbnailImage) {
       state = state.copyWith(
         errorMsg: '썸네일 이미지를 선택해주세요.',
@@ -187,7 +189,7 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
 
     try {
       _ensureCanManageArticles();
-      final userId = _resolveUserId();
+      final authorInfo = _resolveAuthorInfo();
       state = state.copyWith(
         isSubmitting: true,
         title: normalizedTitle,
@@ -204,7 +206,9 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
               payload: CreatePostPayload(
                 title: normalizedTitle,
                 contentMarkdown: normalizedContent,
-                authorId: userId,
+                authorId: authorInfo.id,
+                authorNickname: authorInfo.nickname,
+                authorProfileImageUrl: authorInfo.profileImageUrl,
                 status: status,
                 imageFileName: imageFileName,
                 imageBytes: imageBytes,
@@ -218,6 +222,7 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
           isSubmitting: false,
           successMsg: successMsg,
         );
+        _syncPublishedPostToList(createdPost);
         return true;
       }
 
@@ -239,6 +244,7 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
         isSubmitting: false,
         successMsg: successMsg,
       );
+      _syncPublishedPostToList(patchedPost);
       return true;
     } catch (e) {
       state = state.copyWith(
@@ -257,11 +263,57 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
     }
   }
 
-  String _resolveUserId() {
-    final userId = ref.read(userViewModelProvider).userId;
+  ({String id, String nickname, String? profileImageUrl}) _resolveAuthorInfo() {
+    final userState = ref.read(userViewModelProvider);
+    final userId = userState.userId;
     if (userId == null || userId.isEmpty) {
       throw Exception('사용자 정보를 확인할 수 없습니다.');
     }
-    return userId;
+    final nickname = userState.nickname;
+    if (nickname == null || nickname.trim().isEmpty) {
+      throw Exception('사용자 닉네임을 확인할 수 없습니다.');
+    }
+
+    return (
+      id: userId,
+      nickname: nickname.trim(),
+      profileImageUrl: userState.profileImageUrl?.trim(),
+    );
+  }
+
+  void _syncPublishedPostToList(Post post) {
+    if (post.status.trim().toLowerCase() != 'published') {
+      return;
+    }
+
+    final userState = ref.read(userViewModelProvider);
+    final userNickname = userState.nickname?.trim();
+    final userProfileImage = userState.profileImageUrl?.trim();
+    final normalizedNickname = userNickname != null && userNickname.isNotEmpty
+        ? userNickname
+        : post.author.nickname;
+    final normalizedProfileImage =
+        userProfileImage != null && userProfileImage.isNotEmpty
+            ? userProfileImage
+            : post.author.profileImage;
+
+    final normalizedPost = Post(
+      id: post.id,
+      title: post.title,
+      contentMarkdown: post.contentMarkdown,
+      thumbnailUrl: post.thumbnailUrl,
+      author: PostAuthor(
+        id: post.author.id,
+        nickname: normalizedNickname,
+        profileImage: normalizedProfileImage,
+      ),
+      status: post.status,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+    );
+
+    ref
+        .read(articleListViewModelProvider.notifier)
+        .upsertPublishedPost(normalizedPost);
   }
 }

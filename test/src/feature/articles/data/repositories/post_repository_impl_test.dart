@@ -1,4 +1,5 @@
 import 'package:a_and_i_report_web_server/src/feature/articles/data/datasources/post_remote_datasource.dart';
+import 'package:a_and_i_report_web_server/src/feature/articles/data/dtos/post_author_response_dto.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/data/dtos/post_list_response_dto.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/data/dtos/post_response_dto.dart';
 import 'package:a_and_i_report_web_server/src/feature/articles/data/repositories/post_repository_impl.dart';
@@ -34,6 +35,8 @@ void main() {
       expect(result.items.length, 1);
       expect(result.items.first.id, 'post-1');
       expect(result.items.first.status, 'Published');
+      expect(result.items.first.author.id, 'author-id-1');
+      expect(result.items.first.author.nickname, 'author-1');
     });
 
     test('createPost는 payload를 DTO로 변환하고 Post를 반환한다', () async {
@@ -49,6 +52,8 @@ void main() {
           title: '새 글',
           contentMarkdown: '# hello',
           authorId: 'author-1',
+          authorNickname: '멘토',
+          authorProfileImageUrl: 'https://example.com/profile.png',
           status: 'Draft',
         ),
       );
@@ -56,6 +61,9 @@ void main() {
       expect(datasource.createTitle, '새 글');
       expect(datasource.createContentMarkdown, '# hello');
       expect(datasource.createAuthorId, 'author-1');
+      expect(datasource.createAuthorNickname, '멘토');
+      expect(datasource.createAuthorProfileImageUrl,
+          'https://example.com/profile.png');
       expect(datasource.createStatus, 'Draft');
       expect(datasource.createFile, isNull);
       expect(datasource.createAuthorization, 'Bearer token');
@@ -117,6 +125,31 @@ void main() {
 
       expect(datasource.deleteAuthorization, 'Bearer token');
       expect(datasource.deletePostId, 'post-delete');
+    });
+
+    test('deletePost에서 403이 발생하면 status=Deleted로 soft delete를 시도한다', () async {
+      final datasource = FakePostRemoteDatasource()
+        ..deleteException = DioException(
+          requestOptions: RequestOptions(path: '/v1/posts/post-delete'),
+          response: Response<void>(
+            requestOptions: RequestOptions(path: '/v1/posts/post-delete'),
+            statusCode: 403,
+          ),
+          type: DioExceptionType.badResponse,
+        );
+      final localAuthDatasource = FakeLocalAuthDatasource();
+      final repository = PostRepositoryImpl(
+        postRemoteDatasource: datasource,
+        localAuthDatasource: localAuthDatasource,
+      );
+
+      await repository.deletePost(postId: 'post-delete');
+
+      expect(datasource.deleteAuthorization, 'Bearer token');
+      expect(datasource.deletePostId, 'post-delete');
+      expect(datasource.patchAuthorization, 'Bearer token');
+      expect(datasource.patchPostId, 'post-delete');
+      expect(datasource.patchStatus, 'Deleted');
     });
 
     test('getDraftPosts는 draft 목록 DTO를 PostPage로 매핑한다', () async {
@@ -191,7 +224,10 @@ class FakePostRemoteDatasource implements PostRemoteDatasource {
   String? createTitle;
   String? createContentMarkdown;
   String? createAuthorId;
+  String? createAuthorNickname;
+  String? createAuthorProfileImageUrl;
   String? createStatus;
+  DioException? deleteException;
   MultipartFile? createFile;
   String? patchTitle;
   String? patchContentMarkdown;
@@ -204,6 +240,8 @@ class FakePostRemoteDatasource implements PostRemoteDatasource {
     String title,
     String contentMarkdown,
     String authorId,
+    String authorNickname,
+    String? authorProfileImageUrl,
     String? status,
     MultipartFile? file,
   ) async {
@@ -211,6 +249,8 @@ class FakePostRemoteDatasource implements PostRemoteDatasource {
     createTitle = title;
     createContentMarkdown = contentMarkdown;
     createAuthorId = authorId;
+    createAuthorNickname = authorNickname;
+    createAuthorProfileImageUrl = authorProfileImageUrl;
     createStatus = status;
     createFile = file;
     return _samplePost(status: status ?? 'Draft');
@@ -220,6 +260,9 @@ class FakePostRemoteDatasource implements PostRemoteDatasource {
   Future<void> deletePost(String authorization, String postId) async {
     deleteAuthorization = authorization;
     deletePostId = postId;
+    if (deleteException != null) {
+      throw deleteException!;
+    }
   }
 
   @override
@@ -287,7 +330,12 @@ PostResponseDto _samplePost({
     id: 'post-1',
     title: 'title',
     contentMarkdown: 'content',
-    authorId: 'author-1',
+    thumbnailUrl: 'https://example.com/thumbnail.webp',
+    author: const PostAuthorResponseDto(
+      id: 'author-id-1',
+      nickname: 'author-1',
+      profileImage: 'https://example.com/profile.png',
+    ),
     status: status,
     createdAt: DateTime.parse('2026-02-01T00:00:00Z'),
     updatedAt: DateTime.parse('2026-02-02T00:00:00Z'),
