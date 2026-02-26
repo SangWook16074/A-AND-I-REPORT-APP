@@ -18,7 +18,11 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-<meta name="description" content="함께 성장하는 IT 동아리, A&I">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+  >
+  <meta name="description" content="함께 성장하는 IT 동아리, A&I">
     <meta property="og:title" content="A&I">
     <meta property="og:description" content="함께 성장하는 IT 동아리, A&I">
     <meta property="og:image" content="https://aandiclub.com/og_img.webp">
@@ -34,6 +38,63 @@
 
     <title>A&I</title>
     <link rel="manifest" href="manifest.json">
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        min-height: 100dvh;
+        min-height: -webkit-fill-available;
+        min-height: var(--app-viewport-height, 100dvh);
+      }
+
+      /* Safari 툴바 축소 트리거를 위해 문서 루트에 최소 스크롤 여유를 둔다. */
+      body::after {
+        content: "";
+        display: block;
+        height: 1px;
+      }
+
+      flt-glass-pane,
+      flt-scene-host,
+      flutter-view {
+        height: var(--app-viewport-height, 100dvh) !important;
+      }
+    </style>
+    <script>
+      (function () {
+        const root = document.documentElement;
+
+        const syncViewportHeight = () => {
+          const viewport = window.visualViewport;
+          const viewportHeight = viewport ? viewport.height : window.innerHeight;
+          root.style.setProperty("--app-viewport-height", `${viewportHeight}px`);
+        };
+
+        window.addEventListener("resize", syncViewportHeight, { passive: true });
+        window.addEventListener("orientationchange", syncViewportHeight, {
+          passive: true,
+        });
+
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener("resize", syncViewportHeight, {
+            passive: true,
+          });
+          window.visualViewport.addEventListener("scroll", syncViewportHeight, {
+            passive: true,
+          });
+        }
+
+        syncViewportHeight();
+      })();
+    </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
