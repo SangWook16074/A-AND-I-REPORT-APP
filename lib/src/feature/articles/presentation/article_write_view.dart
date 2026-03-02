@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:js_interop';
 
 import 'package:a_and_i_report_web_server/src/core/auth/role_policy.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_model.dart';
@@ -35,10 +34,6 @@ class ArticleWriteViewState extends ConsumerState<ArticleWriteView> {
   late final UndoHistoryController contentUndoController;
   Timer? _autoSaveTimer;
   bool _isAutoSaving = false;
-  final GlobalKey _markdownAreaKey = GlobalKey();
-  bool _isMarkdownDragOver = false;
-  web.EventListener? _webDragOverListener;
-  web.EventListener? _webDropListener;
 
   @override
   void initState() {
@@ -55,12 +50,10 @@ class ArticleWriteViewState extends ConsumerState<ArticleWriteView> {
     contentFocusNode = FocusNode();
     contentUndoController = UndoHistoryController();
     _startAutoSaveTimer();
-    _bindWebDropListeners();
   }
 
   @override
   void dispose() {
-    _unbindWebDropListeners();
     _autoSaveTimer?.cancel();
     titleController.dispose();
     contentController.dispose();

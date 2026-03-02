@@ -361,10 +361,7 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
           title: createdPost.title,
           contentMarkdown: createdPost.contentMarkdown,
         );
-        _syncPublishedPostToList(
-          createdPost,
-          summary: summaryToUpload,
-        );
+        _syncPublishedPostToList(createdPost);
         return true;
       }
 
@@ -395,10 +392,7 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
         title: patchedPost.title,
         contentMarkdown: patchedPost.contentMarkdown,
       );
-      _syncPublishedPostToList(
-        patchedPost,
-        summary: summaryToUpload,
-      );
+      _syncPublishedPostToList(patchedPost);
       return true;
     } catch (e) {
       state = state.copyWith(

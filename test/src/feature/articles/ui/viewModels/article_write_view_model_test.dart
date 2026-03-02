@@ -177,45 +177,6 @@ void main() {
       );
     });
 
-    test('patch 응답 summary가 오래된 값이어도 입력한 summary를 유지한다', () async {
-      final fakeRepository = FakePostRepository()
-        ..patchResponseSummaryOverride = '기존 요약';
-      final container = ProviderContainer(
-        overrides: [
-          userViewModelProvider.overrideWith(FakeUserViewModel.new),
-          postRepositoryProvider.overrideWithValue(fakeRepository),
-        ],
-      );
-      addTearDown(container.dispose);
-
-      final notifier = container.read(articleWriteViewModelProvider.notifier);
-      notifier.startEditing(
-        Post(
-          id: 'post-edit-2',
-          title: '기존 제목',
-          contentMarkdown: '기존 본문',
-          summary: '기존 요약',
-          author: const PostAuthor(
-            id: 'user-1',
-            nickname: '멘토',
-          ),
-          status: 'Published',
-          createdAt: DateTime.parse('2026-01-01T00:00:00Z'),
-          updatedAt: DateTime.parse('2026-01-01T00:00:00Z'),
-        ),
-      );
-      notifier.setSummary('새 요약');
-
-      final result = await notifier.publish(
-        title: '수정 제목',
-        contentMarkdown: '수정 본문',
-      );
-
-      expect(result, isTrue);
-      expect(fakeRepository.lastPatchPayload?.summary, '새 요약');
-      expect(container.read(articleWriteViewModelProvider).summary, '새 요약');
-    });
-
     test('자동 임시저장은 변경사항이 있을 때만 저장한다', () async {
       final fakeRepository = FakePostRepository();
       final container = ProviderContainer(
