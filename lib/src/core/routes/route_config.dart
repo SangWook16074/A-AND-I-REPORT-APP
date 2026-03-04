@@ -179,9 +179,7 @@ GoRouter goRouter(Ref ref) {
         pageBuilder: (context, state) {
           final courseSlug = state.uri.queryParameters['courseSlug'] ?? '';
           html.document.title = "멘토링 | A&I";
-          return NoTransitionPage(
-            child: ReportListView(courseSlug: courseSlug),
-          );
+          return NoTransitionPage(child: const ReportListView());
         },
         routes: [
           GoRoute(
