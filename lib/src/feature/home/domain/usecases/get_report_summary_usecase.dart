@@ -21,12 +21,15 @@ final class GetReportSummaryUsecaseImpl implements GetReportSummaryUsecase {
   Future<List<ReportSummary>> call() async {
     // 세션 스토리지에서 토큰 가져오기
     final token = await authRepository.getToken();
-    // 토큰이 없으면 인증되지 않은 사용자
-    if (token == null || token.isEmpty) {
-      throw Exception('인증되지 않은 사용자입니다. 로그인이 필요합니다.');
-    }
 
-    final authorization = 'Bearer $token';
+    /// 조회 API는 인증 없이도 호출 가능하므로
+    /// 토큰이 없더라도 예외를 발생시키지 않고 진행합니다.
+    /// 토큰이 존재하는 경우에만 Authorization 헤더에 Bearer 토큰을 포함합니다.
+    final authorization =
+        (token != null && token.isNotEmpty) ? 'Bearer $token' : null;
+
+    /// ReportSummaryRepository를 호출하여 과제 목록 데이터를 가져옵니다.
+    /// authorization이 null인 경우 Authorization 헤더 없이 요청됩니다.
     return await reportSummaryRepository.getReportSummaries(authorization);
   }
 }

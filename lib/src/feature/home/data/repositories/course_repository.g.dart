@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'report_summary_repository.dart';
+part of 'course_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'report_summary_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
-class _ReportSummaryRepository implements ReportSummaryRepository {
-  _ReportSummaryRepository(this._dio, {this.baseUrl, this.errorLogger});
+class _CourseRepository implements CourseRepository {
+  _CourseRepository(this._dio, {this.baseUrl, this.errorLogger});
 
   final Dio _dio;
 
@@ -18,17 +18,13 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<ReportSummary>> getReportSummaries(String? authorization) async {
+  Future<List<Course>> getCourses() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{
-      r'Content-Type': 'application/json',
-      r'Authorization': authorization,
-    };
+    final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<ReportSummary>>(
+    final _options = _setStreamType<List<Course>>(
       Options(
         method: 'GET',
         headers: _headers,
@@ -44,10 +40,10 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<ReportSummary> _value;
+    late List<Course> _value;
     try {
       _value = _result.data!
-          .map((dynamic i) => ReportSummary.fromJson(i as Map<String, dynamic>))
+          .map((dynamic i) => Course.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
