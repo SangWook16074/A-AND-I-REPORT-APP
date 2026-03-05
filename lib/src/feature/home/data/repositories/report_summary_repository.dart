@@ -15,7 +15,7 @@ abstract class ReportSummaryRepository {
   /// 서버로부터 과제 목록을 조회합니다.
   ///
   /// [authorization] 헤더에 Bearer 토큰을 포함하여 요청해야 합니다.
-  @GET("/v2/report/v1/courses")
+  @GET("/v1/courses")
   @Headers(<String, dynamic>{
     'Content-Type': 'application/json',
   })

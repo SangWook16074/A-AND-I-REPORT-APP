@@ -8,7 +8,7 @@ part 'course_repository.g.dart';
 abstract class CourseRepository {
   factory CourseRepository(Dio dio, {String baseUrl}) = _CourseRepository;
 
-  @GET("/v2/report/v1/courses")
+  @GET("/v1/courses")
   @Headers(<String, dynamic>{
     'Content-Type': 'application/json',
   })
