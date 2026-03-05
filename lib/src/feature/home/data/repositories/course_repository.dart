@@ -8,6 +8,12 @@ part 'course_repository.g.dart';
 abstract class CourseRepository {
   factory CourseRepository(Dio dio, {String baseUrl}) = _CourseRepository;
 
+  @GET("/v1/course/{courseSlug}")
+  Future<Course> getCourseBySlug(
+    @Header("Authorization") String authorization,
+    @Path("courseSlug") String courseSlug,
+  );
+
   @GET("/v1/courses")
   Future<List<Course>> getCourses(
     @Header("Authorization") String authorization,
