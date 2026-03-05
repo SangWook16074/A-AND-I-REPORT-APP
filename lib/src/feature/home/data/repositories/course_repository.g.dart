@@ -33,7 +33,7 @@ class _CourseRepository implements CourseRepository {
       )
           .compose(
             _dio.options,
-            '/v2/report/v1/courses',
+            '/v1/courses',
             queryParameters: queryParameters,
             data: _data,
           )
