@@ -23,7 +23,6 @@ class AuthInterceptor extends QueuedInterceptor {
     ErrorInterceptorHandler handler,
   ) async {
     final requestOptions = err.requestOptions;
-    final hasAuthHeader = _readAuthorizationHeader(requestOptions) != null;
     final isUnauthorized = err.response?.statusCode == 401;
     final isRefreshApi = _isRefreshApi(requestOptions);
     final alreadyRetried = requestOptions.extra[_retryKey] == true;
@@ -57,40 +56,8 @@ class AuthInterceptor extends QueuedInterceptor {
         final response = await _requestTokenRefresh(refreshToken);
 
         // 응답 데이터 안전하게 파싱
-        if (response.statusCode == 200 && response.data is Map) {
-          final responseData = response.data as Map;
-          final data = responseData['data'];
-          if (responseData['success'] == true && data is Map) {
-            final newAccessToken = data['accessToken']?.toString();
-            final newRefreshToken = data['refreshToken']?.toString();
-
-            if (newAccessToken == null || newAccessToken.isEmpty) {
-              log('토큰 갱신 응답에 accessToken이 없음');
-              await onTokenExpired(refreshToken);
-              return handler.reject(err);
-            }
-
-            // 새 토큰 저장 (refreshToken은 내려준 경우에만 갱신)
-            await localAuthDatasource.saveUserToken(newAccessToken);
-            if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
-              await localAuthDatasource.saveRefreshToken(newRefreshToken);
-            }
-
-            log('토큰 갱신 성공');
-
-            // 원래 요청 재시도 (무한 재시도 방지 플래그 포함)
-            _setAuthorizationHeader(requestOptions, 'Bearer $newAccessToken');
-            final retryOptions = _buildRetryOptions(requestOptions)
-              ..extra[_retryKey] = true;
-
-            final retryResponse = await dio.fetch<dynamic>(retryOptions);
-            return handler.resolve(retryResponse);
-          } else {
-            log('토큰 갱신 응답 포맷이 유효하지 않음');
-            await onTokenExpired(refreshToken);
-            return handler.reject(err);
-          }
-        } else {
+        final statusCode = response.statusCode ?? 0;
+        if (statusCode < 200 || statusCode >= 300) {
           log('토큰 갱신 실패, 로그아웃 처리');
           await onTokenExpired(refreshToken);
           return handler.reject(err);
@@ -137,10 +104,59 @@ class AuthInterceptor extends QueuedInterceptor {
     return handler.next(err);
   }
 
+  Future<Response<dynamic>> _requestTokenRefresh(String refreshToken) {
+    final refreshDio = Dio(dio.options.copyWith());
+
+    return refreshDio.post<dynamic>(
+      _refreshPath,
+      data: {'refreshToken': refreshToken},
+      options: Options(
+        headers: {'Content-Type': 'application/json'},
+      ),
+    );
+  }
+
   bool _isRefreshApi(RequestOptions options) {
     final parsed = Uri.tryParse(options.path);
     final normalizedPath = parsed?.path ?? options.path;
     return normalizedPath.endsWith(_refreshPath);
+  }
+
+  bool _hasToken(String? token) {
+    if (token == null) {
+      return false;
+    }
+    return token.trim().isNotEmpty;
+  }
+
+  String? _extractAccessToken(dynamic body) {
+    final root = _toMap(body);
+    if (root == null) {
+      return null;
+    }
+    final data = _toMap(root['data']);
+    final token = data?['accessToken'] ?? root['accessToken'];
+    return token?.toString();
+  }
+
+  String? _extractRefreshToken(dynamic body) {
+    final root = _toMap(body);
+    if (root == null) {
+      return null;
+    }
+    final data = _toMap(root['data']);
+    final token = data?['refreshToken'] ?? root['refreshToken'];
+    return token?.toString();
+  }
+
+  Map<String, dynamic>? _toMap(dynamic source) {
+    if (source is Map<String, dynamic>) {
+      return source;
+    }
+    if (source is Map) {
+      return Map<String, dynamic>.from(source);
+    }
+    return null;
   }
 
   String? _readAuthorizationHeader(RequestOptions options) {
