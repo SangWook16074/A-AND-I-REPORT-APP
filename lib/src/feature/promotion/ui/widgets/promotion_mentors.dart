@@ -4,7 +4,6 @@ import 'package:a_and_i_report_web_server/src/core/widgets/responsive_layout.dar
 import 'package:a_and_i_report_web_server/src/core/widgets/animate_on_visible.dart';
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/widgets/gradient_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class Mentor {

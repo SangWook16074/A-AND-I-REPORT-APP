@@ -4,10 +4,8 @@ import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/ap
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/faq_list_view_event.dart';
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/faq_list_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/faq_list_view_state.dart';
-import 'package:a_and_i_report_web_server/src/feature/promotion/ui/views/apply_button_view.dart';
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/widgets/promotion_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FaqFilterLightView extends ConsumerWidget {

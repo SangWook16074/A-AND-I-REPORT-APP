@@ -9,8 +9,7 @@ abstract class CourseRepository {
   factory CourseRepository(Dio dio, {String baseUrl}) = _CourseRepository;
 
   @GET("/v1/courses")
-  @Headers(<String, dynamic>{
-    'Content-Type': 'application/json',
-  })
-  Future<List<Course>> getCourses();
+  Future<List<Course>> getCourses(
+    @Header("Authorization") String authorization,
+  );
 }

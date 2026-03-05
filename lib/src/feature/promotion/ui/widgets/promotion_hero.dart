@@ -1,10 +1,8 @@
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/views/apply_button_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:a_and_i_report_web_server/src/core/widgets/responsive_layout.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class PromotionHero extends ConsumerWidget {
   const PromotionHero({super.key});
