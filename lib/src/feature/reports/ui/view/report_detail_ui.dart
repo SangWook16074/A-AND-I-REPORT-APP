@@ -10,7 +10,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ReportDetailUI extends HookConsumerWidget {
   final String id;
   final DateTime? endAt;
-  const ReportDetailUI({super.key, required this.id, this.endAt});
+  final int? week;
+  final int? seq;
+
+  const ReportDetailUI({
+    super.key,
+    required this.id,
+    this.endAt,
+    this.week,
+    this.seq,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

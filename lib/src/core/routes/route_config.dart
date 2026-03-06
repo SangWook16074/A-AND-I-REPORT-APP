@@ -182,14 +182,23 @@ GoRouter goRouter(Ref ref) {
         routes: [
           GoRoute(
             path: ':id',
+            name: 'report-detail',
             pageBuilder: (context, state) {
               final endAtMs = state.uri.queryParameters['endAt'];
+              final week = state.uri.queryParameters['week'];
+              final seq = state.uri.queryParameters['seq'];
+              final parsedEndAtMs = endAtMs != null ? int.tryParse(endAtMs) : null;
+              final parsedWeek = week != null ? int.tryParse(week) : null;
+              final parsedSeq = seq != null ? int.tryParse(seq) : null;
+
               return NoTransitionPage(
                 child: ReportDetailUI(
                   id: state.pathParameters['id']!,
-                  endAt: endAtMs != null
-                      ? DateTime.fromMillisecondsSinceEpoch(int.parse(endAtMs))
+                  endAt: parsedEndAtMs != null
+                      ? DateTime.fromMillisecondsSinceEpoch(parsedEndAtMs)
                       : null,
+                  week: parsedWeek,
+                  seq: parsedSeq,
                 ),
               );
             },
