@@ -28,7 +28,20 @@ final class GetCourseBySlugUsecaseImpl implements GetCourseBySlugUsecase {
 
     try {
       final authorization = 'Bearer $token';
-      return await courseRepository.getCourseBySlug(authorization, courseSlug);
+      try {
+        return await courseRepository.getCourseBySlug(authorization, courseSlug);
+      } on DioException catch (e) {
+        final statusCode = e.response?.statusCode;
+
+        // 서버 라우팅이 /v1/courses/{slug} 형태인 경우를 위한 fallback
+        if (statusCode == 404 || statusCode == 405) {
+          return await courseRepository.getCourseBySlugFromCourses(
+            authorization,
+            courseSlug,
+          );
+        }
+        rethrow;
+      }
     } on DioException catch (e) {
       final data = e.response?.data;
       if (data is Map<String, dynamic>) {
@@ -38,7 +51,8 @@ final class GetCourseBySlugUsecaseImpl implements GetCourseBySlugUsecase {
         }
       }
 
-      throw Exception('코스 조회에 실패했습니다.');
+      final statusCode = e.response?.statusCode;
+      throw Exception('코스 조회에 실패했습니다. (slug: $courseSlug, status: $statusCode)');
     }
   }
 }

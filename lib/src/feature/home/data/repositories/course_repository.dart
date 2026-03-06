@@ -14,6 +14,12 @@ abstract class CourseRepository {
     @Path("courseSlug") String courseSlug,
   );
 
+  @GET("/v1/courses/{courseSlug}")
+  Future<Course> getCourseBySlugFromCourses(
+    @Header("Authorization") String authorization,
+    @Path("courseSlug") String courseSlug,
+  );
+
   @GET("/v1/courses")
   Future<List<Course>> getCourses(
     @Header("Authorization") String authorization,
