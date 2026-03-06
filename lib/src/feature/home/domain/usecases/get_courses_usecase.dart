@@ -2,10 +2,12 @@ import 'package:a_and_i_report_web_server/src/feature/auth/domain/repositories/a
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/course.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/data/repositories/course_repository.dart';
 
+/// 코스 목록 조회 UseCase 인터페이스입니다.
 abstract class GetCoursesUsecase {
   Future<List<Course>> call();
 }
 
+/// 코스 목록을 조회하는 UseCase 구현체입니다.
 final class GetCoursesUsecaseImpl implements GetCoursesUsecase {
   final CourseRepository courseRepository;
   final AuthRepository authRepository;
@@ -24,6 +26,6 @@ final class GetCoursesUsecaseImpl implements GetCoursesUsecase {
     }
 
     final authorization = 'Bearer $token';
-    return courseRepository.getCourses(authorization);
+    return await courseRepository.getCourses(authorization);
   }
 }

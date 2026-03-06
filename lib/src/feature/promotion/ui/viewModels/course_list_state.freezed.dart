@@ -14,6 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$CourseListState {
+  CourseListViewStatus get status;
   List<Course> get courses;
   String? get errorMsg;
 
@@ -30,18 +31,19 @@ mixin _$CourseListState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is CourseListState &&
+            (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality().equals(other.courses, courses) &&
             (identical(other.errorMsg, errorMsg) ||
                 other.errorMsg == errorMsg));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(courses), errorMsg);
+  int get hashCode => Object.hash(runtimeType, status,
+      const DeepCollectionEquality().hash(courses), errorMsg);
 
   @override
   String toString() {
-    return 'CourseListState(courses: $courses, errorMsg: $errorMsg)';
+    return 'CourseListState(status: $status, courses: $courses, errorMsg: $errorMsg)';
   }
 }
 
@@ -51,7 +53,8 @@ abstract mixin class $CourseListStateCopyWith<$Res> {
           CourseListState value, $Res Function(CourseListState) _then) =
       _$CourseListStateCopyWithImpl;
   @useResult
-  $Res call({List<Course> courses, String? errorMsg});
+  $Res call(
+      {CourseListViewStatus status, List<Course> courses, String? errorMsg});
 }
 
 /// @nodoc
@@ -67,10 +70,15 @@ class _$CourseListStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? status = null,
     Object? courses = null,
     Object? errorMsg = freezed,
   }) {
     return _then(_self.copyWith(
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as CourseListViewStatus,
       courses: null == courses
           ? _self.courses
           : courses // ignore: cast_nullable_to_non_nullable
@@ -174,13 +182,15 @@ extension CourseListStatePatterns on CourseListState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<Course> courses, String? errorMsg)? $default, {
+    TResult Function(CourseListViewStatus status, List<Course> courses,
+            String? errorMsg)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _CourseListState() when $default != null:
-        return $default(_that.courses, _that.errorMsg);
+        return $default(_that.status, _that.courses, _that.errorMsg);
       case _:
         return orElse();
     }
@@ -201,12 +211,14 @@ extension CourseListStatePatterns on CourseListState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<Course> courses, String? errorMsg) $default,
+    TResult Function(
+            CourseListViewStatus status, List<Course> courses, String? errorMsg)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _CourseListState():
-        return $default(_that.courses, _that.errorMsg);
+        return $default(_that.status, _that.courses, _that.errorMsg);
     }
   }
 
@@ -224,12 +236,14 @@ extension CourseListStatePatterns on CourseListState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(List<Course> courses, String? errorMsg)? $default,
+    TResult? Function(CourseListViewStatus status, List<Course> courses,
+            String? errorMsg)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _CourseListState() when $default != null:
-        return $default(_that.courses, _that.errorMsg);
+        return $default(_that.status, _that.courses, _that.errorMsg);
       case _:
         return null;
     }
@@ -239,9 +253,15 @@ extension CourseListStatePatterns on CourseListState {
 /// @nodoc
 
 class _CourseListState implements CourseListState {
-  const _CourseListState({final List<Course> courses = const [], this.errorMsg})
+  const _CourseListState(
+      {this.status = CourseListViewStatus.init,
+      final List<Course> courses = const [],
+      this.errorMsg})
       : _courses = courses;
 
+  @override
+  @JsonKey()
+  final CourseListViewStatus status;
   final List<Course> _courses;
   @override
   @JsonKey()
@@ -267,18 +287,19 @@ class _CourseListState implements CourseListState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _CourseListState &&
+            (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality().equals(other._courses, _courses) &&
             (identical(other.errorMsg, errorMsg) ||
                 other.errorMsg == errorMsg));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_courses), errorMsg);
+  int get hashCode => Object.hash(runtimeType, status,
+      const DeepCollectionEquality().hash(_courses), errorMsg);
 
   @override
   String toString() {
-    return 'CourseListState(courses: $courses, errorMsg: $errorMsg)';
+    return 'CourseListState(status: $status, courses: $courses, errorMsg: $errorMsg)';
   }
 }
 
@@ -290,7 +311,8 @@ abstract mixin class _$CourseListStateCopyWith<$Res>
       __$CourseListStateCopyWithImpl;
   @override
   @useResult
-  $Res call({List<Course> courses, String? errorMsg});
+  $Res call(
+      {CourseListViewStatus status, List<Course> courses, String? errorMsg});
 }
 
 /// @nodoc
@@ -306,10 +328,15 @@ class __$CourseListStateCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? status = null,
     Object? courses = null,
     Object? errorMsg = freezed,
   }) {
     return _then(_CourseListState(
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as CourseListViewStatus,
       courses: null == courses
           ? _self._courses
           : courses // ignore: cast_nullable_to_non_nullable

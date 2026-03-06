@@ -7,7 +7,7 @@ part 'course_list_view_model.g.dart';
 @riverpod
 class CourseListViewModel extends _$CourseListViewModel {
   @override
-  Future<CourseListState> build() async {
+  build() async {
     try {
       final courses = await ref.read(getCoursesUsecaseProvider).call();
       return CourseListState(courses: courses);

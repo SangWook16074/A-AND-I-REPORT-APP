@@ -3,9 +3,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'course_list_state.freezed.dart';
 
+enum CourseListViewStatus { init, loading, done, error }
+
 @freezed
 sealed class CourseListState with _$CourseListState {
   const factory CourseListState({
+    @Default(CourseListViewStatus.init) CourseListViewStatus status,
     @Default([]) List<Course> courses,
     String? errorMsg,
   }) = _CourseListState;
