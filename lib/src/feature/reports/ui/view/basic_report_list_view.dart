@@ -1,29 +1,58 @@
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/course.dart';
-import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/course_by_slug_view_model.dart';
+import 'package:a_and_i_report_web_server/src/core/widgets/responsive_layout.dart';
+import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/course_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class BasicReportListView extends ConsumerWidget {
-  static const String _courseSlug = 'fl-basic';
-
   const BasicReportListView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final courseAsync = ref.watch(courseBySlugViewModelProvider(_courseSlug));
+    final courseListAsync = ref.watch(courseListViewModelProvider);
 
-    return courseAsync.when(
-      data: (course) => _CourseInfoView(course: course),
+    return courseListAsync.when(
+      data: (courses) {
+        Course? basicCourse;
+        for (final course in courses) {
+          if (_isBasicCourse(course)) {
+            basicCourse = course;
+            break;
+          }
+        }
+
+        if (basicCourse == null) {
+          return _EmptyCourseView();
+        }
+        return _CourseInfoView(course: basicCourse);
+      },
       loading: () => const Center(
         child: CircularProgressIndicator(),
       ),
       error: (error, stack) => Center(
         child: Text(
-          '오류가 발생했습니다: ${error.toString()}',
-          style: const TextStyle(color: Colors.red),
+          '조회 가능한 코스가 없습니다.',
+          style: TextStyle(
+            color: const Color(0xffAFAFAF),
+            fontSize: ResponsiveLayout.isMobile(context) ? 13 : 15,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );
+  }
+
+  bool _isBasicCourse(Course course) {
+    final slug = course.slug.toLowerCase();
+    final title = course.metadata.title.toLowerCase();
+    final description = course.metadata.description.toLowerCase();
+    final phase = (course.phase ?? course.metadata.phase).toLowerCase();
+
+    return phase == 'basic' ||
+        slug.contains('basic') ||
+        title.contains('basic') ||
+        description.contains('basic') ||
+        description.contains('기초');
   }
 }
 
@@ -63,6 +92,25 @@ class _CourseInfoView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _EmptyCourseView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 80,
+      child: Center(
+        child: Text(
+          '조회 가능한 코스가 없습니다.',
+          style: TextStyle(
+            color: const Color(0xffAFAFAF),
+            fontSize: ResponsiveLayout.isMobile(context) ? 13 : 15,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
     );
   }
 }
