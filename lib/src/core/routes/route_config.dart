@@ -174,7 +174,7 @@ GoRouter goRouter(Ref ref) {
       ),
       GoRoute(
         path: '/report',
-        name: "멘토링 | A&I",
+        name: "report-home",
         pageBuilder: (context, state) {
           html.document.title = "멘토링 | A&I";
           return NoTransitionPage(child: const ReportListView());
@@ -182,7 +182,7 @@ GoRouter goRouter(Ref ref) {
         routes: [
           GoRoute(
             path: ':id',
-            name: 'report-detail',
+            name: '멘토링 | A&I',
             pageBuilder: (context, state) {
               final endAtMs = state.uri.queryParameters['endAt'];
               final week = state.uri.queryParameters['week'];
@@ -190,6 +190,7 @@ GoRouter goRouter(Ref ref) {
               final parsedEndAtMs = endAtMs != null ? int.tryParse(endAtMs) : null;
               final parsedWeek = week != null ? int.tryParse(week) : null;
               final parsedSeq = seq != null ? int.tryParse(seq) : null;
+              html.document.title = "멘토링 | A&I";
 
               return NoTransitionPage(
                 child: ReportDetailUI(

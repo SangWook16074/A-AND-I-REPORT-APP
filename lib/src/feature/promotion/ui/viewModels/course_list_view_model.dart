@@ -7,12 +7,26 @@ part 'course_list_view_model.g.dart';
 @riverpod
 class CourseListViewModel extends _$CourseListViewModel {
   @override
-  build() async {
+  CourseListState build() {
+    Future.microtask(_init);
+    return const CourseListState();
+  }
+
+  Future<void> _init() async {
+    state = state.copyWith(status: CourseListViewStatus.loading, errorMsg: null);
+
     try {
       final courses = await ref.read(getCoursesUsecaseProvider).call();
-      return CourseListState(courses: courses);
+      state = state.copyWith(
+        status: CourseListViewStatus.done,
+        courses: courses,
+        errorMsg: null,
+      );
     } catch (e) {
-      return CourseListState(errorMsg: e.toString());
+      state = state.copyWith(
+        status: CourseListViewStatus.error,
+        errorMsg: e.toString(),
+      );
     }
   }
 }

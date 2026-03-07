@@ -60,14 +60,15 @@ class ReportListWidget extends StatelessWidget {
                 EdgeInsets.only(bottom: index == reports.length - 1 ? 0 : 10),
             child: InkWell(
               borderRadius: BorderRadius.circular(14),
-              onTap: () => context.goNamed(
-                'report-detail',
-                pathParameters: {'id': report.id},
-                queryParameters: {
-                  'endAt': report.endAt.millisecondsSinceEpoch.toString(),
-                  'week': report.week.toString(),
-                  'seq': report.seq.toString(),
-                },
+              onTap: () => context.go(
+                Uri(
+                  path: '/report/${report.id}',
+                  queryParameters: {
+                    'endAt': report.endAt.millisecondsSinceEpoch.toString(),
+                    'week': report.week.toString(),
+                    'seq': report.seq.toString(),
+                  },
+                ).toString(),
               ),
               child: ReportTitleRow(
                 reportSummary: report,

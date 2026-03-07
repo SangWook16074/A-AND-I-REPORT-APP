@@ -1,5 +1,6 @@
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/course.dart';
 import 'package:a_and_i_report_web_server/src/core/widgets/responsive_layout.dart';
+import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/course_list_state.dart';
 import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/course_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,27 +10,16 @@ class BasicReportListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final courseListAsync = ref.watch(courseListViewModelProvider);
+    final courseListState = ref.watch(courseListViewModelProvider);
 
-    return courseListAsync.when(
-      data: (courses) {
-        Course? basicCourse;
-        for (final course in courses) {
-          if (_isBasicCourse(course)) {
-            basicCourse = course;
-            break;
-          }
-        }
-
-        if (basicCourse == null) {
-          return _EmptyCourseView();
-        }
-        return _CourseInfoView(course: basicCourse);
-      },
-      loading: () => const Center(
+    if (courseListState.status == CourseListViewStatus.loading) {
+      return const Center(
         child: CircularProgressIndicator(),
-      ),
-      error: (error, stack) => Center(
+      );
+    }
+
+    if (courseListState.status == CourseListViewStatus.error) {
+      return Center(
         child: Text(
           '조회 가능한 코스가 없습니다.',
           style: TextStyle(
@@ -38,8 +28,23 @@ class BasicReportListView extends ConsumerWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-      ),
-    );
+      );
+    }
+
+    final courses = courseListState.courses;
+    Course? basicCourse;
+    for (final course in courses) {
+      if (_isBasicCourse(course)) {
+        basicCourse = course;
+        break;
+      }
+    }
+
+    if (basicCourse == null) {
+      return _EmptyCourseView();
+    }
+
+    return _CourseInfoView(course: basicCourse);
   }
 
   bool _isBasicCourse(Course course) {

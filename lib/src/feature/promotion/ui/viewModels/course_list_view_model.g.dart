@@ -7,12 +7,12 @@ part of 'course_list_view_model.dart';
 // **************************************************************************
 
 String _$courseListViewModelHash() =>
-    r'02f5c8311bc3455571cd49dcf2ab5b119866b9e0';
+    r'95a2bddc3d527193b68e8209736564d855f6a952';
 
 /// See also [CourseListViewModel].
 @ProviderFor(CourseListViewModel)
 final courseListViewModelProvider =
-    AutoDisposeNotifierProvider<CourseListViewModel, Object?>.internal(
+    AutoDisposeNotifierProvider<CourseListViewModel, CourseListState>.internal(
   CourseListViewModel.new,
   name: r'courseListViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final courseListViewModelProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$CourseListViewModel = AutoDisposeNotifier<Object?>;
+typedef _$CourseListViewModel = AutoDisposeNotifier<CourseListState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

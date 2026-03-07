@@ -7,7 +7,7 @@ part of 'course_by_slug_view_model.dart';
 // **************************************************************************
 
 String _$courseBySlugViewModelHash() =>
-    r'0caf34af019eeb5c011f54a37878f15e1da20392';
+    r'8cd694bf46d4501535e7eb533710aee0eaddac8f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,24 +30,33 @@ class _SystemHash {
   }
 }
 
+abstract class _$CourseBySlugViewModel
+    extends BuildlessAutoDisposeNotifier<CourseBySlugState> {
+  late final String courseSlug;
+
+  CourseBySlugState build(
+    String courseSlug,
+  );
+}
+
 /// 코스 슬러그별 과정을 조회하는 ViewModel Provider입니다.
 ///
-/// Copied from [courseBySlugViewModel].
-@ProviderFor(courseBySlugViewModel)
+/// Copied from [CourseBySlugViewModel].
+@ProviderFor(CourseBySlugViewModel)
 const courseBySlugViewModelProvider = CourseBySlugViewModelFamily();
 
 /// 코스 슬러그별 과정을 조회하는 ViewModel Provider입니다.
 ///
-/// Copied from [courseBySlugViewModel].
-class CourseBySlugViewModelFamily extends Family<AsyncValue<Course>> {
+/// Copied from [CourseBySlugViewModel].
+class CourseBySlugViewModelFamily extends Family<CourseBySlugState> {
   /// 코스 슬러그별 과정을 조회하는 ViewModel Provider입니다.
   ///
-  /// Copied from [courseBySlugViewModel].
+  /// Copied from [CourseBySlugViewModel].
   const CourseBySlugViewModelFamily();
 
   /// 코스 슬러그별 과정을 조회하는 ViewModel Provider입니다.
   ///
-  /// Copied from [courseBySlugViewModel].
+  /// Copied from [CourseBySlugViewModel].
   CourseBySlugViewModelProvider call(
     String courseSlug,
   ) {
@@ -82,18 +91,16 @@ class CourseBySlugViewModelFamily extends Family<AsyncValue<Course>> {
 
 /// 코스 슬러그별 과정을 조회하는 ViewModel Provider입니다.
 ///
-/// Copied from [courseBySlugViewModel].
-class CourseBySlugViewModelProvider extends AutoDisposeFutureProvider<Course> {
+/// Copied from [CourseBySlugViewModel].
+class CourseBySlugViewModelProvider extends AutoDisposeNotifierProviderImpl<
+    CourseBySlugViewModel, CourseBySlugState> {
   /// 코스 슬러그별 과정을 조회하는 ViewModel Provider입니다.
   ///
-  /// Copied from [courseBySlugViewModel].
+  /// Copied from [CourseBySlugViewModel].
   CourseBySlugViewModelProvider(
     String courseSlug,
   ) : this._internal(
-          (ref) => courseBySlugViewModel(
-            ref as CourseBySlugViewModelRef,
-            courseSlug,
-          ),
+          () => CourseBySlugViewModel()..courseSlug = courseSlug,
           from: courseBySlugViewModelProvider,
           name: r'courseBySlugViewModelProvider',
           debugGetCreateSourceHash:
@@ -119,13 +126,20 @@ class CourseBySlugViewModelProvider extends AutoDisposeFutureProvider<Course> {
   final String courseSlug;
 
   @override
-  Override overrideWith(
-    FutureOr<Course> Function(CourseBySlugViewModelRef provider) create,
+  CourseBySlugState runNotifierBuild(
+    covariant CourseBySlugViewModel notifier,
   ) {
+    return notifier.build(
+      courseSlug,
+    );
+  }
+
+  @override
+  Override overrideWith(CourseBySlugViewModel Function() create) {
     return ProviderOverride(
       origin: this,
       override: CourseBySlugViewModelProvider._internal(
-        (ref) => create(ref as CourseBySlugViewModelRef),
+        () => create()..courseSlug = courseSlug,
         from: from,
         name: null,
         dependencies: null,
@@ -137,7 +151,8 @@ class CourseBySlugViewModelProvider extends AutoDisposeFutureProvider<Course> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Course> createElement() {
+  AutoDisposeNotifierProviderElement<CourseBySlugViewModel, CourseBySlugState>
+      createElement() {
     return _CourseBySlugViewModelProviderElement(this);
   }
 
@@ -158,14 +173,15 @@ class CourseBySlugViewModelProvider extends AutoDisposeFutureProvider<Course> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin CourseBySlugViewModelRef on AutoDisposeFutureProviderRef<Course> {
+mixin CourseBySlugViewModelRef
+    on AutoDisposeNotifierProviderRef<CourseBySlugState> {
   /// The parameter `courseSlug` of this provider.
   String get courseSlug;
 }
 
 class _CourseBySlugViewModelProviderElement
-    extends AutoDisposeFutureProviderElement<Course>
-    with CourseBySlugViewModelRef {
+    extends AutoDisposeNotifierProviderElement<CourseBySlugViewModel,
+        CourseBySlugState> with CourseBySlugViewModelRef {
   _CourseBySlugViewModelProviderElement(super.provider);
 
   @override
