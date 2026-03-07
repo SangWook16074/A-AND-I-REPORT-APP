@@ -8,7 +8,7 @@ enum CourseListViewStatus { loading, done, error }
 
 /// 과정 목록 화면 상태를 담는 ViewModel 모델입니다.
 @freezed
-abstract class CourseListState with _$CourseListState {
+sealed class CourseListState with _$CourseListState {
   const factory CourseListState({
     @Default(CourseListViewStatus.loading) CourseListViewStatus status,
     @Default([]) List<Course> courses,

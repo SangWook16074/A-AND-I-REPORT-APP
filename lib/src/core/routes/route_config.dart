@@ -175,7 +175,7 @@ GoRouter goRouter(Ref ref) {
       ),
       GoRoute(
         path: '/report',
-        name: "멘토링 | A&I",
+        name: "report-home",
         pageBuilder: (context, state) {
           final courseSlug = state.uri.queryParameters['courseSlug'] ?? '';
           html.document.title = "멘토링 | A&I";
@@ -186,7 +186,7 @@ GoRouter goRouter(Ref ref) {
         routes: [
           GoRoute(
             path: ':id',
-            name: '멘토링 상세 | A&I',
+            name: '멘토링 | A&I',
             pageBuilder: (context, state) {
               final courseSlug = state.uri.queryParameters['courseSlug'] ?? '';
               final endAtMs = state.uri.queryParameters['endAt'];

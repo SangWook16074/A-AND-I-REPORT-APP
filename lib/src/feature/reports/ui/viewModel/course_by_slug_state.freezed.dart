@@ -154,8 +154,6 @@ extension CourseBySlugStatePatterns on CourseBySlugState {
     switch (_that) {
       case _CourseBySlugState():
         return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 
@@ -235,8 +233,6 @@ extension CourseBySlugStatePatterns on CourseBySlugState {
     switch (_that) {
       case _CourseBySlugState():
         return $default(_that.status, _that.course, _that.errorMsg);
-      case _:
-        throw StateError('Unexpected subclass');
     }
   }
 

@@ -28,30 +28,6 @@ final class GetCourseBySlugUsecaseImpl implements GetCourseBySlugUsecase {
     }
 
     final authorization = 'Bearer $token';
-    try {
-      final response = await _courseRepository.getCourseBySlugFromCourses(
-        authorization,
-        courseSlug,
-      );
-
-      if (!response.success || response.data == null) {
-        throw Exception(
-          ApiErrorMapper.mapApiError(
-            code: response.error?.code,
-            message: response.error?.message,
-            fallbackMessage: '코스 상세 조회에 실패했습니다.',
-          ),
-        );
-      }
-
-      return response.data!;
-    } catch (error) {
-      throw Exception(
-        ApiErrorMapper.map(
-          error,
-          fallbackMessage: '코스 상세 조회에 실패했습니다.',
-        ),
-      );
-    }
+    return _courseRepository.getCourseBySlug(authorization, courseSlug);
   }
 }

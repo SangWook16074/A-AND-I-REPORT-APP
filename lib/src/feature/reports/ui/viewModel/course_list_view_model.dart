@@ -1,4 +1,3 @@
-import 'package:a_and_i_report_web_server/src/core/utils/api_error_mapper.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/providers/get_courses_usecase_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/course_list_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -24,10 +23,7 @@ class CourseListViewModel extends _$CourseListViewModel {
     } catch (e) {
       state = CourseListState(
         status: CourseListViewStatus.error,
-        errorMsg: ApiErrorMapper.map(
-          e,
-          fallbackMessage: '코스 목록을 불러오지 못했습니다.',
-        ),
+        errorMsg: e.toString(),
       );
     }
   }
