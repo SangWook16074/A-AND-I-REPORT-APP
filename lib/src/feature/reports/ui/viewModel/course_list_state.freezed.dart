@@ -140,6 +140,8 @@ extension CourseListStatePatterns on CourseListState {
     switch (_that) {
       case _CourseListState():
         return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
     }
   }
 
@@ -219,6 +221,8 @@ extension CourseListStatePatterns on CourseListState {
     switch (_that) {
       case _CourseListState():
         return $default(_that.status, _that.courses, _that.errorMsg);
+      case _:
+        throw StateError('Unexpected subclass');
     }
   }
 

@@ -8,7 +8,7 @@ enum CourseBySlugViewStatus { loading, done, error }
 
 /// 코스 슬러그 기반 조회 상태를 담는 ViewModel 상태 모델입니다.
 @freezed
-sealed class CourseBySlugState with _$CourseBySlugState {
+abstract class CourseBySlugState with _$CourseBySlugState {
   const factory CourseBySlugState({
     @Default(CourseBySlugViewStatus.loading) CourseBySlugViewStatus status,
     Course? course,

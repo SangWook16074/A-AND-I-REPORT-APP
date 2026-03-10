@@ -4,7 +4,7 @@ part 'course.freezed.dart';
 part 'course.g.dart';
 
 @freezed
-sealed class Course with _$Course {
+abstract class Course with _$Course {
   const factory Course({
     required String id,
     required String slug,
@@ -27,7 +27,7 @@ sealed class Course with _$Course {
 }
 
 @freezed
-sealed class CourseMetadata with _$CourseMetadata {
+abstract class CourseMetadata with _$CourseMetadata {
   const factory CourseMetadata({
     required String title,
     required String description,

@@ -254,6 +254,8 @@ extension CoursePatterns on Course {
     switch (_that) {
       case _Course():
         return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
     }
   }
 
@@ -383,6 +385,8 @@ extension CoursePatterns on Course {
             _that.description,
             _that.phase,
             _that.targetTrack);
+      case _:
+        throw StateError('Unexpected subclass');
     }
   }
 
@@ -813,6 +817,8 @@ extension CourseMetadataPatterns on CourseMetadata {
     switch (_that) {
       case _CourseMetadata():
         return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
     }
   }
 
@@ -894,6 +900,8 @@ extension CourseMetadataPatterns on CourseMetadata {
       case _CourseMetadata():
         return $default(
             _that.title, _that.description, _that.phase, _that.attributes);
+      case _:
+        throw StateError('Unexpected subclass');
     }
   }
 
