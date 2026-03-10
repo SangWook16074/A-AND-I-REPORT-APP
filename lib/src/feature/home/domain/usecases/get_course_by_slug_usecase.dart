@@ -27,6 +27,9 @@ final class GetCourseBySlugUsecaseImpl implements GetCourseBySlugUsecase {
     }
 
     final authorization = 'Bearer $token';
-    return _courseRepository.getCourseBySlug(authorization, courseSlug);
+    return _courseRepository.getCourseBySlugFromCourses(
+      authorization,
+      courseSlug,
+    );
   }
 }
