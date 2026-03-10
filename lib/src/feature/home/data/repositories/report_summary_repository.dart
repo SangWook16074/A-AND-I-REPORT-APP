@@ -20,5 +20,5 @@ abstract class ReportSummaryRepository {
     'Content-Type': 'application/json',
   })
   Future<List<ReportSummary>> getReportSummaries(
-      @Header("Authorization") String? authorization);
+      @Header("Authorization") String authorization);
 }

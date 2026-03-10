@@ -18,10 +18,9 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<ReportSummary>> getReportSummaries(String? authorization) async {
+  Future<List<ReportSummary>> getReportSummaries(String authorization) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{
       r'Content-Type': 'application/json',
       r'Authorization': authorization,
