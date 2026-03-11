@@ -18,12 +18,53 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ReportSummaryResponseDto> getReportSummaries(
+  Future<WeekListResponseDto> getWeeks(
     String authorization,
     String courseSlug,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Content-Type': 'application/json',
+      r'Authorization': authorization,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<WeekListResponseDto>(
+      Options(
+        method: 'GET',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'application/json',
+      )
+          .compose(
+            _dio.options,
+            '/v1/courses/${courseSlug}/weeks',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late WeekListResponseDto _value;
+    try {
+      _value = WeekListResponseDto.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ReportSummaryResponseDto> getReportSummaries(
+    String authorization,
+    String courseSlug,
+    int weekNo,
+    String status,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'status': status};
     final _headers = <String, dynamic>{
       r'Content-Type': 'application/json',
       r'Authorization': authorization,
@@ -39,7 +80,7 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
       )
           .compose(
             _dio.options,
-            '/v1/courses/${courseSlug}/weeks',
+            '/v1/courses/${courseSlug}/weeks/${weekNo}/assignments',
             queryParameters: queryParameters,
             data: _data,
           )

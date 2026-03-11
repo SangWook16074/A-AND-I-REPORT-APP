@@ -31,16 +31,55 @@ final class GetReportSummaryUsecaseImpl implements GetReportSummaryUsecase {
     }
 
     final authorization = 'Bearer $token';
-    final response = await reportSummaryRepository.getReportSummaries(
+    final weekResponse = await reportSummaryRepository.getWeeks(
       authorization,
       courseSlug,
     );
 
-    if (!response.success) {
-      throw Exception(response.error?.message ?? '과제 목록 조회에 실패했습니다.');
+    if (!weekResponse.success) {
+      throw Exception(weekResponse.error?.message ?? '주차 목록 조회에 실패했습니다.');
     }
 
-    return response.data;
+    final weekNumbers = weekResponse.data
+        .map((week) => week.weekNo)
+        .where((weekNo) => weekNo > 0)
+        .toList(growable: false);
+
+    if (weekNumbers.isEmpty) {
+      return const <ReportSummary>[];
+    }
+
+    final assignmentResponses = await Future.wait(
+      weekNumbers.map(
+        (weekNo) => reportSummaryRepository.getReportSummaries(
+          authorization,
+          courseSlug,
+          weekNo,
+          'PUBLISHED',
+        ),
+      ),
+    );
+
+    final reports = <ReportSummary>[];
+
+    for (final response in assignmentResponses) {
+      if (!response.success) {
+        throw Exception(response.error?.message ?? '과제 목록 조회에 실패했습니다.');
+      }
+
+      reports.addAll(response.data);
+    }
+
+    reports.sort((a, b) {
+      final weekCompare = a.week.compareTo(b.week);
+      if (weekCompare != 0) {
+        return weekCompare;
+      }
+
+      return a.seq.compareTo(b.seq);
+    });
+
+    return reports;
   }
 }
 

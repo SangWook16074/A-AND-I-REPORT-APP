@@ -7,7 +7,7 @@ part of 'report_detail_view_model.dart';
 // **************************************************************************
 
 String _$reportDetailViewModelHash() =>
-    r'ef450afcaa9e8101df2010d3be77fc0cc931746c';
+    r'4549bb3eafa02f98c532daed897ffdc294f4bed6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,10 +32,12 @@ class _SystemHash {
 
 abstract class _$ReportDetailViewModel
     extends BuildlessAutoDisposeNotifier<ReportDatailState> {
-  late final String id;
+  late final String courseSlug;
+  late final String assignmentId;
 
   ReportDatailState build(
-    String id,
+    String courseSlug,
+    String assignmentId,
   );
 }
 
@@ -50,10 +52,12 @@ class ReportDetailViewModelFamily extends Family<ReportDatailState> {
 
   /// See also [ReportDetailViewModel].
   ReportDetailViewModelProvider call(
-    String id,
+    String courseSlug,
+    String assignmentId,
   ) {
     return ReportDetailViewModelProvider(
-      id,
+      courseSlug,
+      assignmentId,
     );
   }
 
@@ -62,7 +66,8 @@ class ReportDetailViewModelFamily extends Family<ReportDatailState> {
     covariant ReportDetailViewModelProvider provider,
   ) {
     return call(
-      provider.id,
+      provider.courseSlug,
+      provider.assignmentId,
     );
   }
 
@@ -86,9 +91,12 @@ class ReportDetailViewModelProvider extends AutoDisposeNotifierProviderImpl<
     ReportDetailViewModel, ReportDatailState> {
   /// See also [ReportDetailViewModel].
   ReportDetailViewModelProvider(
-    String id,
+    String courseSlug,
+    String assignmentId,
   ) : this._internal(
-          () => ReportDetailViewModel()..id = id,
+          () => ReportDetailViewModel()
+            ..courseSlug = courseSlug
+            ..assignmentId = assignmentId,
           from: reportDetailViewModelProvider,
           name: r'reportDetailViewModelProvider',
           debugGetCreateSourceHash:
@@ -98,7 +106,8 @@ class ReportDetailViewModelProvider extends AutoDisposeNotifierProviderImpl<
           dependencies: ReportDetailViewModelFamily._dependencies,
           allTransitiveDependencies:
               ReportDetailViewModelFamily._allTransitiveDependencies,
-          id: id,
+          courseSlug: courseSlug,
+          assignmentId: assignmentId,
         );
 
   ReportDetailViewModelProvider._internal(
@@ -108,17 +117,20 @@ class ReportDetailViewModelProvider extends AutoDisposeNotifierProviderImpl<
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.id,
+    required this.courseSlug,
+    required this.assignmentId,
   }) : super.internal();
 
-  final String id;
+  final String courseSlug;
+  final String assignmentId;
 
   @override
   ReportDatailState runNotifierBuild(
     covariant ReportDetailViewModel notifier,
   ) {
     return notifier.build(
-      id,
+      courseSlug,
+      assignmentId,
     );
   }
 
@@ -127,13 +139,16 @@ class ReportDetailViewModelProvider extends AutoDisposeNotifierProviderImpl<
     return ProviderOverride(
       origin: this,
       override: ReportDetailViewModelProvider._internal(
-        () => create()..id = id,
+        () => create()
+          ..courseSlug = courseSlug
+          ..assignmentId = assignmentId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        id: id,
+        courseSlug: courseSlug,
+        assignmentId: assignmentId,
       ),
     );
   }
@@ -146,13 +161,16 @@ class ReportDetailViewModelProvider extends AutoDisposeNotifierProviderImpl<
 
   @override
   bool operator ==(Object other) {
-    return other is ReportDetailViewModelProvider && other.id == id;
+    return other is ReportDetailViewModelProvider &&
+        other.courseSlug == courseSlug &&
+        other.assignmentId == assignmentId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, courseSlug.hashCode);
+    hash = _SystemHash.combine(hash, assignmentId.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -162,8 +180,11 @@ class ReportDetailViewModelProvider extends AutoDisposeNotifierProviderImpl<
 // ignore: unused_element
 mixin ReportDetailViewModelRef
     on AutoDisposeNotifierProviderRef<ReportDatailState> {
-  /// The parameter `id` of this provider.
-  String get id;
+  /// The parameter `courseSlug` of this provider.
+  String get courseSlug;
+
+  /// The parameter `assignmentId` of this provider.
+  String get assignmentId;
 }
 
 class _ReportDetailViewModelProviderElement
@@ -172,7 +193,10 @@ class _ReportDetailViewModelProviderElement
   _ReportDetailViewModelProviderElement(super.provider);
 
   @override
-  String get id => (origin as ReportDetailViewModelProvider).id;
+  String get courseSlug => (origin as ReportDetailViewModelProvider).courseSlug;
+  @override
+  String get assignmentId =>
+      (origin as ReportDetailViewModelProvider).assignmentId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

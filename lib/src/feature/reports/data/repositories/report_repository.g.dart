@@ -19,7 +19,8 @@ class _ReportRepository implements ReportRepository {
 
   @override
   Future<ReportDetailResponseDto> getReportDetailById(
-    String id,
+    String courseSlug,
+    String assignmentId,
     String authorization,
   ) async {
     final _extra = <String, dynamic>{};
@@ -39,7 +40,7 @@ class _ReportRepository implements ReportRepository {
       )
           .compose(
             _dio.options,
-            '/v1/report/${id}',
+            '/v1/courses/${courseSlug}/assignments/${assignmentId}',
             queryParameters: queryParameters,
             data: _data,
           )

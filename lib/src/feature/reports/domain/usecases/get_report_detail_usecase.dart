@@ -17,7 +17,7 @@ final class GetReportDetailUsecaseImpl implements GetReportDetailUsecase {
   });
 
   @override
-  Future<Report> call(String id) async {
+  Future<Report> call(String courseSlug, String assignmentId) async {
     // 세션 스토리지에서 토큰 가져오기
     final token = await authRepository.getToken();
 
@@ -27,8 +27,11 @@ final class GetReportDetailUsecaseImpl implements GetReportDetailUsecase {
     }
 
     final authorization = 'Bearer $token';
-    final response =
-        await reportRepository.getReportDetailById(id, authorization);
+    final response = await reportRepository.getReportDetailById(
+      courseSlug,
+      assignmentId,
+      authorization,
+    );
 
     if (!response.success || response.data == null) {
       throw Exception(response.error?.message ?? '과제 상세 조회에 실패했습니다.');
@@ -40,5 +43,5 @@ final class GetReportDetailUsecaseImpl implements GetReportDetailUsecase {
 
 /// 과제 상세 정보 조회 UseCase 인터페이스입니다.
 abstract class GetReportDetailUsecase {
-  Future<Report> call(String id);
+  Future<Report> call(String courseSlug, String assignmentId);
 }

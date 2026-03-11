@@ -188,6 +188,7 @@ GoRouter goRouter(Ref ref) {
             path: ':id',
             name: '멘토링 상세 | A&I',
             pageBuilder: (context, state) {
+              final courseSlug = state.uri.queryParameters['courseSlug'] ?? '';
               final endAtMs = state.uri.queryParameters['endAt'];
               final week = state.uri.queryParameters['week'];
               final seq = state.uri.queryParameters['seq'];
@@ -199,6 +200,7 @@ GoRouter goRouter(Ref ref) {
 
               return NoTransitionPage(
                 child: ReportDetailUI(
+                  courseSlug: courseSlug,
                   id: state.pathParameters['id']!,
                   endAt: parsedEndAtMs != null
                       ? DateTime.fromMillisecondsSinceEpoch(parsedEndAtMs)

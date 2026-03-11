@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReportDetailUI extends HookConsumerWidget {
+  final String courseSlug;
   final String id;
   final DateTime? endAt;
   final int? week;
@@ -15,6 +16,7 @@ class ReportDetailUI extends HookConsumerWidget {
 
   const ReportDetailUI({
     super.key,
+    required this.courseSlug,
     required this.id,
     this.endAt,
     this.week,
@@ -23,7 +25,7 @@ class ReportDetailUI extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(reportDetailViewModelProvider(id));
+    final state = ref.watch(reportDetailViewModelProvider(courseSlug, id));
     final isDarkMode = ref.watch(studyDarkModeProvider);
 
     final backgroundColor =
@@ -45,7 +47,7 @@ class ReportDetailUI extends HookConsumerWidget {
               context.pop();
               return;
             }
-            context.go('/report');
+            context.go('/report?courseSlug=$courseSlug');
           },
         ),
         actions: [
