@@ -131,6 +131,13 @@ class ReportDetailUI extends HookConsumerWidget {
               ),
             ),
           ),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+              return;
+            }
+            context.go('/report?courseSlug=$courseSlug');
+          },
         ),
       ),
     );

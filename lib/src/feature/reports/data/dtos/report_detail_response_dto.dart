@@ -1,22 +1,28 @@
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/level.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/report_type.dart';
 import 'package:a_and_i_report_web_server/src/feature/reports/data/entities/report.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'report_detail_response_dto.freezed.dart';
 
 /// 코스 과제 상세 API 응답 DTO입니다.
-@freezed
-abstract class ReportDetailResponseDto with _$ReportDetailResponseDto {
+class ReportDetailResponseDto {
   /// 코스 과제 상세 API 응답 DTO를 생성합니다.
-  const factory ReportDetailResponseDto({
-    required bool success,
-    Report? data,
-    ReportDetailApiErrorDto? error,
-    String? timestamp,
-  }) = _ReportDetailResponseDto;
+  const ReportDetailResponseDto({
+    required this.success,
+    this.data,
+    this.error,
+    this.timestamp,
+  });
 
-  const ReportDetailResponseDto._();
+  /// 요청 성공 여부입니다.
+  final bool success;
+
+  /// 과제 상세 데이터입니다.
+  final Report? data;
+
+  /// 에러 정보입니다.
+  final ReportDetailApiErrorDto? error;
+
+  /// 응답 시각입니다.
+  final String? timestamp;
 
   /// JSON 응답을 DTO로 변환합니다.
   factory ReportDetailResponseDto.fromJson(Map<String, dynamic> json) {
@@ -34,23 +40,17 @@ abstract class ReportDetailResponseDto with _$ReportDetailResponseDto {
     }
 
     final metadata = rawData['metadata'];
-    final attributes = metadata is Map<String, dynamic>
-        ? metadata['attributes']
-        : null;
+    final attributes =
+        metadata is Map<String, dynamic> ? metadata['attributes'] : null;
 
     final id = rawData['id']?.toString();
-    final problemId = attributes is Map<String, dynamic>
-        ? attributes['problemId']?.toString()
-        : rawData['problemId']?.toString();
-    final title = metadata is Map<String, dynamic>
-        ? metadata['title']?.toString()
-        : null;
+    final title =
+        metadata is Map<String, dynamic> ? metadata['title']?.toString() : null;
     final content = metadata is Map<String, dynamic>
         ? metadata['description']?.toString()
         : null;
-    final learningGoals = metadata is Map<String, dynamic>
-        ? metadata['learningGoals']
-        : null;
+    final learningGoals =
+        metadata is Map<String, dynamic> ? metadata['learningGoals'] : null;
     final level = _parseLevel(
       metadata is Map<String, dynamic> ? metadata['difficulty'] : null,
     );
@@ -70,7 +70,6 @@ abstract class ReportDetailResponseDto with _$ReportDetailResponseDto {
 
     return Report(
       id: id,
-      problemId: problemId,
       title: title,
       content: content,
       requirement: const <SeqString>[],
