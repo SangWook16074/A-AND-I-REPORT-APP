@@ -284,19 +284,27 @@ String _extractSummary(String markdown) {
     return '본문 내용이 없습니다.';
   }
 
-  return _truncateSummary(plainText);
+  return _truncateSummary(
+    plainText,
+    maxLength: 30,
+  );
 }
 
 String _resolveSummary(Post post) {
   final providedSummary = post.summary?.trim();
   if (providedSummary != null && providedSummary.isNotEmpty) {
-    return _truncateSummary(providedSummary);
+    return _truncateSummary(
+      providedSummary,
+      maxLength: 120,
+    );
   }
   return _extractSummary(post.contentMarkdown);
 }
 
-String _truncateSummary(String text) {
-  const maxLength = 120;
+String _truncateSummary(
+  String text, {
+  required int maxLength,
+}) {
   if (text.length <= maxLength) {
     return text;
   }

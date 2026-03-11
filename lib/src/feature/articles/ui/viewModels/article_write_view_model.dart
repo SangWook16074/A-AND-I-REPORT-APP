@@ -138,11 +138,13 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
   Future<bool> saveDraft({
     required String title,
     required String contentMarkdown,
+    String? summary,
   }) async {
     final isEditingPublishedPost = _isEditingPublishedPost();
     return _submit(
       title: title,
       contentMarkdown: contentMarkdown,
+      summary: summary,
       status: 'Draft',
       successMsg: isEditingPublishedPost ? '수정사항이 임시저장되었습니다.' : '임시저장되었습니다.',
     );
@@ -181,11 +183,13 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
   Future<bool> publish({
     required String title,
     required String contentMarkdown,
+    String? summary,
   }) async {
     final isEditingPublishedPost = _isEditingPublishedPost();
     return _submit(
       title: title,
       contentMarkdown: contentMarkdown,
+      summary: summary,
       status: 'Published',
       successMsg: isEditingPublishedPost ? '포스트가 수정되었습니다.' : '포스트가 출간되었습니다.',
     );
@@ -294,12 +298,13 @@ class ArticleWriteViewModel extends _$ArticleWriteViewModel {
   Future<bool> _submit({
     required String title,
     required String contentMarkdown,
+    String? summary,
     required String status,
     required String successMsg,
   }) async {
     final normalizedTitle = title.trim();
     final normalizedContent = contentMarkdown.trim();
-    final normalizedSummary = state.summary.trim();
+    final normalizedSummary = (summary ?? state.summary).trim();
     final summaryToUpload = normalizedSummary;
     if (normalizedTitle.isEmpty) {
       state = state.copyWith(errorMsg: '제목을 입력해주세요.', successMsg: '');
