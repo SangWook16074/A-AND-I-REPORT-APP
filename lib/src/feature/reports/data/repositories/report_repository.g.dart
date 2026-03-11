@@ -18,7 +18,10 @@ class _ReportRepository implements ReportRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<Report> getReportDetailById(String id, String authorization) async {
+  Future<ReportDetailResponseDto> getReportDetailById(
+    String id,
+    String authorization,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{
@@ -27,7 +30,7 @@ class _ReportRepository implements ReportRepository {
     };
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<Report>(
+    final _options = _setStreamType<ReportDetailResponseDto>(
       Options(
         method: 'GET',
         headers: _headers,
@@ -43,9 +46,9 @@ class _ReportRepository implements ReportRepository {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Report _value;
+    late ReportDetailResponseDto _value;
     try {
-      _value = Report.fromJson(_result.data!);
+      _value = ReportDetailResponseDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

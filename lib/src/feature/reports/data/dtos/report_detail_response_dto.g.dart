@@ -1,28 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'report_summary_response_dto.dart';
+part of 'report_detail_response_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ReportSummaryResponseDto _$ReportSummaryResponseDtoFromJson(
+_ReportDetailResponseDto _$ReportDetailResponseDtoFromJson(
         Map<String, dynamic> json) =>
-    _ReportSummaryResponseDto(
+    _ReportDetailResponseDto(
       success: json['success'] as bool,
-      data: (json['data'] as List<dynamic>?)
-              ?.map((e) => ReportSummary.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const <ReportSummary>[],
+      data: json['data'] == null
+          ? null
+          : Report.fromJson(json['data'] as Map<String, dynamic>),
       error: json['error'] == null
           ? null
-          : ReportSummaryApiErrorDto.fromJson(
+          : ReportDetailApiErrorDto.fromJson(
               json['error'] as Map<String, dynamic>),
       timestamp: json['timestamp'] as String?,
     );
 
-Map<String, dynamic> _$ReportSummaryResponseDtoToJson(
-        _ReportSummaryResponseDto instance) =>
+Map<String, dynamic> _$ReportDetailResponseDtoToJson(
+        _ReportDetailResponseDto instance) =>
     <String, dynamic>{
       'success': instance.success,
       'data': instance.data,
@@ -30,15 +29,15 @@ Map<String, dynamic> _$ReportSummaryResponseDtoToJson(
       'timestamp': instance.timestamp,
     };
 
-_ReportSummaryApiErrorDto _$ReportSummaryApiErrorDtoFromJson(
+_ReportDetailApiErrorDto _$ReportDetailApiErrorDtoFromJson(
         Map<String, dynamic> json) =>
-    _ReportSummaryApiErrorDto(
+    _ReportDetailApiErrorDto(
       code: json['code'] as String?,
       message: json['message'] as String?,
     );
 
-Map<String, dynamic> _$ReportSummaryApiErrorDtoToJson(
-        _ReportSummaryApiErrorDto instance) =>
+Map<String, dynamic> _$ReportDetailApiErrorDtoToJson(
+        _ReportDetailApiErrorDto instance) =>
     <String, dynamic>{
       'code': instance.code,
       'message': instance.message,

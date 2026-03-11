@@ -27,7 +27,14 @@ final class GetReportDetailUsecaseImpl implements GetReportDetailUsecase {
     }
 
     final authorization = 'Bearer $token';
-    return await reportRepository.getReportDetailById(id, authorization);
+    final response =
+        await reportRepository.getReportDetailById(id, authorization);
+
+    if (!response.success || response.data == null) {
+      throw Exception(response.error?.message ?? '과제 상세 조회에 실패했습니다.');
+    }
+
+    return response.data!;
   }
 }
 

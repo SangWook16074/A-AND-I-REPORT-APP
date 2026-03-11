@@ -1,4 +1,4 @@
-import 'package:a_and_i_report_web_server/src/feature/reports/data/entities/report.dart';
+import 'package:a_and_i_report_web_server/src/feature/reports/data/dtos/report_detail_response_dto.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 
@@ -18,6 +18,6 @@ abstract class ReportRepository {
   @Headers(<String, dynamic>{
     'Content-Type': 'application/json',
   })
-  Future<Report> getReportDetailById(
+  Future<ReportDetailResponseDto> getReportDetailById(
       @Path("id") String id, @Header("Authorization") String authorization);
 }

@@ -18,7 +18,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// `report_list_view.html` 시안을 기반으로,
 /// 코스별/주차별 과제 목록을 표시합니다.
 class ReportListView extends ConsumerStatefulWidget {
-  const ReportListView({super.key});
+  const ReportListView({
+    super.key,
+    required this.courseSlug,
+  });
+
+  final String courseSlug;
 
   @override
   ConsumerState<ReportListView> createState() => _ReportListViewState();
@@ -29,7 +34,8 @@ class _ReportListViewState extends ConsumerState<ReportListView> {
   Widget build(BuildContext context) {
     final isDarkMode = ref.watch(studyDarkModeProvider);
     final palette = _Palette.fromMode(isDarkMode);
-    final reportListStateAsync = ref.watch(reportListViewModelProvider);
+    final reportListStateAsync =
+        ref.watch(reportListViewModelProvider(widget.courseSlug));
     final isLoggedIn = ref.watch(authViewModelProvider).status ==
         AuthenticationStatus.authenticated;
     final userState = ref.watch(userViewModelProvider);
@@ -99,7 +105,7 @@ class _ReportListViewState extends ConsumerState<ReportListView> {
                         if (state.errorMsg.isNotEmpty) {
                           return _FeedbackCard(
                             palette: palette,
-                            message: '과제 목록을 불러오지 못했습니다.',
+                            message: state.errorMsg,
                           );
                         }
 
@@ -136,9 +142,9 @@ class _ReportListViewState extends ConsumerState<ReportListView> {
                           color: palette.textPrimary,
                         ),
                       ),
-                      error: (_, __) => _FeedbackCard(
+                      error: (error, _) => _FeedbackCard(
                         palette: palette,
-                        message: '과제 목록을 불러오지 못했습니다.',
+                        message: error.toString(),
                       ),
                     ),
                   ],

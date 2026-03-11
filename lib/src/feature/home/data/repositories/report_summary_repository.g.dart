@@ -20,6 +20,7 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
   @override
   Future<ReportSummaryResponseDto> getReportSummaries(
     String authorization,
+    String courseSlug,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -38,7 +39,7 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
       )
           .compose(
             _dio.options,
-            '/v1/report',
+            '/v1/courses/${courseSlug}/weeks',
             queryParameters: queryParameters,
             data: _data,
           )

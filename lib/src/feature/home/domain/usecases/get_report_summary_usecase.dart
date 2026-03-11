@@ -18,7 +18,11 @@ final class GetReportSummaryUsecaseImpl implements GetReportSummaryUsecase {
   });
 
   @override
-  Future<List<ReportSummary>> call() async {
+  Future<List<ReportSummary>> call(String courseSlug) async {
+    if (courseSlug.trim().isEmpty) {
+      throw Exception('코스 슬러그가 없어 과제 목록을 조회할 수 없습니다.');
+    }
+
     // 세션 스토리지에서 토큰 가져오기
     final token = await authRepository.getToken();
     // 토큰이 없으면 인증되지 않은 사용자
@@ -27,8 +31,10 @@ final class GetReportSummaryUsecaseImpl implements GetReportSummaryUsecase {
     }
 
     final authorization = 'Bearer $token';
-    final response =
-        await reportSummaryRepository.getReportSummaries(authorization);
+    final response = await reportSummaryRepository.getReportSummaries(
+      authorization,
+      courseSlug,
+    );
 
     if (!response.success) {
       throw Exception(response.error?.message ?? '과제 목록 조회에 실패했습니다.');
@@ -40,5 +46,5 @@ final class GetReportSummaryUsecaseImpl implements GetReportSummaryUsecase {
 
 /// 과제 목록 조회 UseCase 인터페이스입니다.
 abstract class GetReportSummaryUsecase {
-  Future<List<ReportSummary>> call();
+  Future<List<ReportSummary>> call(String courseSlug);
 }

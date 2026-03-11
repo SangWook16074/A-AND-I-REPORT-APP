@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'report_summary_response_dto.dart';
+part of 'report_detail_response_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,30 +13,30 @@ part of 'report_summary_response_dto.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ReportSummaryResponseDto {
+mixin _$ReportDetailResponseDto {
   bool get success;
-  List<ReportSummary> get data;
-  ReportSummaryApiErrorDto? get error;
+  Report? get data;
+  ReportDetailApiErrorDto? get error;
   String? get timestamp;
 
-  /// Create a copy of ReportSummaryResponseDto
+  /// Create a copy of ReportDetailResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ReportSummaryResponseDtoCopyWith<ReportSummaryResponseDto> get copyWith =>
-      _$ReportSummaryResponseDtoCopyWithImpl<ReportSummaryResponseDto>(
-          this as ReportSummaryResponseDto, _$identity);
+  $ReportDetailResponseDtoCopyWith<ReportDetailResponseDto> get copyWith =>
+      _$ReportDetailResponseDtoCopyWithImpl<ReportDetailResponseDto>(
+          this as ReportDetailResponseDto, _$identity);
 
-  /// Serializes this ReportSummaryResponseDto to a JSON map.
+  /// Serializes this ReportDetailResponseDto to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ReportSummaryResponseDto &&
+            other is ReportDetailResponseDto &&
             (identical(other.success, success) || other.success == success) &&
-            const DeepCollectionEquality().equals(other.data, data) &&
+            (identical(other.data, data) || other.data == data) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp));
@@ -44,45 +44,45 @@ mixin _$ReportSummaryResponseDto {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, success,
-      const DeepCollectionEquality().hash(data), error, timestamp);
+  int get hashCode => Object.hash(runtimeType, success, data, error, timestamp);
 
   @override
   String toString() {
-    return 'ReportSummaryResponseDto(success: $success, data: $data, error: $error, timestamp: $timestamp)';
+    return 'ReportDetailResponseDto(success: $success, data: $data, error: $error, timestamp: $timestamp)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ReportSummaryResponseDtoCopyWith<$Res> {
-  factory $ReportSummaryResponseDtoCopyWith(ReportSummaryResponseDto value,
-          $Res Function(ReportSummaryResponseDto) _then) =
-      _$ReportSummaryResponseDtoCopyWithImpl;
+abstract mixin class $ReportDetailResponseDtoCopyWith<$Res> {
+  factory $ReportDetailResponseDtoCopyWith(ReportDetailResponseDto value,
+          $Res Function(ReportDetailResponseDto) _then) =
+      _$ReportDetailResponseDtoCopyWithImpl;
   @useResult
   $Res call(
       {bool success,
-      List<ReportSummary> data,
-      ReportSummaryApiErrorDto? error,
+      Report? data,
+      ReportDetailApiErrorDto? error,
       String? timestamp});
 
-  $ReportSummaryApiErrorDtoCopyWith<$Res>? get error;
+  $ReportCopyWith<$Res>? get data;
+  $ReportDetailApiErrorDtoCopyWith<$Res>? get error;
 }
 
 /// @nodoc
-class _$ReportSummaryResponseDtoCopyWithImpl<$Res>
-    implements $ReportSummaryResponseDtoCopyWith<$Res> {
-  _$ReportSummaryResponseDtoCopyWithImpl(this._self, this._then);
+class _$ReportDetailResponseDtoCopyWithImpl<$Res>
+    implements $ReportDetailResponseDtoCopyWith<$Res> {
+  _$ReportDetailResponseDtoCopyWithImpl(this._self, this._then);
 
-  final ReportSummaryResponseDto _self;
-  final $Res Function(ReportSummaryResponseDto) _then;
+  final ReportDetailResponseDto _self;
+  final $Res Function(ReportDetailResponseDto) _then;
 
-  /// Create a copy of ReportSummaryResponseDto
+  /// Create a copy of ReportDetailResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? success = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? error = freezed,
     Object? timestamp = freezed,
   }) {
@@ -91,14 +91,14 @@ class _$ReportSummaryResponseDtoCopyWithImpl<$Res>
           ? _self.success
           : success // ignore: cast_nullable_to_non_nullable
               as bool,
-      data: null == data
+      data: freezed == data
           ? _self.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<ReportSummary>,
+              as Report?,
       error: freezed == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
-              as ReportSummaryApiErrorDto?,
+              as ReportDetailApiErrorDto?,
       timestamp: freezed == timestamp
           ? _self.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -106,23 +106,37 @@ class _$ReportSummaryResponseDtoCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of ReportSummaryResponseDto
+  /// Create a copy of ReportDetailResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ReportSummaryApiErrorDtoCopyWith<$Res>? get error {
+  $ReportCopyWith<$Res>? get data {
+    if (_self.data == null) {
+      return null;
+    }
+
+    return $ReportCopyWith<$Res>(_self.data!, (value) {
+      return _then(_self.copyWith(data: value));
+    });
+  }
+
+  /// Create a copy of ReportDetailResponseDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ReportDetailApiErrorDtoCopyWith<$Res>? get error {
     if (_self.error == null) {
       return null;
     }
 
-    return $ReportSummaryApiErrorDtoCopyWith<$Res>(_self.error!, (value) {
+    return $ReportDetailApiErrorDtoCopyWith<$Res>(_self.error!, (value) {
       return _then(_self.copyWith(error: value));
     });
   }
 }
 
-/// Adds pattern-matching-related methods to [ReportSummaryResponseDto].
-extension ReportSummaryResponseDtoPatterns on ReportSummaryResponseDto {
+/// Adds pattern-matching-related methods to [ReportDetailResponseDto].
+extension ReportDetailResponseDtoPatterns on ReportDetailResponseDto {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -137,12 +151,12 @@ extension ReportSummaryResponseDtoPatterns on ReportSummaryResponseDto {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_ReportSummaryResponseDto value)? $default, {
+    TResult Function(_ReportDetailResponseDto value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryResponseDto() when $default != null:
+      case _ReportDetailResponseDto() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -164,11 +178,11 @@ extension ReportSummaryResponseDtoPatterns on ReportSummaryResponseDto {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_ReportSummaryResponseDto value) $default,
+    TResult Function(_ReportDetailResponseDto value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryResponseDto():
+      case _ReportDetailResponseDto():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -189,11 +203,11 @@ extension ReportSummaryResponseDtoPatterns on ReportSummaryResponseDto {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_ReportSummaryResponseDto value)? $default,
+    TResult? Function(_ReportDetailResponseDto value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryResponseDto() when $default != null:
+      case _ReportDetailResponseDto() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -214,14 +228,14 @@ extension ReportSummaryResponseDtoPatterns on ReportSummaryResponseDto {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(bool success, List<ReportSummary> data,
-            ReportSummaryApiErrorDto? error, String? timestamp)?
+    TResult Function(bool success, Report? data, ReportDetailApiErrorDto? error,
+            String? timestamp)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryResponseDto() when $default != null:
+      case _ReportDetailResponseDto() when $default != null:
         return $default(
             _that.success, _that.data, _that.error, _that.timestamp);
       case _:
@@ -244,13 +258,13 @@ extension ReportSummaryResponseDtoPatterns on ReportSummaryResponseDto {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(bool success, List<ReportSummary> data,
-            ReportSummaryApiErrorDto? error, String? timestamp)
+    TResult Function(bool success, Report? data, ReportDetailApiErrorDto? error,
+            String? timestamp)
         $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryResponseDto():
+      case _ReportDetailResponseDto():
         return $default(
             _that.success, _that.data, _that.error, _that.timestamp);
       case _:
@@ -272,13 +286,13 @@ extension ReportSummaryResponseDtoPatterns on ReportSummaryResponseDto {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(bool success, List<ReportSummary> data,
-            ReportSummaryApiErrorDto? error, String? timestamp)?
+    TResult? Function(bool success, Report? data,
+            ReportDetailApiErrorDto? error, String? timestamp)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryResponseDto() when $default != null:
+      case _ReportDetailResponseDto() when $default != null:
         return $default(
             _that.success, _that.data, _that.error, _that.timestamp);
       case _:
@@ -289,44 +303,33 @@ extension ReportSummaryResponseDtoPatterns on ReportSummaryResponseDto {
 
 /// @nodoc
 @JsonSerializable()
-class _ReportSummaryResponseDto implements ReportSummaryResponseDto {
-  const _ReportSummaryResponseDto(
-      {required this.success,
-      final List<ReportSummary> data = const <ReportSummary>[],
-      this.error,
-      this.timestamp})
-      : _data = data;
-  factory _ReportSummaryResponseDto.fromJson(Map<String, dynamic> json) =>
-      _$ReportSummaryResponseDtoFromJson(json);
+class _ReportDetailResponseDto implements ReportDetailResponseDto {
+  const _ReportDetailResponseDto(
+      {required this.success, this.data, this.error, this.timestamp});
+  factory _ReportDetailResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$ReportDetailResponseDtoFromJson(json);
 
   @override
   final bool success;
-  final List<ReportSummary> _data;
   @override
-  @JsonKey()
-  List<ReportSummary> get data {
-    if (_data is EqualUnmodifiableListView) return _data;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_data);
-  }
-
+  final Report? data;
   @override
-  final ReportSummaryApiErrorDto? error;
+  final ReportDetailApiErrorDto? error;
   @override
   final String? timestamp;
 
-  /// Create a copy of ReportSummaryResponseDto
+  /// Create a copy of ReportDetailResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ReportSummaryResponseDtoCopyWith<_ReportSummaryResponseDto> get copyWith =>
-      __$ReportSummaryResponseDtoCopyWithImpl<_ReportSummaryResponseDto>(
+  _$ReportDetailResponseDtoCopyWith<_ReportDetailResponseDto> get copyWith =>
+      __$ReportDetailResponseDtoCopyWithImpl<_ReportDetailResponseDto>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$ReportSummaryResponseDtoToJson(
+    return _$ReportDetailResponseDtoToJson(
       this,
     );
   }
@@ -335,9 +338,9 @@ class _ReportSummaryResponseDto implements ReportSummaryResponseDto {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ReportSummaryResponseDto &&
+            other is _ReportDetailResponseDto &&
             (identical(other.success, success) || other.success == success) &&
-            const DeepCollectionEquality().equals(other._data, _data) &&
+            (identical(other.data, data) || other.data == data) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp));
@@ -345,64 +348,65 @@ class _ReportSummaryResponseDto implements ReportSummaryResponseDto {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, success,
-      const DeepCollectionEquality().hash(_data), error, timestamp);
+  int get hashCode => Object.hash(runtimeType, success, data, error, timestamp);
 
   @override
   String toString() {
-    return 'ReportSummaryResponseDto(success: $success, data: $data, error: $error, timestamp: $timestamp)';
+    return 'ReportDetailResponseDto(success: $success, data: $data, error: $error, timestamp: $timestamp)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$ReportSummaryResponseDtoCopyWith<$Res>
-    implements $ReportSummaryResponseDtoCopyWith<$Res> {
-  factory _$ReportSummaryResponseDtoCopyWith(_ReportSummaryResponseDto value,
-          $Res Function(_ReportSummaryResponseDto) _then) =
-      __$ReportSummaryResponseDtoCopyWithImpl;
+abstract mixin class _$ReportDetailResponseDtoCopyWith<$Res>
+    implements $ReportDetailResponseDtoCopyWith<$Res> {
+  factory _$ReportDetailResponseDtoCopyWith(_ReportDetailResponseDto value,
+          $Res Function(_ReportDetailResponseDto) _then) =
+      __$ReportDetailResponseDtoCopyWithImpl;
   @override
   @useResult
   $Res call(
       {bool success,
-      List<ReportSummary> data,
-      ReportSummaryApiErrorDto? error,
+      Report? data,
+      ReportDetailApiErrorDto? error,
       String? timestamp});
 
   @override
-  $ReportSummaryApiErrorDtoCopyWith<$Res>? get error;
+  $ReportCopyWith<$Res>? get data;
+  @override
+  $ReportDetailApiErrorDtoCopyWith<$Res>? get error;
 }
 
 /// @nodoc
-class __$ReportSummaryResponseDtoCopyWithImpl<$Res>
-    implements _$ReportSummaryResponseDtoCopyWith<$Res> {
-  __$ReportSummaryResponseDtoCopyWithImpl(this._self, this._then);
+class __$ReportDetailResponseDtoCopyWithImpl<$Res>
+    implements _$ReportDetailResponseDtoCopyWith<$Res> {
+  __$ReportDetailResponseDtoCopyWithImpl(this._self, this._then);
 
-  final _ReportSummaryResponseDto _self;
-  final $Res Function(_ReportSummaryResponseDto) _then;
+  final _ReportDetailResponseDto _self;
+  final $Res Function(_ReportDetailResponseDto) _then;
 
-  /// Create a copy of ReportSummaryResponseDto
+  /// Create a copy of ReportDetailResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
     Object? success = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? error = freezed,
     Object? timestamp = freezed,
   }) {
-    return _then(_ReportSummaryResponseDto(
+    return _then(_ReportDetailResponseDto(
       success: null == success
           ? _self.success
           : success // ignore: cast_nullable_to_non_nullable
               as bool,
-      data: null == data
-          ? _self._data
+      data: freezed == data
+          ? _self.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<ReportSummary>,
+              as Report?,
       error: freezed == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
-              as ReportSummaryApiErrorDto?,
+              as ReportDetailApiErrorDto?,
       timestamp: freezed == timestamp
           ? _self.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -410,42 +414,56 @@ class __$ReportSummaryResponseDtoCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of ReportSummaryResponseDto
+  /// Create a copy of ReportDetailResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ReportSummaryApiErrorDtoCopyWith<$Res>? get error {
+  $ReportCopyWith<$Res>? get data {
+    if (_self.data == null) {
+      return null;
+    }
+
+    return $ReportCopyWith<$Res>(_self.data!, (value) {
+      return _then(_self.copyWith(data: value));
+    });
+  }
+
+  /// Create a copy of ReportDetailResponseDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ReportDetailApiErrorDtoCopyWith<$Res>? get error {
     if (_self.error == null) {
       return null;
     }
 
-    return $ReportSummaryApiErrorDtoCopyWith<$Res>(_self.error!, (value) {
+    return $ReportDetailApiErrorDtoCopyWith<$Res>(_self.error!, (value) {
       return _then(_self.copyWith(error: value));
     });
   }
 }
 
 /// @nodoc
-mixin _$ReportSummaryApiErrorDto {
+mixin _$ReportDetailApiErrorDto {
   String? get code;
   String? get message;
 
-  /// Create a copy of ReportSummaryApiErrorDto
+  /// Create a copy of ReportDetailApiErrorDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ReportSummaryApiErrorDtoCopyWith<ReportSummaryApiErrorDto> get copyWith =>
-      _$ReportSummaryApiErrorDtoCopyWithImpl<ReportSummaryApiErrorDto>(
-          this as ReportSummaryApiErrorDto, _$identity);
+  $ReportDetailApiErrorDtoCopyWith<ReportDetailApiErrorDto> get copyWith =>
+      _$ReportDetailApiErrorDtoCopyWithImpl<ReportDetailApiErrorDto>(
+          this as ReportDetailApiErrorDto, _$identity);
 
-  /// Serializes this ReportSummaryApiErrorDto to a JSON map.
+  /// Serializes this ReportDetailApiErrorDto to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ReportSummaryApiErrorDto &&
+            other is ReportDetailApiErrorDto &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.message, message) || other.message == message));
   }
@@ -456,28 +474,28 @@ mixin _$ReportSummaryApiErrorDto {
 
   @override
   String toString() {
-    return 'ReportSummaryApiErrorDto(code: $code, message: $message)';
+    return 'ReportDetailApiErrorDto(code: $code, message: $message)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ReportSummaryApiErrorDtoCopyWith<$Res> {
-  factory $ReportSummaryApiErrorDtoCopyWith(ReportSummaryApiErrorDto value,
-          $Res Function(ReportSummaryApiErrorDto) _then) =
-      _$ReportSummaryApiErrorDtoCopyWithImpl;
+abstract mixin class $ReportDetailApiErrorDtoCopyWith<$Res> {
+  factory $ReportDetailApiErrorDtoCopyWith(ReportDetailApiErrorDto value,
+          $Res Function(ReportDetailApiErrorDto) _then) =
+      _$ReportDetailApiErrorDtoCopyWithImpl;
   @useResult
   $Res call({String? code, String? message});
 }
 
 /// @nodoc
-class _$ReportSummaryApiErrorDtoCopyWithImpl<$Res>
-    implements $ReportSummaryApiErrorDtoCopyWith<$Res> {
-  _$ReportSummaryApiErrorDtoCopyWithImpl(this._self, this._then);
+class _$ReportDetailApiErrorDtoCopyWithImpl<$Res>
+    implements $ReportDetailApiErrorDtoCopyWith<$Res> {
+  _$ReportDetailApiErrorDtoCopyWithImpl(this._self, this._then);
 
-  final ReportSummaryApiErrorDto _self;
-  final $Res Function(ReportSummaryApiErrorDto) _then;
+  final ReportDetailApiErrorDto _self;
+  final $Res Function(ReportDetailApiErrorDto) _then;
 
-  /// Create a copy of ReportSummaryApiErrorDto
+  /// Create a copy of ReportDetailApiErrorDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -498,8 +516,8 @@ class _$ReportSummaryApiErrorDtoCopyWithImpl<$Res>
   }
 }
 
-/// Adds pattern-matching-related methods to [ReportSummaryApiErrorDto].
-extension ReportSummaryApiErrorDtoPatterns on ReportSummaryApiErrorDto {
+/// Adds pattern-matching-related methods to [ReportDetailApiErrorDto].
+extension ReportDetailApiErrorDtoPatterns on ReportDetailApiErrorDto {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -514,12 +532,12 @@ extension ReportSummaryApiErrorDtoPatterns on ReportSummaryApiErrorDto {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_ReportSummaryApiErrorDto value)? $default, {
+    TResult Function(_ReportDetailApiErrorDto value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryApiErrorDto() when $default != null:
+      case _ReportDetailApiErrorDto() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -541,11 +559,11 @@ extension ReportSummaryApiErrorDtoPatterns on ReportSummaryApiErrorDto {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_ReportSummaryApiErrorDto value) $default,
+    TResult Function(_ReportDetailApiErrorDto value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryApiErrorDto():
+      case _ReportDetailApiErrorDto():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -566,11 +584,11 @@ extension ReportSummaryApiErrorDtoPatterns on ReportSummaryApiErrorDto {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_ReportSummaryApiErrorDto value)? $default,
+    TResult? Function(_ReportDetailApiErrorDto value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryApiErrorDto() when $default != null:
+      case _ReportDetailApiErrorDto() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -596,7 +614,7 @@ extension ReportSummaryApiErrorDtoPatterns on ReportSummaryApiErrorDto {
   }) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryApiErrorDto() when $default != null:
+      case _ReportDetailApiErrorDto() when $default != null:
         return $default(_that.code, _that.message);
       case _:
         return orElse();
@@ -622,7 +640,7 @@ extension ReportSummaryApiErrorDtoPatterns on ReportSummaryApiErrorDto {
   ) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryApiErrorDto():
+      case _ReportDetailApiErrorDto():
         return $default(_that.code, _that.message);
       case _:
         throw StateError('Unexpected subclass');
@@ -647,7 +665,7 @@ extension ReportSummaryApiErrorDtoPatterns on ReportSummaryApiErrorDto {
   ) {
     final _that = this;
     switch (_that) {
-      case _ReportSummaryApiErrorDto() when $default != null:
+      case _ReportDetailApiErrorDto() when $default != null:
         return $default(_that.code, _that.message);
       case _:
         return null;
@@ -657,28 +675,28 @@ extension ReportSummaryApiErrorDtoPatterns on ReportSummaryApiErrorDto {
 
 /// @nodoc
 @JsonSerializable()
-class _ReportSummaryApiErrorDto implements ReportSummaryApiErrorDto {
-  const _ReportSummaryApiErrorDto({this.code, this.message});
-  factory _ReportSummaryApiErrorDto.fromJson(Map<String, dynamic> json) =>
-      _$ReportSummaryApiErrorDtoFromJson(json);
+class _ReportDetailApiErrorDto implements ReportDetailApiErrorDto {
+  const _ReportDetailApiErrorDto({this.code, this.message});
+  factory _ReportDetailApiErrorDto.fromJson(Map<String, dynamic> json) =>
+      _$ReportDetailApiErrorDtoFromJson(json);
 
   @override
   final String? code;
   @override
   final String? message;
 
-  /// Create a copy of ReportSummaryApiErrorDto
+  /// Create a copy of ReportDetailApiErrorDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ReportSummaryApiErrorDtoCopyWith<_ReportSummaryApiErrorDto> get copyWith =>
-      __$ReportSummaryApiErrorDtoCopyWithImpl<_ReportSummaryApiErrorDto>(
+  _$ReportDetailApiErrorDtoCopyWith<_ReportDetailApiErrorDto> get copyWith =>
+      __$ReportDetailApiErrorDtoCopyWithImpl<_ReportDetailApiErrorDto>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$ReportSummaryApiErrorDtoToJson(
+    return _$ReportDetailApiErrorDtoToJson(
       this,
     );
   }
@@ -687,7 +705,7 @@ class _ReportSummaryApiErrorDto implements ReportSummaryApiErrorDto {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ReportSummaryApiErrorDto &&
+            other is _ReportDetailApiErrorDto &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.message, message) || other.message == message));
   }
@@ -698,30 +716,30 @@ class _ReportSummaryApiErrorDto implements ReportSummaryApiErrorDto {
 
   @override
   String toString() {
-    return 'ReportSummaryApiErrorDto(code: $code, message: $message)';
+    return 'ReportDetailApiErrorDto(code: $code, message: $message)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$ReportSummaryApiErrorDtoCopyWith<$Res>
-    implements $ReportSummaryApiErrorDtoCopyWith<$Res> {
-  factory _$ReportSummaryApiErrorDtoCopyWith(_ReportSummaryApiErrorDto value,
-          $Res Function(_ReportSummaryApiErrorDto) _then) =
-      __$ReportSummaryApiErrorDtoCopyWithImpl;
+abstract mixin class _$ReportDetailApiErrorDtoCopyWith<$Res>
+    implements $ReportDetailApiErrorDtoCopyWith<$Res> {
+  factory _$ReportDetailApiErrorDtoCopyWith(_ReportDetailApiErrorDto value,
+          $Res Function(_ReportDetailApiErrorDto) _then) =
+      __$ReportDetailApiErrorDtoCopyWithImpl;
   @override
   @useResult
   $Res call({String? code, String? message});
 }
 
 /// @nodoc
-class __$ReportSummaryApiErrorDtoCopyWithImpl<$Res>
-    implements _$ReportSummaryApiErrorDtoCopyWith<$Res> {
-  __$ReportSummaryApiErrorDtoCopyWithImpl(this._self, this._then);
+class __$ReportDetailApiErrorDtoCopyWithImpl<$Res>
+    implements _$ReportDetailApiErrorDtoCopyWith<$Res> {
+  __$ReportDetailApiErrorDtoCopyWithImpl(this._self, this._then);
 
-  final _ReportSummaryApiErrorDto _self;
-  final $Res Function(_ReportSummaryApiErrorDto) _then;
+  final _ReportDetailApiErrorDto _self;
+  final $Res Function(_ReportDetailApiErrorDto) _then;
 
-  /// Create a copy of ReportSummaryApiErrorDto
+  /// Create a copy of ReportDetailApiErrorDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -729,7 +747,7 @@ class __$ReportSummaryApiErrorDtoCopyWithImpl<$Res>
     Object? code = freezed,
     Object? message = freezed,
   }) {
-    return _then(_ReportSummaryApiErrorDto(
+    return _then(_ReportDetailApiErrorDto(
       code: freezed == code
           ? _self.code
           : code // ignore: cast_nullable_to_non_nullable

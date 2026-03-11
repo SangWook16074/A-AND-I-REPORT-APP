@@ -149,8 +149,11 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
             _CourseCard(
               palette: palette,
               data: _toCourseCardData(courses[index]),
-              onTapAction:
-                  _isCourseActive(courses[index]) ? () => context.go('/report') : null,
+              onTapAction: _isCourseActive(courses[index])
+                  ? () => context.go(
+                        '/report?courseSlug=${Uri.encodeComponent(courses[index].slug)}',
+                      )
+                  : null,
             ),
             if (index != courses.length - 1) const SizedBox(height: 22),
           ],

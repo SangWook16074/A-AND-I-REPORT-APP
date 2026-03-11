@@ -16,9 +16,11 @@ class ReportListViewModel extends _$ReportListViewModel {
   /// 성공 시 [ReportListState]에 목록을 담아 반환하고,
   /// 실패 시 에러 메시지를 담아 반환합니다.
   @override
-  Future<ReportListState> build() async {
+  Future<ReportListState> build(String courseSlug) async {
     try {
-      final reports = await ref.read(getReportSummaryUsecaseProvider).call();
+      final reports = await ref
+          .read(getReportSummaryUsecaseProvider)
+          .call(courseSlug);
       return ReportListState(reports: reports);
     } catch (e) {
       return ReportListState(errorMsg: e.toString());
