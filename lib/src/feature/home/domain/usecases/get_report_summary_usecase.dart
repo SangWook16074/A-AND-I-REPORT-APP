@@ -27,7 +27,14 @@ final class GetReportSummaryUsecaseImpl implements GetReportSummaryUsecase {
     }
 
     final authorization = 'Bearer $token';
-    return await reportSummaryRepository.getReportSummaries(authorization);
+    final response =
+        await reportSummaryRepository.getReportSummaries(authorization);
+
+    if (!response.success) {
+      throw Exception(response.error?.message ?? '과제 목록 조회에 실패했습니다.');
+    }
+
+    return response.data;
   }
 }
 

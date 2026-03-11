@@ -18,7 +18,9 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<ReportSummary>> getReportSummaries(String authorization) async {
+  Future<ReportSummaryResponseDto> getReportSummaries(
+    String authorization,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{
@@ -27,7 +29,7 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
     };
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<ReportSummary>>(
+    final _options = _setStreamType<ReportSummaryResponseDto>(
       Options(
         method: 'GET',
         headers: _headers,
@@ -36,18 +38,16 @@ class _ReportSummaryRepository implements ReportSummaryRepository {
       )
           .compose(
             _dio.options,
-            '/v1/courses',
+            '/v1/report',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<ReportSummary> _value;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ReportSummaryResponseDto _value;
     try {
-      _value = _result.data!
-          .map((dynamic i) => ReportSummary.fromJson(i as Map<String, dynamic>))
-          .toList();
+      _value = ReportSummaryResponseDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
-import '../entities/report_summary.dart';
+import '../dtos/report_summary_response_dto.dart';
 
 part 'report_summary_repository.g.dart';
 
@@ -15,10 +15,10 @@ abstract class ReportSummaryRepository {
   /// 서버로부터 과제 목록을 조회합니다.
   ///
   /// [authorization] 헤더에 Bearer 토큰을 포함하여 요청해야 합니다.
-  @GET("/v1/courses")
+  @GET("/v1/report")
   @Headers(<String, dynamic>{
     'Content-Type': 'application/json',
   })
-  Future<List<ReportSummary>> getReportSummaries(
+  Future<ReportSummaryResponseDto> getReportSummaries(
       @Header("Authorization") String authorization);
 }
