@@ -64,6 +64,7 @@ GoRouter goRouter(Ref ref) {
       // 1. 비로그인 상태인데 보호된 페이지로 접근하려 할 때
       if (isUnauthenticated &&
           (location.startsWith('/report') ||
+              location.startsWith('/course') ||
               location.startsWith('/my-account'))) {
         final fromPath = state.uri.toString();
         return '/sign-in?from=${Uri.encodeComponent(fromPath)}';

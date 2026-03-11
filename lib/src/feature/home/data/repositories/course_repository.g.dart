@@ -18,7 +18,7 @@ class _CourseRepository implements CourseRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<Course> getCourseBySlug(
+  Future<CourseDetailResponseDto> getCourseBySlugFromCourses(
     String authorization,
     String courseSlug,
   ) async {
@@ -27,38 +27,7 @@ class _CourseRepository implements CourseRepository {
     final _headers = <String, dynamic>{r'Authorization': authorization};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<Course>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/v1/course/${courseSlug}',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Course _value;
-    try {
-      _value = Course.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<Course> getCourseBySlugFromCourses(
-    String authorization,
-    String courseSlug,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
-    _headers.removeWhere((k, v) => v == null);
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<Course>(
+    final _options = _setStreamType<CourseDetailResponseDto>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -69,9 +38,9 @@ class _CourseRepository implements CourseRepository {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Course _value;
+    late CourseDetailResponseDto _value;
     try {
-      _value = Course.fromJson(_result.data!);
+      _value = CourseDetailResponseDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -80,13 +49,23 @@ class _CourseRepository implements CourseRepository {
   }
 
   @override
-  Future<List<Course>> getCourses(String authorization) async {
+  Future<CourseListResponseDto> getCourses(
+    String authorization,
+    String? status,
+    String? phase,
+    String? track,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'status': status,
+      r'phase': phase,
+      r'track': track,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'Authorization': authorization};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<Course>>(
+    final _options = _setStreamType<CourseListResponseDto>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -96,12 +75,10 @@ class _CourseRepository implements CourseRepository {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<Course> _value;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CourseListResponseDto _value;
     try {
-      _value = _result.data!
-          .map((dynamic i) => Course.fromJson(i as Map<String, dynamic>))
-          .toList();
+      _value = CourseListResponseDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

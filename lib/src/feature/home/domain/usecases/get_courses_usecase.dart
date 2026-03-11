@@ -27,6 +27,71 @@ final class GetCoursesUsecaseImpl implements GetCoursesUsecase {
     }
 
     final authorization = 'Bearer $token';
-    return await _courseRepository.getCourses(authorization);
+    final requests = <({String? status, String? phase, String? track})>[
+      (status: null, phase: null, track: null),
+      (status: 'PUBLISHED', phase: null, track: null),
+      (status: 'PUBLISHED', phase: null, track: 'FL'),
+      (status: 'PUBLISHED', phase: 'BASIC', track: 'FL'),
+      (status: 'PUBLISHED', phase: 'CS', track: 'FL'),
+    ];
+
+    for (final request in requests) {
+      final response = await _courseRepository.getCourses(
+        authorization,
+        request.status,
+        request.phase,
+        request.track,
+      );
+
+      if (!response.success) {
+        throw Exception(response.error?.message ?? '코스 목록 조회에 실패했습니다.');
+      }
+
+      if (response.data.isNotEmpty) {
+        return _deduplicateCourses(response.data);
+      }
+    }
+
+    final legacyCourses = await _fetchLegacyCourses(authorization);
+    if (legacyCourses.isNotEmpty) {
+      return legacyCourses;
+    }
+
+    return const [];
+  }
+
+  Future<List<Course>> _fetchLegacyCourses(String authorization) async {
+    const legacyCourseSlugs = <String>[
+      '3rd-cs-basic',
+    ];
+
+    final courses = <Course>[];
+
+    for (final slug in legacyCourseSlugs) {
+      try {
+        final response = await _courseRepository.getCourseBySlugFromCourses(
+          authorization,
+          slug,
+        );
+
+        if (response.success && response.data != null) {
+          courses.add(response.data!);
+        }
+      } catch (_) {
+        // 레거시 코스가 없거나 접근 불가한 경우 다음 slug를 계속 시도한다.
+      }
+    }
+
+    return _deduplicateCourses(courses);
+  }
+
+  List<Course> _deduplicateCourses(List<Course> courses) {
+    final uniqueById = <String, Course>{};
+
+    for (final course in courses) {
+      uniqueById[course.id] = course;
+    }
+
+    return uniqueById.values.toList(growable: false);
   }
 }

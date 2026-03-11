@@ -4,6 +4,9 @@ import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_st
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_state.dart';
+import 'package:a_and_i_report_web_server/src/feature/home/data/entities/course.dart';
+import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/course_list_state.dart';
+import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/course_list_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -31,6 +34,7 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
     final profileImageUrl = userState.profileImageUrl;
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 768;
+    final courseListState = ref.watch(courseListViewModelProvider);
 
     return Scaffold(
       backgroundColor: palette.pageBackground,
@@ -83,16 +87,10 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
                       ),
                     ),
                     SizedBox(height: isMobile ? 24 : 32),
-                    _CourseCard(
+                    ..._buildCourseSections(
+                      context: context,
                       palette: palette,
-                      data: _activeCourse,
-                      onTapAction: () => context.go('/report'),
-                    ),
-                    const SizedBox(height: 22),
-                    _CourseCard(
-                      palette: palette,
-                      data: _lockedCourse,
-                      onTapAction: null,
+                      courseListState: courseListState,
                     ),
                     SizedBox(height: isMobile ? 72 : 108),
                     _FooterSection(palette: palette),
@@ -105,6 +103,59 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildCourseSections({
+    required BuildContext context,
+    required _CoursePalette palette,
+    required CourseListState courseListState,
+  }) {
+    switch (courseListState.status) {
+      case CourseListViewStatus.loading:
+        return [
+          _CourseLoadingCard(palette: palette),
+        ];
+      case CourseListViewStatus.error:
+        return [
+          _CourseFeedbackCard(
+            palette: palette,
+            message: '코스 목록을 불러오지 못했습니다.',
+          ),
+        ];
+      case CourseListViewStatus.done:
+        final courses = List<Course>.of(courseListState.courses)
+          ..sort((a, b) {
+            final activeCompare = (_isCourseActive(a) == _isCourseActive(b))
+                ? 0
+                : (_isCourseActive(a) ? -1 : 1);
+            if (activeCompare != 0) {
+              return activeCompare;
+            }
+
+            return a.metadata.title.compareTo(b.metadata.title);
+          });
+
+        if (courses.isEmpty) {
+          return [
+            _CourseFeedbackCard(
+              palette: palette,
+              message: '표시할 코스가 없습니다.',
+            ),
+          ];
+        }
+
+        return [
+          for (var index = 0; index < courses.length; index++) ...[
+            _CourseCard(
+              palette: palette,
+              data: _toCourseCardData(courses[index]),
+              onTapAction:
+                  _isCourseActive(courses[index]) ? () => context.go('/report') : null,
+            ),
+            if (index != courses.length - 1) const SizedBox(height: 22),
+          ],
+        ];
+    }
   }
 }
 
@@ -415,6 +466,15 @@ class _CourseCardContent extends StatelessWidget {
               height: 1.6,
             ),
           ),
+          const SizedBox(height: 12),
+          Text(
+            data.period,
+            style: TextStyle(
+              color: palette.textSecondary,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: 24),
           data.isActive
               ? _buildActiveBottom(context)
@@ -542,10 +602,68 @@ class _FooterSection extends StatelessWidget {
   }
 }
 
+class _CourseFeedbackCard extends StatelessWidget {
+  const _CourseFeedbackCard({
+    required this.palette,
+    required this.message,
+  });
+
+  final _CoursePalette palette;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+      decoration: BoxDecoration(
+        color: palette.cardBackground,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: palette.border),
+      ),
+      child: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: palette.textMuted,
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          height: 1.6,
+        ),
+      ),
+    );
+  }
+}
+
+class _CourseLoadingCard extends StatelessWidget {
+  const _CourseLoadingCard({required this.palette});
+
+  final _CoursePalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 48),
+      decoration: BoxDecoration(
+        color: palette.cardBackground,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: palette.border),
+      ),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: palette.textPrimary,
+        ),
+      ),
+    );
+  }
+}
+
 class _CourseCardData {
   const _CourseCardData({
     required this.title,
     required this.description,
+    required this.period,
     required this.badgeLabel,
     required this.badgeBackground,
     required this.badgeBorder,
@@ -556,6 +674,7 @@ class _CourseCardData {
 
   final String title;
   final String description;
+  final String period;
   final String badgeLabel;
   final Color badgeBackground;
   final Color badgeBorder;
@@ -675,24 +794,56 @@ String? _resolveProfileImageUrl(String? imagePath) {
   return Uri.parse(baseUrl).resolve(trimmedImagePath).toString();
 }
 
-const _activeCourse = _CourseCardData(
-  title: '기초 CS 과정',
-  description: '운영체제, 네트워크, 자료구조 등 개발자의 필수 소양인 컴퓨터 사이언스 기초를 다지는 과정입니다.',
-  badgeLabel: 'ACTIVE',
-  badgeBackground: Color(0xFFECFDF3),
-  badgeBorder: Color(0xFFC6F6D5),
-  badgeText: Color(0xFF16A34A),
-  visualIcon: Icons.code_rounded,
-  isActive: true,
-);
+_CourseCardData _toCourseCardData(Course course) {
+  final isActive = _isCourseActive(course);
 
-const _lockedCourse = _CourseCardData(
-  title: 'AI 심화 과정',
-  description: '머신러닝과 딥러닝의 핵심 원리를 파악하고 실제 모델을 구현해보는 실습 위주의 교육 과정입니다.',
-  badgeLabel: 'LOCKED',
-  badgeBackground: Color(0xFFF4F4F5),
-  badgeBorder: Color(0xFFE4E4E7),
-  badgeText: Color(0xFF71717A),
-  visualIcon: Icons.smart_toy_rounded,
-  isActive: false,
-);
+  return _CourseCardData(
+    title: course.metadata.title,
+    description: course.metadata.description,
+    period: '기간: ${course.startDate} ~ ${course.endDate}',
+    badgeLabel: isActive ? 'ACTIVE' : 'LOCKED',
+    badgeBackground:
+        isActive ? const Color(0xFFECFDF3) : const Color(0xFFF4F4F5),
+    badgeBorder: isActive ? const Color(0xFFC6F6D5) : const Color(0xFFE4E4E7),
+    badgeText: isActive ? const Color(0xFF16A34A) : const Color(0xFF71717A),
+    visualIcon: _courseIcon(course),
+    isActive: isActive,
+  );
+}
+
+bool _isCourseActive(Course course) {
+  final normalizedStatus = course.status.trim().toLowerCase();
+
+  return normalizedStatus == 'active' ||
+      normalizedStatus == 'opened' ||
+      normalizedStatus == 'open' ||
+      normalizedStatus == 'ongoing' ||
+      normalizedStatus == 'in_progress' ||
+      normalizedStatus == 'available' ||
+      normalizedStatus == 'published';
+}
+
+IconData _courseIcon(Course course) {
+  final slug = course.slug.toLowerCase();
+  final fieldTag = course.fieldTag.toLowerCase();
+  final title = course.metadata.title.toLowerCase();
+  final description = course.metadata.description.toLowerCase();
+
+  if (slug.contains('ai') ||
+      fieldTag.contains('ai') ||
+      title.contains('ai') ||
+      description.contains('딥러닝') ||
+      description.contains('머신러닝')) {
+    return Icons.smart_toy_rounded;
+  }
+
+  if (slug.contains('cs') ||
+      fieldTag.contains('cs') ||
+      description.contains('computer science') ||
+      description.contains('자료구조') ||
+      description.contains('운영체제')) {
+    return Icons.code_rounded;
+  }
+
+  return Icons.auto_stories_rounded;
+}

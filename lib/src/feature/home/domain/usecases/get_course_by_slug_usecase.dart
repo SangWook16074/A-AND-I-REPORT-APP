@@ -27,9 +27,15 @@ final class GetCourseBySlugUsecaseImpl implements GetCourseBySlugUsecase {
     }
 
     final authorization = 'Bearer $token';
-    return _courseRepository.getCourseBySlugFromCourses(
+    final response = await _courseRepository.getCourseBySlugFromCourses(
       authorization,
       courseSlug,
     );
+
+    if (!response.success || response.data == null) {
+      throw Exception(response.error?.message ?? '코스 상세 조회에 실패했습니다.');
+    }
+
+    return response.data!;
   }
 }
