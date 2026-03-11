@@ -1,3 +1,4 @@
+import 'package:a_and_i_report_web_server/src/core/utils/api_error_mapper.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/providers/get_report_summary_usecase_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/report_list_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -23,7 +24,12 @@ class ReportListViewModel extends _$ReportListViewModel {
           .call(courseSlug);
       return ReportListState(reports: reports);
     } catch (e) {
-      return ReportListState(errorMsg: e.toString());
+      return ReportListState(
+        errorMsg: ApiErrorMapper.map(
+          e,
+          fallbackMessage: '과제 목록을 불러오지 못했습니다.',
+        ),
+      );
     }
   }
 }

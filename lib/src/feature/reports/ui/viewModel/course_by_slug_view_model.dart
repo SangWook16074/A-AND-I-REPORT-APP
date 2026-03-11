@@ -1,3 +1,4 @@
+import 'package:a_and_i_report_web_server/src/core/utils/api_error_mapper.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/providers/get_course_by_slug_usecase_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/reports/ui/viewModel/course_by_slug_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -24,7 +25,10 @@ class CourseBySlugViewModel extends _$CourseBySlugViewModel {
     } catch (e) {
       state = CourseBySlugState(
         status: CourseBySlugViewStatus.error,
-        errorMsg: e.toString(),
+        errorMsg: ApiErrorMapper.map(
+          e,
+          fallbackMessage: '코스 상세를 불러오지 못했습니다.',
+        ),
       );
     }
   }

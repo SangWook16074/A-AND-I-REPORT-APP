@@ -1,5 +1,6 @@
 import 'package:a_and_i_report_web_server/src/core/constants/api_url.dart';
 import 'package:a_and_i_report_web_server/src/core/providers/study_theme_provider.dart';
+import 'package:a_and_i_report_web_server/src/core/utils/api_error_mapper.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_state.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_model.dart';
@@ -156,7 +157,10 @@ class _ReportListViewState extends ConsumerState<ReportListView> {
                               ),
                               error: (error, _) => _FeedbackCard(
                                 palette: palette,
-                                message: error.toString(),
+                                message: ApiErrorMapper.map(
+                                  error,
+                                  fallbackMessage: '과제 목록을 불러오지 못했습니다.',
+                                ),
                               ),
                             ),
                           ],

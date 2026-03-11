@@ -1,3 +1,4 @@
+import 'package:a_and_i_report_web_server/src/core/utils/api_error_mapper.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/domain/repositories/auth_repository.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/course.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/data/repositories/course_repository.dart';
@@ -36,19 +37,34 @@ final class GetCoursesUsecaseImpl implements GetCoursesUsecase {
     ];
 
     for (final request in requests) {
-      final response = await _courseRepository.getCourses(
-        authorization,
-        request.status,
-        request.phase,
-        request.track,
-      );
+      try {
+        final response = await _courseRepository.getCourses(
+          authorization,
+          request.status,
+          request.phase,
+          request.track,
+        );
 
-      if (!response.success) {
-        throw Exception(response.error?.message ?? '코스 목록 조회에 실패했습니다.');
-      }
+        if (!response.success) {
+          throw Exception(
+            ApiErrorMapper.mapApiError(
+              code: response.error?.code,
+              message: response.error?.message,
+              fallbackMessage: '코스 목록 조회에 실패했습니다.',
+            ),
+          );
+        }
 
-      if (response.data.isNotEmpty) {
-        return _deduplicateCourses(response.data);
+        if (response.data.isNotEmpty) {
+          return _deduplicateCourses(response.data);
+        }
+      } catch (error) {
+        throw Exception(
+          ApiErrorMapper.map(
+            error,
+            fallbackMessage: '코스 목록 조회에 실패했습니다.',
+          ),
+        );
       }
     }
 

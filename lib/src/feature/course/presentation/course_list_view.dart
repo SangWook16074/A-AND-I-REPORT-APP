@@ -119,7 +119,9 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
         return [
           _CourseFeedbackCard(
             palette: palette,
-            message: '코스 목록을 불러오지 못했습니다.',
+            message: courseListState.errorMsg.isEmpty
+                ? '코스 목록을 불러오지 못했습니다.'
+                : courseListState.errorMsg,
           ),
         ];
       case CourseListViewStatus.done:
