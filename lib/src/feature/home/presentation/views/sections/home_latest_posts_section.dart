@@ -154,7 +154,7 @@ class _HomeLatestPostsSectionContent extends StatelessWidget {
                   final post = posts[index];
                   return HomePostCard(
                     post: HomePostCardData(
-                      date: _formatKoreanDate(post.updatedAt),
+                      date: _formatKoreanDate(post.createdAt),
                       title: post.title,
                       summary: _extractSummary(post.contentMarkdown),
                       thumbnailUrl: _resolveThumbnailUrl(post),
