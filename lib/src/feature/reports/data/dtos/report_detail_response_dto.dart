@@ -1,28 +1,22 @@
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/level.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/report_type.dart';
 import 'package:a_and_i_report_web_server/src/feature/reports/data/entities/report.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'report_detail_response_dto.freezed.dart';
 
 /// 코스 과제 상세 API 응답 DTO입니다.
-class ReportDetailResponseDto {
+@freezed
+abstract class ReportDetailResponseDto with _$ReportDetailResponseDto {
   /// 코스 과제 상세 API 응답 DTO를 생성합니다.
-  const ReportDetailResponseDto({
-    required this.success,
-    this.data,
-    this.error,
-    this.timestamp,
-  });
+  const factory ReportDetailResponseDto({
+    required bool success,
+    Report? data,
+    ReportDetailApiErrorDto? error,
+    String? timestamp,
+  }) = _ReportDetailResponseDto;
 
-  /// 요청 성공 여부입니다.
-  final bool success;
-
-  /// 과제 상세 데이터입니다.
-  final Report? data;
-
-  /// 에러 정보입니다.
-  final ReportDetailApiErrorDto? error;
-
-  /// 응답 시각입니다.
-  final String? timestamp;
+  const ReportDetailResponseDto._();
 
   /// JSON 응답을 DTO로 변환합니다.
   factory ReportDetailResponseDto.fromJson(Map<String, dynamic> json) {

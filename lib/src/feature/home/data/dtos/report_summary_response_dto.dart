@@ -1,30 +1,24 @@
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/level.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/report_summary.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/data/entities/report_type.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'report_summary_response_dto.freezed.dart';
 
 /// 주차 목록 API 응답 DTO입니다.
-class WeekListResponseDto {
+@freezed
+abstract class WeekListResponseDto with _$WeekListResponseDto {
   /// 주차 목록 API 응답 DTO를 생성합니다.
-  const WeekListResponseDto({
-    required this.success,
-    required this.data,
-    this.error,
-    this.timestamp,
-  });
+  const factory WeekListResponseDto({
+    required bool success,
+    required List<CourseWeekDto> data,
+    ReportSummaryApiErrorDto? error,
+    String? timestamp,
+  }) = _WeekListResponseDto;
 
   /// 요청 성공 여부입니다.
-  final bool success;
+  const WeekListResponseDto._();
 
-  /// 주차 목록입니다.
-  final List<CourseWeekDto> data;
-
-  /// 에러 정보입니다.
-  final ReportSummaryApiErrorDto? error;
-
-  /// 응답 시각입니다.
-  final String? timestamp;
-
-  /// JSON 응답을 DTO로 변환합니다.
   factory WeekListResponseDto.fromJson(Map<String, dynamic> json) {
     final rawData = json['data'];
 

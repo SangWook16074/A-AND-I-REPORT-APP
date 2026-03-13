@@ -7,7 +7,7 @@ part of 'report_detail_view_model.dart';
 // **************************************************************************
 
 String _$reportDetailViewModelHash() =>
-    r'4549bb3eafa02f98c532daed897ffdc294f4bed6';
+    r'3c2dc91f7a811e8aa68308dcfaacfbd20d804561';
 
 /// Copied from Dart SDK
 class _SystemHash {
