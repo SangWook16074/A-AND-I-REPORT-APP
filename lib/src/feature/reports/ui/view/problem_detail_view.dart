@@ -152,13 +152,6 @@ class _ContentCard extends StatelessWidget {
           color:
               isDarkMode ? const Color(0xFF27272A) : const Color(0xFFE5E7EB),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: switch (selectedTab) {
         0 => _ProblemTab(report: report, isDarkMode: isDarkMode),
