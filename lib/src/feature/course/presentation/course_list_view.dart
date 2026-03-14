@@ -378,24 +378,23 @@ class _CourseVisual extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.35,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            bottomLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: LinearGradient(
+              colors: [palette.visualStart, palette.visualEnd],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-          gradient: LinearGradient(
-            colors: [palette.visualStart, palette.visualEnd],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Center(
-          child: Icon(
-            icon,
-            size: 84,
-            color: palette.visualIcon,
+          child: Center(
+            child: Icon(
+              icon,
+              size: 84,
+              color: palette.visualIcon,
+            ),
           ),
         ),
       ),
