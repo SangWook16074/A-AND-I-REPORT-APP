@@ -128,16 +128,7 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
         ];
       case CourseListViewStatus.done:
         final courses = List<Course>.of(courseListState.courses)
-          ..sort((a, b) {
-            final activeCompare = (_isCourseActive(a) == _isCourseActive(b))
-                ? 0
-                : (_isCourseActive(a) ? -1 : 1);
-            if (activeCompare != 0) {
-              return activeCompare;
-            }
-
-            return a.metadata.title.compareTo(b.metadata.title);
-          });
+          ..sort((a, b) => a.metadata.title.compareTo(b.metadata.title));
 
         if (courses.isEmpty) {
           return [
@@ -153,11 +144,9 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
             _CourseCard(
               palette: palette,
               data: _toCourseCardData(courses[index]),
-              onTapCourse: _isCourseActive(courses[index])
-                  ? () => context.go(
-                        '/report?courseSlug=${Uri.encodeComponent(courses[index].slug)}',
-                      )
-                  : null,
+              onTapCourse: () => context.go(
+                '/report?courseSlug=${Uri.encodeComponent(courses[index].slug)}',
+              ),
             ),
             if (index != courses.length - 1) const SizedBox(height: 22),
           ],
@@ -450,51 +439,17 @@ class _CourseCardContent extends StatelessWidget {
               height: 1.6,
             ),
           ),
-          const SizedBox(height: 24),
-          if (!data.isActive) _buildLockedBottom(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLockedBottom(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Row(
-            children: [
-              Icon(Icons.lock_outline, color: palette.textMuted, size: 16),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  '이전 과정 수료 후 활성화',
-                  style: TextStyle(
-                    color: palette.textMuted,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          decoration: BoxDecoration(
-            color: palette.lockedButtonBackground,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Text(
-            '준비 중',
+          const SizedBox(height: 12),
+          Text(
+            data.period,
             style: TextStyle(
-              color: palette.lockedButtonForeground,
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
+              color: palette.textSecondary,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -557,22 +512,14 @@ class _CourseCardData {
   const _CourseCardData({
     required this.title,
     required this.description,
-    required this.badgeLabel,
-    required this.badgeBackground,
-    required this.badgeBorder,
-    required this.badgeText,
+    required this.period,
     required this.visualIcon,
-    required this.isActive,
   });
 
   final String title;
   final String description;
-  final String badgeLabel;
-  final Color badgeBackground;
-  final Color badgeBorder;
-  final Color badgeText;
+  final String period;
   final IconData visualIcon;
-  final bool isActive;
 }
 
 class _CoursePalette {
@@ -686,24 +633,36 @@ String? _resolveProfileImageUrl(String? imagePath) {
   return Uri.parse(baseUrl).resolve(trimmedImagePath).toString();
 }
 
-const _activeCourse = _CourseCardData(
-  title: '기초 CS 과정',
-  description: '운영체제, 네트워크, 자료구조 등 개발자의 필수 소양인 컴퓨터 사이언스 기초를 다지는 과정입니다.',
-  badgeLabel: 'ACTIVE',
-  badgeBackground: Color(0xFFECFDF3),
-  badgeBorder: Color(0xFFC6F6D5),
-  badgeText: Color(0xFF16A34A),
-  visualIcon: Icons.code_rounded,
-  isActive: true,
-);
+_CourseCardData _toCourseCardData(Course course) {
+  return _CourseCardData(
+    title: course.metadata.title,
+    description: course.metadata.description,
+    period: '기간: ${course.startDate} ~ ${course.endDate}',
+    visualIcon: _courseIcon(course),
+  );
+}
 
-const _lockedCourse = _CourseCardData(
-  title: 'AI 심화 과정',
-  description: '머신러닝과 딥러닝의 핵심 원리를 파악하고 실제 모델을 구현해보는 실습 위주의 교육 과정입니다.',
-  badgeLabel: 'LOCKED',
-  badgeBackground: Color(0xFFF4F4F5),
-  badgeBorder: Color(0xFFE4E4E7),
-  badgeText: Color(0xFF71717A),
-  visualIcon: Icons.smart_toy_rounded,
-  isActive: false,
-);
+IconData _courseIcon(Course course) {
+  final slug = course.slug.toLowerCase();
+  final fieldTag = course.fieldTag.toLowerCase();
+  final title = course.metadata.title.toLowerCase();
+  final description = course.metadata.description.toLowerCase();
+
+  if (slug.contains('ai') ||
+      fieldTag.contains('ai') ||
+      title.contains('ai') ||
+      description.contains('딥러닝') ||
+      description.contains('머신러닝')) {
+    return Icons.smart_toy_rounded;
+  }
+
+  if (slug.contains('cs') ||
+      fieldTag.contains('cs') ||
+      description.contains('computer science') ||
+      description.contains('자료구조') ||
+      description.contains('운영체제')) {
+    return Icons.code_rounded;
+  }
+
+  return Icons.auto_stories_rounded;
+}
