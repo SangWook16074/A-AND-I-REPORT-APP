@@ -29,6 +29,8 @@ final class CreateSubmissionUsecaseImpl implements CreateSubmissionUsecase {
     try {
       return await submissionRepository.createSubmission(
         'Bearer $token',
+        'application/json',
+        'application/json',
         SubmissionRequestDto(
           problemId: problemId,
           language: language,
@@ -36,7 +38,7 @@ final class CreateSubmissionUsecaseImpl implements CreateSubmissionUsecase {
           options: const SubmissionOptionsDto(
             realtimeFeedback: true,
           ),
-        ),
+        ).toJson(),
       );
     } catch (error) {
       throw Exception(

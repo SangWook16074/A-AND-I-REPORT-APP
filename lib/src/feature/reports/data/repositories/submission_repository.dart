@@ -1,4 +1,3 @@
-import 'package:a_and_i_report_web_server/src/feature/reports/data/dtos/submission_request_dto.dart';
 import 'package:a_and_i_report_web_server/src/feature/reports/data/dtos/submission_response_dto.dart';
 import 'package:a_and_i_report_web_server/src/feature/reports/data/dtos/submission_result_response_dto.dart';
 import 'package:dio/dio.dart';
@@ -15,7 +14,9 @@ abstract class SubmissionRepository {
   @POST('/v1/submissions')
   Future<SubmissionResponseDto> createSubmission(
     @Header('Authorization') String authorization,
-    @Body() SubmissionRequestDto request,
+    @Header('Content-Type') String contentType,
+    @Header('accept') String accept,
+    @Body() Map<String, dynamic> request,
   );
 
   /// 제출 최종 결과를 조회합니다.

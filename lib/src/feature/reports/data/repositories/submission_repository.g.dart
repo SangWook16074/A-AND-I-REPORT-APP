@@ -20,15 +20,27 @@ class _SubmissionRepository implements SubmissionRepository {
   @override
   Future<SubmissionResponseDto> createSubmission(
     String authorization,
-    SubmissionRequestDto request,
+    String contentType,
+    String accept,
+    Map<String, dynamic> request,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': authorization};
+    final _headers = <String, dynamic>{
+      r'Authorization': authorization,
+      r'Content-Type': contentType,
+      r'accept': accept,
+    };
     _headers.removeWhere((k, v) => v == null);
-    final _data = request;
+    final _data = <String, dynamic>{};
+    _data.addAll(request);
     final _options = _setStreamType<SubmissionResponseDto>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+      Options(
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: contentType,
+      )
           .compose(
             _dio.options,
             '/v1/submissions',

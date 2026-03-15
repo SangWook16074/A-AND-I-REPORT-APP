@@ -27,9 +27,6 @@ mixin _$SubmissionRequestDto {
       _$SubmissionRequestDtoCopyWithImpl<SubmissionRequestDto>(
           this as SubmissionRequestDto, _$identity);
 
-  /// Serializes this SubmissionRequestDto to a JSON map.
-  Map<String, dynamic> toJson();
-
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -43,7 +40,6 @@ mixin _$SubmissionRequestDto {
             (identical(other.options, options) || other.options == options));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, problemId, language, code, options);
@@ -285,15 +281,13 @@ extension SubmissionRequestDtoPatterns on SubmissionRequestDto {
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _SubmissionRequestDto implements SubmissionRequestDto {
   const _SubmissionRequestDto(
       {required this.problemId,
       required this.language,
       required this.code,
       required this.options});
-  factory _SubmissionRequestDto.fromJson(Map<String, dynamic> json) =>
-      _$SubmissionRequestDtoFromJson(json);
 
   @override
   final String problemId;
@@ -314,13 +308,6 @@ class _SubmissionRequestDto implements SubmissionRequestDto {
           this, _$identity);
 
   @override
-  Map<String, dynamic> toJson() {
-    return _$SubmissionRequestDtoToJson(
-      this,
-    );
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -333,7 +320,6 @@ class _SubmissionRequestDto implements SubmissionRequestDto {
             (identical(other.options, options) || other.options == options));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, problemId, language, code, options);
@@ -423,9 +409,6 @@ mixin _$SubmissionOptionsDto {
       _$SubmissionOptionsDtoCopyWithImpl<SubmissionOptionsDto>(
           this as SubmissionOptionsDto, _$identity);
 
-  /// Serializes this SubmissionOptionsDto to a JSON map.
-  Map<String, dynamic> toJson();
-
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -435,7 +418,6 @@ mixin _$SubmissionOptionsDto {
                 other.realtimeFeedback == realtimeFeedback));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, realtimeFeedback);
 
@@ -636,11 +618,9 @@ extension SubmissionOptionsDtoPatterns on SubmissionOptionsDto {
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _SubmissionOptionsDto implements SubmissionOptionsDto {
   const _SubmissionOptionsDto({required this.realtimeFeedback});
-  factory _SubmissionOptionsDto.fromJson(Map<String, dynamic> json) =>
-      _$SubmissionOptionsDtoFromJson(json);
 
   @override
   final bool realtimeFeedback;
@@ -655,13 +635,6 @@ class _SubmissionOptionsDto implements SubmissionOptionsDto {
           this, _$identity);
 
   @override
-  Map<String, dynamic> toJson() {
-    return _$SubmissionOptionsDtoToJson(
-      this,
-    );
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -670,7 +643,6 @@ class _SubmissionOptionsDto implements SubmissionOptionsDto {
                 other.realtimeFeedback == realtimeFeedback));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, realtimeFeedback);
 
