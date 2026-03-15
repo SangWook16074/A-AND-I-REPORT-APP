@@ -2,15 +2,22 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:a_and_i_report_web_server/src/core/widgets/responsive_layout.dart';
+import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/apply_view.dart';
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/views/apply_button_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PromotionBottomBar extends StatelessWidget {
+class PromotionBottomBar extends ConsumerWidget {
   const PromotionBottomBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isRecruiting = ref.watch(applyViewProvider);
+    if (!isRecruiting) {
+      return const SizedBox.shrink();
+    }
+
     final isMobile = ResponsiveLayout.isMobile(context);
     // 모바일 웹에서는 BackdropFilter가 매우 무거우므로 제거하고 불투명한 배경을 사용함.
     final useOptimizedBackground = kIsWeb && isMobile;
@@ -23,16 +30,16 @@ class PromotionBottomBar extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: useOptimizedBackground
-            ? Colors.black.withOpacity(0.9) // 최적화: 진한 배경
+            ? Colors.black.withValues(alpha: 0.9) // 최적화: 진한 배경
             : Colors.black
-                .withOpacity(0.8), // 기본: 반투명 (Blur 효과용)
+                .withValues(alpha: 0.8), // 기본: 반투명 (Blur 효과용)
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF3B82F6).withOpacity(0.3),
+          color: const Color(0xFF3B82F6).withValues(alpha: 0.3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           )

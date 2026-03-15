@@ -1,4 +1,5 @@
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/views/apply_button_view.dart';
+import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/apply_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -6,6 +7,19 @@ import 'package:a_and_i_report_web_server/src/core/widgets/responsive_layout.dar
 
 class PromotionHero extends ConsumerWidget {
   const PromotionHero({super.key});
+
+  /// 모집 상태에 따라 히어로 보조 문구를 반환합니다.
+  static String subtitleText(bool isRecruiting) {
+    return isRecruiting ? '함께 성장할 여러분을 기다립니다!' : '모집 기간이 종료되었습니다.';
+  }
+
+  /// 모집 상태에 따라 히어로 상세 문구를 반환합니다.
+  static String? detailText(bool isRecruiting) {
+    if (isRecruiting) {
+      return '2026.01.16 - 2026.03.15';
+    }
+    return '다음 모집 일정은 추후 공지됩니다.';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,6 +30,7 @@ class PromotionHero extends ConsumerWidget {
         context);
 
     final isMobile = ResponsiveLayout.isMobile(context);
+    final isRecruiting = ref.watch(applyViewProvider);
 
     return Container(
       width: double.infinity,
@@ -84,7 +99,7 @@ class PromotionHero extends ConsumerWidget {
 
                     // 서브 타이틀
                     Text(
-                      '함께 성장할 여러분을 기다립니다!',
+                      subtitleText(isRecruiting),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: isMobile ? 20 : 30, // 반응형 폰트 크기
@@ -97,23 +112,33 @@ class PromotionHero extends ConsumerWidget {
                         .moveY(begin: 30, end: 0),
                     SizedBox(height: isMobile ? 10 : 20),
 
-                    // 모집 기간
-                    Text(
-                      '2026.01.16 - 2026.03.15',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: isMobile ? 18 : 24, // 반응형 폰트 크기
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ).animate().fadeIn(delay: 800.ms, duration: 600.ms),
-
-                    SizedBox(height: isMobile ? 50 : 20),
-
-                    // CTA 버튼
-                    ApplyButtonView()
-                        .animate()
-                        .fadeIn(delay: 1000.ms, duration: 600.ms)
+                    if (isRecruiting) ...[
+                      Text(
+                        detailText(isRecruiting)!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: isMobile ? 18 : 24, // 반응형 폰트 크기
+                          color: Colors.white70,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ).animate().fadeIn(delay: 800.ms, duration: 600.ms),
+                      SizedBox(height: isMobile ? 50 : 20),
+                      ApplyButtonView()
+                          .animate()
+                          .fadeIn(delay: 1000.ms, duration: 600.ms),
+                    ] else ...[
+                      SizedBox(height: isMobile ? 16 : 20),
+                      Text(
+                        detailText(isRecruiting)!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: isMobile ? 16 : 22,
+                          color: Colors.white60,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ).animate().fadeIn(delay: 800.ms, duration: 600.ms),
+                      SizedBox(height: isMobile ? 50 : 20),
+                    ],
                   ],
                 ),
               ),
