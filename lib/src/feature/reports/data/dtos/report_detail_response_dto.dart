@@ -39,6 +39,9 @@ abstract class ReportDetailResponseDto with _$ReportDetailResponseDto {
         : null;
 
     final id = rawData['id']?.toString();
+    final problemId = attributes is Map<String, dynamic>
+        ? attributes['problemId']?.toString()
+        : rawData['problemId']?.toString();
     final title = metadata is Map<String, dynamic>
         ? metadata['title']?.toString()
         : null;
@@ -67,6 +70,7 @@ abstract class ReportDetailResponseDto with _$ReportDetailResponseDto {
 
     return Report(
       id: id,
+      problemId: problemId,
       title: title,
       content: content,
       requirement: const <SeqString>[],

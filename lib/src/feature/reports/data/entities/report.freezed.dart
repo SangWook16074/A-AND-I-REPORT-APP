@@ -17,6 +17,9 @@ mixin _$Report {
   /// 과제 고유 ID (UUID)
   String get id;
 
+  /// 채점 시스템 문제 ID입니다.
+  String? get problemId;
+
   /// 과제 제목
   String get title;
 
@@ -57,6 +60,8 @@ mixin _$Report {
         (other.runtimeType == runtimeType &&
             other is Report &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.problemId, problemId) ||
+                other.problemId == problemId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
             const DeepCollectionEquality()
@@ -74,6 +79,7 @@ mixin _$Report {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      problemId,
       title,
       content,
       const DeepCollectionEquality().hash(requirement),
@@ -85,7 +91,7 @@ mixin _$Report {
 
   @override
   String toString() {
-    return 'Report(id: $id, title: $title, content: $content, requirement: $requirement, objects: $objects, exampleIo: $exampleIo, reportType: $reportType, week: $week, level: $level)';
+    return 'Report(id: $id, problemId: $problemId, title: $title, content: $content, requirement: $requirement, objects: $objects, exampleIo: $exampleIo, reportType: $reportType, week: $week, level: $level)';
   }
 }
 
@@ -96,6 +102,7 @@ abstract mixin class $ReportCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String? problemId,
       String title,
       String content,
       List<SeqString> requirement,
@@ -119,6 +126,7 @@ class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
   @override
   $Res call({
     Object? id = null,
+    Object? problemId = freezed,
     Object? title = null,
     Object? content = null,
     Object? requirement = null,
@@ -133,6 +141,10 @@ class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      problemId: freezed == problemId
+          ? _self.problemId
+          : problemId // ignore: cast_nullable_to_non_nullable
+              as String?,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -262,6 +274,7 @@ extension ReportPatterns on Report {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
             String id,
+            String? problemId,
             String title,
             String content,
             List<SeqString> requirement,
@@ -278,6 +291,7 @@ extension ReportPatterns on Report {
       case _Report() when $default != null:
         return $default(
             _that.id,
+            _that.problemId,
             _that.title,
             _that.content,
             _that.requirement,
@@ -308,6 +322,7 @@ extension ReportPatterns on Report {
   TResult when<TResult extends Object?>(
     TResult Function(
             String id,
+            String? problemId,
             String title,
             String content,
             List<SeqString> requirement,
@@ -323,6 +338,7 @@ extension ReportPatterns on Report {
       case _Report():
         return $default(
             _that.id,
+            _that.problemId,
             _that.title,
             _that.content,
             _that.requirement,
@@ -350,6 +366,7 @@ extension ReportPatterns on Report {
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
             String id,
+            String? problemId,
             String title,
             String content,
             List<SeqString> requirement,
@@ -365,6 +382,7 @@ extension ReportPatterns on Report {
       case _Report() when $default != null:
         return $default(
             _that.id,
+            _that.problemId,
             _that.title,
             _that.content,
             _that.requirement,
@@ -384,6 +402,7 @@ extension ReportPatterns on Report {
 class _Report implements Report {
   _Report(
       {required this.id,
+      this.problemId,
       required this.title,
       required this.content,
       required final List<SeqString> requirement,
@@ -400,6 +419,10 @@ class _Report implements Report {
   /// 과제 고유 ID (UUID)
   @override
   final String id;
+
+  /// 채점 시스템 문제 ID입니다.
+  @override
+  final String? problemId;
 
   /// 과제 제목
   @override
@@ -475,6 +498,8 @@ class _Report implements Report {
         (other.runtimeType == runtimeType &&
             other is _Report &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.problemId, problemId) ||
+                other.problemId == problemId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
             const DeepCollectionEquality()
@@ -493,6 +518,7 @@ class _Report implements Report {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      problemId,
       title,
       content,
       const DeepCollectionEquality().hash(_requirement),
@@ -504,7 +530,7 @@ class _Report implements Report {
 
   @override
   String toString() {
-    return 'Report(id: $id, title: $title, content: $content, requirement: $requirement, objects: $objects, exampleIo: $exampleIo, reportType: $reportType, week: $week, level: $level)';
+    return 'Report(id: $id, problemId: $problemId, title: $title, content: $content, requirement: $requirement, objects: $objects, exampleIo: $exampleIo, reportType: $reportType, week: $week, level: $level)';
   }
 }
 
@@ -516,6 +542,7 @@ abstract mixin class _$ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String? problemId,
       String title,
       String content,
       List<SeqString> requirement,
@@ -539,6 +566,7 @@ class __$ReportCopyWithImpl<$Res> implements _$ReportCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? id = null,
+    Object? problemId = freezed,
     Object? title = null,
     Object? content = null,
     Object? requirement = null,
@@ -553,6 +581,10 @@ class __$ReportCopyWithImpl<$Res> implements _$ReportCopyWith<$Res> {
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      problemId: freezed == problemId
+          ? _self.problemId
+          : problemId // ignore: cast_nullable_to_non_nullable
+              as String?,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable

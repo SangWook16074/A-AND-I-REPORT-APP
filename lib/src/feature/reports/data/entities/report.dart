@@ -12,6 +12,9 @@ sealed class Report with _$Report {
     /// 과제 고유 ID (UUID)
     required String id,
 
+    /// 채점 시스템 문제 ID입니다.
+    String? problemId,
+
     /// 과제 제목
     required String title,
 

@@ -254,13 +254,32 @@ class SourceCodeSubmitView extends HookConsumerWidget {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
             ),
-            onPressed: () {
-              final success = notifier.submitCurrentDraft();
-              showValidationError.value = !success;
-            },
-            child: const Text(
-              '제출하기',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+            onPressed: submitState.isSubmitting
+                ? null
+                : () async {
+                    final success = await notifier.submitCurrentDraft(
+                      problemId: report.problemId,
+                    );
+                    final latestState =
+                        ref.read(reportSubmitViewModelProvider(report.id));
+                    if (latestState.errorMsg.isNotEmpty && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(latestState.errorMsg)),
+                      );
+                    }
+                    if (success && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('제출이 접수되었습니다. 결과 탭에서 상태를 확인하세요.'),
+                        ),
+                      );
+                    }
+                    showValidationError.value =
+                        !success && latestState.errorMsg.isEmpty;
+                  },
+            child: Text(
+              submitState.isSubmitting ? '제출 중...' : '제출하기',
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
             ),
           ),
         ),

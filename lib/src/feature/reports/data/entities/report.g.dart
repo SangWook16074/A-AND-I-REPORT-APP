@@ -8,6 +8,7 @@ part of 'report.dart';
 
 _Report _$ReportFromJson(Map<String, dynamic> json) => _Report(
       id: json['id'] as String,
+      problemId: json['problemId'] as String?,
       title: json['title'] as String,
       content: json['content'] as String,
       requirement: (json['requirement'] as List<dynamic>)
@@ -26,6 +27,7 @@ _Report _$ReportFromJson(Map<String, dynamic> json) => _Report(
 
 Map<String, dynamic> _$ReportToJson(_Report instance) => <String, dynamic>{
       'id': instance.id,
+      'problemId': instance.problemId,
       'title': instance.title,
       'content': instance.content,
       'requirement': instance.requirement,

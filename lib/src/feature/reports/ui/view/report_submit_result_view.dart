@@ -108,7 +108,10 @@ class _SummaryCard extends StatelessWidget {
             children: [
               _MetricTile(
                 label: '점수',
-                value: state.submissionStatus == SubmissionStatus.notSubmitted
+                value: state.submissionStatus == SubmissionStatus.notSubmitted ||
+                        state.submissionStatus == SubmissionStatus.submitting ||
+                        state.submissionStatus == SubmissionStatus.queued ||
+                        state.submissionStatus == SubmissionStatus.judging
                     ? '-'
                     : '${state.score}',
                 isDarkMode: isDarkMode,
@@ -127,6 +130,18 @@ class _SummaryCard extends StatelessWidget {
               ),
             ],
           ),
+          if ((state.submissionId ?? '').isNotEmpty) ...[
+            const SizedBox(height: 14),
+            Text(
+              'Submission ID: ${state.submissionId}',
+              style: TextStyle(
+                fontSize: 12,
+                color:
+                    isDarkMode ? const Color(0xFFA1A1AA) : const Color(0xFF6B7280),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -218,7 +233,11 @@ class _FeedbackCard extends StatelessWidget {
           const SizedBox(height: 10),
           if (feedbacks.isEmpty)
             Text(
-              '아직 제출 기록이 없습니다. 제출 탭에서 코드를 제출해 주세요.',
+              state.submissionStatus == SubmissionStatus.submitting ||
+                      state.submissionStatus == SubmissionStatus.queued ||
+                      state.submissionStatus == SubmissionStatus.judging
+                  ? '채점 진행 중입니다. 잠시만 기다려 주세요.'
+                  : '아직 제출 기록이 없습니다. 제출 탭에서 코드를 제출해 주세요.',
               style: TextStyle(
                   fontSize: 13,
                   color: isDarkMode ? Color(0xFFE5E7EB) : Color(0xFF000000),
@@ -320,13 +339,33 @@ _StatusMeta _statusMeta(SubmissionStatus status) {
         backgroundColor: Color(0xFFF3F4F6),
         textColor: Color(0xFF4B5563),
       ),
-    SubmissionStatus.passed => const _StatusMeta(
+    SubmissionStatus.submitting => const _StatusMeta(
+        label: '제출 중',
+        backgroundColor: Color(0xFFDBEAFE),
+        textColor: Color(0xFF1D4ED8),
+      ),
+    SubmissionStatus.queued => const _StatusMeta(
+        label: '대기 중',
+        backgroundColor: Color(0xFFE0E7FF),
+        textColor: Color(0xFF4338CA),
+      ),
+    SubmissionStatus.judging => const _StatusMeta(
+        label: '채점 중',
+        backgroundColor: Color(0xFFFEF3C7),
+        textColor: Color(0xFF92400E),
+      ),
+    SubmissionStatus.accepted => const _StatusMeta(
         label: '통과',
         backgroundColor: Color(0xFFDCFCE7),
         textColor: Color(0xFF166534),
       ),
     SubmissionStatus.failed => const _StatusMeta(
         label: '보완 필요',
+        backgroundColor: Color(0xFFFEE2E2),
+        textColor: Color(0xFF991B1B),
+      ),
+    SubmissionStatus.error => const _StatusMeta(
+        label: '오류',
         backgroundColor: Color(0xFFFEE2E2),
         textColor: Color(0xFF991B1B),
       ),
