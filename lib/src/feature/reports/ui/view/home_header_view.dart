@@ -16,7 +16,7 @@ class HomeHeaderView extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                  color: const Color(0xff000000).withOpacity(0.25),
+                  color: const Color(0xff000000).withValues(alpha: 0.25),
                   offset: const Offset(0, 1),
                   spreadRadius: 0,
                   blurRadius: 5.0)

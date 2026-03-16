@@ -27,17 +27,15 @@ class LoginButtonView extends ConsumerWidget {
       child: FilledButton(
         onPressed: canSubmit
             ? () async {
-                if (loginUiState is Idle) {
-                  try {
-                    final account = loginUiState.userId;
-                    final password = loginUiState.password;
-                    loginUiViewModel.onEvent(Login());
-                    await authViewModel
-                        .onEvent(SignIn(account: account, password: password));
-                  } catch (e) {
-                    log(e.toString());
-                    loginUiViewModel.onEvent(LoginFail(errorMsg: e.toString()));
-                  }
+                try {
+                  final Idle(:userId, :password) = loginUiState;
+                  final account = userId;
+                  loginUiViewModel.onEvent(Login());
+                  await authViewModel
+                      .onEvent(SignIn(account: account, password: password));
+                } catch (e) {
+                  log(e.toString());
+                  loginUiViewModel.onEvent(LoginFail(errorMsg: e.toString()));
                 }
               }
             : null,

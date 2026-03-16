@@ -54,7 +54,7 @@ class _PromotionScheduleState extends ConsumerState<PromotionSchedule> {
                           shape: BoxShape.circle,
                           gradient: RadialGradient(
                             colors: [
-                              const Color(0xFF1E3A8A).withOpacity(0.4),
+                              const Color(0xFF1E3A8A).withValues(alpha: 0.4),
                               Colors.transparent,
                             ],
                             stops: const [0.0, 0.7],
@@ -69,7 +69,7 @@ class _PromotionScheduleState extends ConsumerState<PromotionSchedule> {
                           height: 500,
                           decoration: BoxDecoration(
                             color: const Color(0xFF1E3A8A)
-                                .withOpacity(0.2), // blue-900
+                                .withValues(alpha: 0.2), // blue-900
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -92,7 +92,7 @@ class _PromotionScheduleState extends ConsumerState<PromotionSchedule> {
                           shape: BoxShape.circle,
                           gradient: RadialGradient(
                             colors: [
-                              const Color(0xFF172554).withOpacity(0.4),
+                              const Color(0xFF172554).withValues(alpha: 0.4),
                               Colors.transparent,
                             ],
                             stops: const [0.0, 0.7],
@@ -107,7 +107,7 @@ class _PromotionScheduleState extends ConsumerState<PromotionSchedule> {
                           height: 500,
                           decoration: BoxDecoration(
                             color: const Color(0xFF172554)
-                                .withOpacity(0.2), // blue-950
+                                .withValues(alpha: 0.2), // blue-950
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -177,7 +177,8 @@ class _PromotionScheduleState extends ConsumerState<PromotionSchedule> {
                             bottom: 20,
                             child: Container(
                               width: 2,
-                              color: const Color(0xFF3B82F6).withOpacity(0.3),
+                              color: const Color(0xFF3B82F6)
+                                  .withValues(alpha: 0.3),
                             ),
                           ),
                           AnimateOnVisible(
@@ -325,7 +326,7 @@ class _PromotionScheduleState extends ConsumerState<PromotionSchedule> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF3B82F6).withOpacity(0.3),
+                  color: const Color(0xFF3B82F6).withValues(alpha: 0.3),
                   blurRadius: 12,
                 ),
               ],
@@ -384,7 +385,7 @@ class StarFieldPainter extends CustomPainter {
 
     // Small stars
     final smallStarPaint = Paint()
-      ..color = Colors.white.withOpacity(0.3)
+      ..color = Colors.white.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
 
     for (int i = 0; i < 50; i++) {
@@ -395,7 +396,7 @@ class StarFieldPainter extends CustomPainter {
 
     // Medium stars
     final mediumStarPaint = Paint()
-      ..color = Colors.white.withOpacity(0.5)
+      ..color = Colors.white.withValues(alpha: 0.5)
       ..style = PaintingStyle.fill;
 
     for (int i = 0; i < 20; i++) {

@@ -113,15 +113,17 @@ class _ReportListViewState extends ConsumerState<ReportListView> {
                               );
                             }
 
-                        return Column(
-                          children: [
-                            ...sections.map(
-                              (section) => Padding(
-                                padding: const EdgeInsets.only(bottom: 22),
-                                child: _CourseSectionCard(
-                                  palette: palette,
-                                  section: section,
-                                  courseSlug: widget.courseSlug,
+                            return Column(
+                              children: [
+                                ...sections.map(
+                                  (section) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 22),
+                                    child: _CourseSectionCard(
+                                      palette: palette,
+                                      section: section,
+                                      courseSlug: widget.courseSlug,
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(height: isMobile ? 56 : 80),
                                 _Footer(palette: palette),

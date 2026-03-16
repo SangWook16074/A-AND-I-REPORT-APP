@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:a_and_i_report_web_server/src/core/widgets/responsive_layout.dart';
 import 'package:a_and_i_report_web_server/src/core/widgets/animate_on_visible.dart';
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/widgets/growth_together_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +9,6 @@ class PromotionIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final isTablet = ResponsiveLayout.isTablet(context);
-    final isMobile = ResponsiveLayout.isMobile(context);
-
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),

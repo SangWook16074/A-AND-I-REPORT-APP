@@ -33,7 +33,8 @@ class ContentIOView extends StatelessWidget {
                             },
                             child: Icon(
                               Icons.copy,
-                              color: const Color(0xff000000).withOpacity(0.48),
+                              color: const Color(0xff000000)
+                                  .withValues(alpha: 0.48),
                               size: 15,
                             ),
                           ),
@@ -52,7 +53,7 @@ class ContentIOView extends StatelessWidget {
                     child: Text(
                       contents[index].$1,
                       style: TextStyle(
-                          color: const Color(0xff000000).withOpacity(.48),
+                          color: const Color(0xff000000).withValues(alpha: .48),
                           fontSize: 12,
                           fontWeight: FontWeight.w600),
                     ),
@@ -78,7 +79,7 @@ class ContentIOView extends StatelessWidget {
                     child: Text(
                       contents[index].$2,
                       style: TextStyle(
-                          color: const Color(0xff000000).withOpacity(.48),
+                          color: const Color(0xff000000).withValues(alpha: .48),
                           fontSize: 12,
                           fontWeight: FontWeight.w600),
                     ),

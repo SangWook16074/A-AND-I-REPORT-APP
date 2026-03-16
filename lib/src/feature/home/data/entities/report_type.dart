@@ -1,8 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'report_type.g.dart';
-
-@JsonEnum(alwaysCreate: true)
+@JsonEnum()
 enum ReportType {
   @JsonValue("CS")
   CS,
