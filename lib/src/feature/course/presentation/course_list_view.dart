@@ -1,13 +1,21 @@
 import 'package:a_and_i_report_web_server/src/core/constants/api_url.dart';
 import 'package:a_and_i_report_web_server/src/core/providers/study_theme_provider.dart';
+import 'package:a_and_i_report_web_server/src/core/utils/api_error_mapper.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_state.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/auth_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_model.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_state.dart';
+import 'package:a_and_i_report_web_server/src/feature/home/data/entities/course.dart';
+import 'package:a_and_i_report_web_server/src/feature/home/providers/get_courses_usecase_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final courseListProvider =
+    FutureProvider.autoDispose<List<Course>>((ref) async {
+  return ref.read(getCoursesUsecaseProvider).call();
+});
 
 /// 사용자 코스 목록 화면입니다.
 ///
@@ -25,6 +33,7 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
   Widget build(BuildContext context) {
     final isDarkMode = ref.watch(studyDarkModeProvider);
     final palette = _CoursePalette.fromMode(isDarkMode);
+    final courseListAsync = ref.watch(courseListProvider);
     final isLoggedIn = ref.watch(authViewModelProvider).status ==
         AuthenticationStatus.authenticated;
     final userState = ref.watch(userViewModelProvider);
@@ -83,16 +92,10 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
                       ),
                     ),
                     SizedBox(height: isMobile ? 24 : 32),
-                    _CourseCard(
+                    ..._buildCourseSections(
+                      context: context,
                       palette: palette,
-                      data: _activeCourse,
-                      onTapAction: () => context.go('/report'),
-                    ),
-                    const SizedBox(height: 22),
-                    _CourseCard(
-                      palette: palette,
-                      data: _lockedCourse,
-                      onTapAction: null,
+                      courseListAsync: courseListAsync,
                     ),
                     SizedBox(height: isMobile ? 72 : 108),
                     _FooterSection(palette: palette),
@@ -110,28 +113,27 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
   List<Widget> _buildCourseSections({
     required BuildContext context,
     required _CoursePalette palette,
-    required CourseListState courseListState,
+    required AsyncValue<List<Course>> courseListAsync,
   }) {
-    switch (courseListState.status) {
-      case CourseListViewStatus.loading:
-        return [
-          _CourseLoadingCard(palette: palette),
-        ];
-      case CourseListViewStatus.error:
-        return [
-          _CourseFeedbackCard(
-            palette: palette,
-            message: courseListState.errorMsg.isEmpty
-                ? '코스 목록을 불러오지 못했습니다.'
-                : courseListState.errorMsg,
+    return courseListAsync.when(
+      loading: () => <Widget>[
+        _CourseLoadingCard(palette: palette),
+      ],
+      error: (error, _) => <Widget>[
+        _CourseFeedbackCard(
+          palette: palette,
+          message: ApiErrorMapper.map(
+            error,
+            fallbackMessage: '코스 목록을 불러오지 못했습니다.',
           ),
-        ];
-      case CourseListViewStatus.done:
-        final courses = List<Course>.of(courseListState.courses)
+        ),
+      ],
+      data: (courses) {
+        final sortedCourses = List<Course>.of(courses)
           ..sort((a, b) => a.metadata.title.compareTo(b.metadata.title));
 
-        if (courses.isEmpty) {
-          return [
+        if (sortedCourses.isEmpty) {
+          return <Widget>[
             _CourseFeedbackCard(
               palette: palette,
               message: '표시할 코스가 없습니다.',
@@ -139,19 +141,20 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
           ];
         }
 
-        return [
-          for (var index = 0; index < courses.length; index++) ...[
+        return <Widget>[
+          for (var index = 0; index < sortedCourses.length; index++) ...[
             _CourseCard(
               palette: palette,
-              data: _toCourseCardData(courses[index]),
+              data: _toCourseCardData(sortedCourses[index]),
               onTapCourse: () => context.go(
-                '/report?courseSlug=${Uri.encodeComponent(courses[index].slug)}',
+                '/report?courseSlug=${Uri.encodeComponent(sortedCourses[index].slug)}',
               ),
             ),
-            if (index != courses.length - 1) const SizedBox(height: 22),
+            if (index != sortedCourses.length - 1) const SizedBox(height: 22),
           ],
         ];
-    }
+      },
+    );
   }
 }
 
@@ -360,6 +363,60 @@ class _CourseCard extends StatelessWidget {
                   ),
                 ],
               ),
+      ),
+    );
+  }
+}
+
+class _CourseLoadingCard extends StatelessWidget {
+  const _CourseLoadingCard({required this.palette});
+
+  final _CoursePalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+      decoration: BoxDecoration(
+        color: palette.cardBackground,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: palette.border),
+      ),
+      child: const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
+    );
+  }
+}
+
+class _CourseFeedbackCard extends StatelessWidget {
+  const _CourseFeedbackCard({
+    required this.palette,
+    required this.message,
+  });
+
+  final _CoursePalette palette;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+      decoration: BoxDecoration(
+        color: palette.cardBackground,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: palette.border),
+      ),
+      child: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: palette.textMuted,
+          fontSize: 15,
+          height: 1.6,
+        ),
       ),
     );
   }

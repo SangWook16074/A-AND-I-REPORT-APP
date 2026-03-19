@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 
 import 'package:a_and_i_report_web_server/src/core/auth/role_policy.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_model.dart';
@@ -32,8 +33,12 @@ class ArticleWriteViewState extends ConsumerState<ArticleWriteView> {
   late final TextEditingController contentController;
   late final FocusNode contentFocusNode;
   late final UndoHistoryController contentUndoController;
+  final GlobalKey _markdownAreaKey = GlobalKey();
   Timer? _autoSaveTimer;
   bool _isAutoSaving = false;
+  bool _isMarkdownDragOver = false;
+  web.EventListener? _webDragOverListener;
+  web.EventListener? _webDropListener;
 
   @override
   void initState() {
@@ -49,12 +54,14 @@ class ArticleWriteViewState extends ConsumerState<ArticleWriteView> {
     contentController = TextEditingController(text: initialMarkdown);
     contentFocusNode = FocusNode();
     contentUndoController = UndoHistoryController();
+    _bindWebDropListeners();
     _startAutoSaveTimer();
   }
 
   @override
   void dispose() {
     _autoSaveTimer?.cancel();
+    _unbindWebDropListeners();
     titleController.dispose();
     contentController.dispose();
     contentFocusNode.dispose();
@@ -481,7 +488,7 @@ class ArticleWriteViewState extends ConsumerState<ArticleWriteView> {
 
   Future<Uint8List> _readWebFileBytes(web.File file) async {
     final jsArrayBuffer = await file.arrayBuffer().toDart;
-    return Uint8List.view(jsArrayBuffer.toDart);
+    return jsArrayBuffer.toDart.asUint8List();
   }
 
   String _resolveDroppedFileName(web.File file, Uint8List bytes) {
