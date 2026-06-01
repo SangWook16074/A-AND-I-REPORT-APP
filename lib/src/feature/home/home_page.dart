@@ -6,10 +6,12 @@ import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_vi
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_state.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/home_theme.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_cta_section.dart';
+import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_designer_cta_section.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_footer_section.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_hero_section.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_latest_posts_section.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_top_bar_section.dart';
+import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/designer_apply_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,6 +27,7 @@ class HomePage extends ConsumerWidget {
     final nickname = userState.nickname ?? '동아리원';
     final publicCode = userState.publicCode;
     final profileImageUrl = userState.profileImageUrl;
+    final isDesignerRecruiting = ref.watch(designerApplyViewProvider);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -44,7 +47,9 @@ class HomePage extends ConsumerWidget {
               profileImageUrl: profileImageUrl,
               isLoggedIn: isLoggedIn,
               onGoHome: () => context.go('/'),
-              onGoIntro: () => context.go("/promotion"),
+              onGoIntro: () => isDesignerRecruiting
+                  ? navigateToDesignerRecruit()
+                  : context.go("/promotion"),
               onGoEducation: () => context.go('/course'),
               onGoPosts: () => context.go('/articles'),
               onGoMaterials: () => context.go('/materials'),
@@ -65,6 +70,7 @@ class HomePage extends ConsumerWidget {
             child: Column(
               children: [
                 const HomeHeroSection(),
+                const HomeDesignerCtaSection(),
                 const HomeLatestPostsSection(),
                 if (isLoggedIn) const HomeLatestMaterialsSection(),
                 const HomeCtaSection(),
