@@ -13,7 +13,9 @@ export default defineConfig({
     // Flutter dev/build 양쪽이 정적 자산을 web/에서 가져가므로
     // 빌드 산출물을 직접 web/recruit-designer/로 보낸다.
     outDir: resolve(__dirname, '../web/recruit-designer'),
-    emptyOutDir: true,
+    // 손수 작성한 index.html(같은 폴더에 위치)이 지워지지 않도록 false.
+    // JS/CSS는 동일 파일명으로 빌드돼 자연스럽게 덮어쓰여진다.
+    emptyOutDir: false,
     cssCodeSplit: false,
     sourcemap: false,
     target: 'es2020',
