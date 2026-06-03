@@ -47,9 +47,9 @@ class HomePage extends ConsumerWidget {
               profileImageUrl: profileImageUrl,
               isLoggedIn: isLoggedIn,
               onGoHome: () => context.go('/'),
-              onGoIntro: () => isDesignerRecruiting
-                  ? navigateToDesignerRecruit()
-                  : context.go("/promotion"),
+              onGoIntro: () => context.go(
+                isDesignerRecruiting ? "/recruit-designer" : "/promotion",
+              ),
               onGoEducation: () => context.go('/course'),
               onGoPosts: () => context.go('/articles'),
               onGoMaterials: () => context.go('/materials'),

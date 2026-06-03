@@ -28,10 +28,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Flutter Web (no service worker, release mode)
-        run: flutter build web --release --dart-define=API_URL=${{ secrets.BASE_URL }} --pwa-strategy=none
-
-      - name: Set up Node.js (for recruit-designer static page)
+      - name: Set up Node.js (for recruit-designer JS bundle)
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -40,9 +37,12 @@ jobs:
         working-directory: web_recruit
         run: npm ci
 
-      - name: Build web_recruit (static recruit-designer page)
+      - name: Build web_recruit (outputs to web/recruit-designer/)
         working-directory: web_recruit
         run: npm run build
+
+      - name: Build Flutter Web (no service worker, release mode)
+        run: flutter build web --release --dart-define=API_URL=${{ secrets.BASE_URL }} --pwa-strategy=none
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0

@@ -2,24 +2,30 @@ import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
 
 export default defineConfig({
-  base: '/recruit-designer/',
   build: {
-    outDir: resolve(__dirname, '../build/web/recruit-designer'),
+    // 라이브러리 모드: Flutter 안에서 mount(host) 호출로 부착
+    lib: {
+      entry: resolve(__dirname, 'src/main.ts'),
+      name: 'RecruitDesigner',
+      formats: ['es'],
+      fileName: () => 'recruit-designer.js',
+    },
+    // Flutter dev/build 양쪽이 정적 자산을 web/에서 가져가므로
+    // 빌드 산출물을 직접 web/recruit-designer/로 보낸다.
+    outDir: resolve(__dirname, '../web/recruit-designer'),
     emptyOutDir: true,
-    assetsDir: 'assets',
     cssCodeSplit: false,
     sourcemap: false,
     target: 'es2020',
     rollupOptions: {
       output: {
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]',
+        assetFileNames: 'recruit-designer[extname]',
       },
     },
   },
   server: {
     port: 5174,
+    cors: true,
     open: '/',
   },
 });

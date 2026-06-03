@@ -7,6 +7,7 @@ import 'package:a_and_i_report_web_server/src/feature/articles/domain/entities/p
 import 'package:a_and_i_report_web_server/src/feature/activate/ui/activate_page.dart';
 import 'package:a_and_i_report_web_server/src/feature/course/presentation/course_list_view.dart';
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/faq_light_page.dart';
+import 'package:a_and_i_report_web_server/src/feature/promotion/ui/recruit_designer_embed_page.dart';
 import 'package:a_and_i_report_web_server/src/feature/user/presentation/user_managerment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -116,6 +117,14 @@ GoRouter goRouter(Ref ref) {
         pageBuilder: (context, state) {
           html.document.title = "2026 팀 A&I 모집안내";
           return NoTransitionPage(child: const PromotionPage());
+        },
+      ),
+      GoRoute(
+        path: '/recruit-designer',
+        name: "A&I 4기 UX/UI 디자이너 모집",
+        pageBuilder: (context, state) {
+          html.document.title = "A&I 4기 UX/UI 디자이너 모집";
+          return NoTransitionPage(child: const RecruitDesignerEmbedPage());
         },
       ),
       GoRoute(

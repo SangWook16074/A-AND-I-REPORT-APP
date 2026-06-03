@@ -1,14 +1,14 @@
 import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/designer_apply_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:web/web.dart' as web;
 
 /// A&I 4기 UX/UI 디자이너 모집 기간 동안 홈 화면에 노출되는 배너.
-/// 클릭 시 정적 페이지(`/recruit-designer/`)로 풀 페이지 네비게이션을 수행합니다.
+/// 클릭 시 같은 SPA 내부의 `/recruit-designer` 라우트로 이동.
 class HomeDesignerCtaSection extends ConsumerWidget {
   const HomeDesignerCtaSection({super.key});
 
-  static const _route = '/recruit-designer/';
+  static const _route = '/recruit-designer';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,15 +38,11 @@ class HomeDesignerCtaSection extends ConsumerWidget {
             bodyFont: bodyFont,
             verticalLayout: verticalLayout,
             isMobile: isMobile,
-            onTap: _goToRecruitPage,
+            onTap: () => context.go(_route),
           ),
         ),
       ),
     );
-  }
-
-  static void _goToRecruitPage() {
-    web.window.location.assign(_route);
   }
 }
 
@@ -193,7 +189,7 @@ class _DesignerBanner extends StatelessWidget {
 
 }
 
-/// 풀-페이지 네비게이션을 수행하는 헬퍼 (정적 페이지 진입).
-void navigateToDesignerRecruit() {
-  web.window.location.assign('/recruit-designer/');
+/// Flutter 내부 라우트로 디자이너 모집 페이지 진입.
+void navigateToDesignerRecruit(BuildContext context) {
+  context.go('/recruit-designer');
 }
