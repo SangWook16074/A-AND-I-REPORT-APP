@@ -25,7 +25,7 @@ export const WHO_WE_WANT: { num: string; title: string; hint: string }[] = [
   },
   {
     num: '03',
-    title: 'Figma · Rive 같은 디자인 툴을 깊게 다뤄보고 싶은 분',
+    title: 'Figma 같은 디자인 툴을 깊게 다뤄보고 싶은 분',
     hint: '인터랙션·모션까지 만들어내는 디자이너로 성장합니다.',
   },
   {
@@ -77,6 +77,6 @@ export const FAQS = [
   },
   {
     q: '어떤 툴을 주로 사용하나요?',
-    a: 'Figma를 메인으로 사용하고, 인터랙션·모션이 필요한 화면에서는 Rive를 활용합니다.',
+    a: 'Figma를 메인 디자인 툴로 사용합니다.',
   },
 ];

@@ -22,7 +22,7 @@ export function footerHTML(): string {
         </div>
 
         <div class="cta-footer__meta">
-          <div>© ${new Date().getFullYear()} ${RECRUIT.club} · ${RECRUIT.university} 모바일 앱 개발 동아리</div>
+          <div>© ${new Date().getFullYear()} ${RECRUIT.club} 모바일 앱 개발 동아리</div>
           <div>
             <a href="/">메인 홈으로</a>
             <span style="margin: 0 10px; color: rgba(255,255,255,0.2);">|</span>

@@ -2,13 +2,16 @@ import 'package:a_and_i_report_web_server/src/feature/promotion/ui/viewModels/de
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-/// A&I 4기 UX/UI 디자이너 모집 기간 동안 홈 화면에 노출되는 배너.
-/// 클릭 시 같은 SPA 내부의 `/recruit-designer` 라우트로 이동.
+/// A&I 4기 UX/UI 디자이너 모집 광고 배너.
+/// 어두운 배경 + 브랜드 블루 액센트로 메인 화면에서 시선을 끌도록 구성.
+/// 클릭 시 같은 SPA 내부 `/recruit-designer` 라우트로 이동.
 class HomeDesignerCtaSection extends ConsumerWidget {
   const HomeDesignerCtaSection({super.key});
 
-  static const _route = '/recruit-designer';
+  static const _bgColor = Color(0xFF0A0A18);
+  static const _accentBlue = Color(0xFF3B83F6);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,140 +27,145 @@ class HomeDesignerCtaSection extends ConsumerWidget {
     final verticalLayout = width < 1024;
     final titleFont = isMobile ? 22.0 : (isTablet ? 26.0 : 30.0);
     final bodyFont = isMobile ? 14.0 : 15.0;
-    final sectionBottom = isMobile ? 32.0 : 48.0;
+    final sectionBottom = isMobile ? 44.0 : 72.0;
     final boxPadding = isMobile ? 22.0 : (isTablet ? 28.0 : 36.0);
 
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1280),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(horizontal, 16, horizontal, sectionBottom),
-          child: _DesignerBanner(
-            boxPadding: boxPadding,
+          padding:
+              EdgeInsets.fromLTRB(horizontal, 0, horizontal, sectionBottom),
+          child: _DesignerAdBanner(
+            isMobile: isMobile,
+            verticalLayout: verticalLayout,
             titleFont: titleFont,
             bodyFont: bodyFont,
-            verticalLayout: verticalLayout,
-            isMobile: isMobile,
-            onTap: () => context.go(_route),
+            boxPadding: boxPadding,
+            bgColor: _bgColor,
+            accentBlue: _accentBlue,
+            onBannerTap: () => context.go('/recruit-designer'),
+            onApplyTap: _launchApplyForm,
           ),
         ),
       ),
     );
   }
+
+  static Future<void> _launchApplyForm() async {
+    final uri = Uri.parse('https://forms.gle/QHuzcBn3yzm59jGX9');
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
 }
 
-class _DesignerBanner extends StatelessWidget {
-  const _DesignerBanner({
-    required this.boxPadding,
+class _DesignerAdBanner extends StatelessWidget {
+  const _DesignerAdBanner({
+    required this.isMobile,
+    required this.verticalLayout,
     required this.titleFont,
     required this.bodyFont,
-    required this.verticalLayout,
-    required this.isMobile,
-    required this.onTap,
+    required this.boxPadding,
+    required this.bgColor,
+    required this.accentBlue,
+    required this.onBannerTap,
+    required this.onApplyTap,
   });
 
-  final double boxPadding;
+  final bool isMobile;
+  final bool verticalLayout;
   final double titleFont;
   final double bodyFont;
-  final bool verticalLayout;
-  final bool isMobile;
-  final VoidCallback onTap;
+  final double boxPadding;
+  final Color bgColor;
+  final Color accentBlue;
+  final VoidCallback onBannerTap;
+  final VoidCallback onApplyTap;
 
   @override
   Widget build(BuildContext context) {
+    final copy = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'A&I 4기 UX/UI 디자이너 모집',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: titleFont,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.6,
+            height: 1.15,
+          ),
+        ),
+        SizedBox(height: isMobile ? 8 : 10),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: accentBlue,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: accentBlue.withValues(alpha: 0.6),
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '2026.06.01 – 2026.08.30',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.7),
+                fontSize: bodyFont,
+                fontWeight: FontWeight.w500,
+                letterSpacing: -0.01 * bodyFont,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+
     final ctaButton = FilledButton.icon(
-      onPressed: onTap,
+      onPressed: onApplyTap,
       icon: const Icon(Icons.arrow_forward_rounded, size: 18),
       style: FilledButton.styleFrom(
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF000000),
+        backgroundColor: accentBlue,
+        foregroundColor: Colors.white,
         textStyle: TextStyle(
           fontWeight: FontWeight.w800,
           fontSize: isMobile ? 14 : 15,
         ),
         padding: EdgeInsets.symmetric(
           horizontal: isMobile ? 18 : 24,
-          vertical: isMobile ? 14 : 16,
+          vertical: isMobile ? 13 : 16,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
-      label: const Text('모집 페이지 보기'),
-    );
-
-    final copy = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Container(
-              width: 8,
-              height: 8,
-              decoration: const BoxDecoration(
-                color: Color(0xFF93C5FD),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(color: Color(0xFF60A5FA), blurRadius: 8),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              '2026.06.01 – 2026.08.30 · NEW',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 2.2,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: isMobile ? 10 : 14),
-        Text(
-          'A&I 4기 UX/UI 디자이너를 찾고 있어요',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: titleFont,
-            fontWeight: FontWeight.w800,
-            letterSpacing: -0.5,
-            height: 1.15,
-          ),
-        ),
-        SizedBox(height: isMobile ? 8 : 10),
-        Text(
-          '8개+ 앱 프로젝트를 함께 만들어갈 디자이너 분들을 모십니다. Figma · Rive로 실제 출시되는 앱의 UX/UI를 디자인해요.',
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.78),
-            fontSize: bodyFont,
-            height: 1.6,
-          ),
-        ),
-      ],
+      label: const Text('지원하러 가기'),
     );
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: onTap,
+        onTap: onBannerTap,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF1E40AF),
-                Color(0xFF3B82F6),
-                Color(0xFF60A5FA),
-              ],
+            color: bgColor,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.06),
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF3B82F6).withValues(alpha: 0.4),
-                blurRadius: 36,
-                offset: const Offset(0, 16),
+                color: Colors.black.withValues(alpha: 0.35),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
@@ -186,7 +194,6 @@ class _DesignerBanner extends StatelessWidget {
       ),
     );
   }
-
 }
 
 /// Flutter 내부 라우트로 디자이너 모집 페이지 진입.

@@ -1,3 +1,11 @@
+// Vite 라이브러리 모드는 process.env.NODE_ENV 치환을 자동으로 하지 않아
+// 일부 의존성(특히 motion, gsap)에서 ReferenceError를 던진다. 미리 폴리필.
+if (typeof (globalThis as unknown as { process?: unknown }).process === 'undefined') {
+  (globalThis as unknown as { process: { env: Record<string, string> } }).process = {
+    env: { NODE_ENV: 'production' },
+  };
+}
+
 import './style.css';
 
 import { heroHTML } from './sections/hero';
@@ -45,6 +53,7 @@ const SITE_CHROME_HTML = /* html */ `
       <a href="#activity">활동</a>
       <a href="#schedule">일정</a>
       <a href="#process">선발</a>
+      <a href="#faq">FAQ</a>
     </nav>
     <a class="header-cta" href="https://forms.gle/QHuzcBn3yzm59jGX9" target="_blank" rel="noopener noreferrer">
       지원하기
@@ -78,8 +87,8 @@ const SITE_CHROME_HTML = /* html */ `
 /**
  * 정적 페이지를 호스트 엘리먼트에 마운트.
  * - Flutter HtmlElementView 안에서 호출됨.
- * - 호스트가 곧 페이지의 루트 컨테이너가 되며, 그 안에 헤더/메인/스티키 CTA를
- *   직접 주입한다. body 전체를 점령하지 않으므로 다른 Flutter 화면에 영향이 없다.
+ * - 호스트가 곧 스크롤 컨테이너가 된다 (window 사용 안 함).
+ * - GSAP ScrollTrigger에 host를 scroller로 등록하고, sticky/position 등도 host 스크롤 이벤트 구독.
  */
 export function mount(host: HTMLElement): () => void {
   host.innerHTML = SITE_CHROME_HTML;
@@ -87,23 +96,37 @@ export function mount(host: HTMLElement): () => void {
   if (!appRoot) return () => {};
   appRoot.innerHTML = SECTIONS_HTML();
 
-  setupSmoothScroll();
+  // 임베드 모드 — 호스트를 스크롤 컨테이너로 등록 (Lenis는 사용 안 함, 네이티브 스크롤만)
+  ScrollTrigger.defaults({ scroller: host });
+
   setupScrollAnimations();
   playHeroIntro();
   setupTilt();
   setupMagnet();
-  setupStickyCta();
+  setupStickyCta(host);
   setupFaq();
   setupCursor();
   setupCountdown(new Date(2026, 7, 30, 23, 59, 59));
-  setupPositionIndicator();
+  setupPositionIndicator(host);
 
-  window.addEventListener('load', () => ScrollTrigger.refresh());
+  // 호스트 안에 동적으로 컨텐츠를 넣은 직후엔 ScrollTrigger 위치가 0으로 계산될 수 있다.
+  // RAF 두 번 후(레이아웃 안정화), 추가로 100ms/500ms 후 한 번 더 refresh.
+  const refresh = () => ScrollTrigger.refresh();
+  requestAnimationFrame(() => requestAnimationFrame(refresh));
+  setTimeout(refresh, 100);
+  setTimeout(refresh, 500);
 
-  // 호출자가 unmount하고 싶을 때 정리할 수 있도록 cleanup 반환
+  // 호스트 자체의 사이즈가 바뀌면 (Flutter 윈도우 리사이즈 등) 다시 계산
+  const ro = new ResizeObserver(() => ScrollTrigger.refresh());
+  ro.observe(host);
+
+  window.addEventListener('load', refresh);
+
   return () => {
+    ro.disconnect();
     host.innerHTML = '';
     ScrollTrigger.getAll().forEach((t) => t.kill());
+    ScrollTrigger.defaults({ scroller: window });
   };
 }
 

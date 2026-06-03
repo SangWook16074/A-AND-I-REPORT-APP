@@ -18,7 +18,7 @@ export function activityHTML(): string {
           </li>
           <li class="info-row">
             <span class="info-row__label">사용 툴</span>
-            <span class="info-row__value">Figma · Rive</span>
+            <span class="info-row__value">Figma</span>
           </li>
           <li class="info-row">
             <span class="info-row__label">활동 장소</span>

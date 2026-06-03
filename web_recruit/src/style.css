@@ -285,9 +285,14 @@ svg {
 .site-nav a {
   position: relative;
   transition: color 0.2s;
+  cursor: pointer;
 }
 .site-nav a:hover {
   color: var(--ink-50);
+}
+.site-nav a.is-active {
+  color: var(--brand-400);
+  font-weight: 700;
 }
 
 .header-cta {
@@ -1531,10 +1536,13 @@ svg {
   position: relative;
 }
 .faq__list {
-  margin-top: 56px;
+  margin: 56px auto 0;
+  max-width: 520px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  text-align: left;
 }
 .faq-item {
   border: 1px solid rgba(255, 255, 255, 0.08);

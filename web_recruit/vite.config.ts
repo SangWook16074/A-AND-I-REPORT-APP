@@ -23,6 +23,10 @@ export default defineConfig({
       },
     },
   },
+  // 라이브러리 모드에서도 process.env.NODE_ENV 참조를 빌드 타임에 치환
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production'),
+  },
   server: {
     port: 5174,
     cors: true,
