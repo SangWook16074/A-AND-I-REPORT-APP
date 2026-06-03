@@ -10,6 +10,10 @@
       ],
       "rewrites": [
         {
+          "source": "/recruit-designer",
+          "destination": "/recruit-designer/index.html"
+        },
+        {
           "source": "**",
           "destination": "/index.html"
         }
@@ -116,6 +120,10 @@
         "**/node_modules/**"
       ],
       "rewrites": [
+        {
+          "source": "/recruit-designer",
+          "destination": "/recruit-designer/index.html"
+        },
         {
           "source": "**",
           "destination": "/index.html"
