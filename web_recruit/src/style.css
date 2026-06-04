@@ -86,6 +86,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  /* iOS Safari 자동 텍스트 확대 방지 — 가로 모드에서 폰트가 튀는 현상 방지 */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* 한국어 기본 줄바꿈 정책 — 어절 단위 줄바꿈, 마지막 글자가 한 자만 떨어지는 현상 방지 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 body {
@@ -132,8 +138,8 @@ svg {
    ============================================================ */
 .section {
   position: relative;
-  padding-block: clamp(80px, 12vw, 140px);
-  padding-inline: clamp(20px, 5vw, 48px);
+  padding-block: clamp(72px, 12vw, 140px);
+  padding-inline: clamp(18px, 5vw, 48px);
   text-align: center;
 }
 
@@ -186,12 +192,30 @@ svg {
 }
 
 .section-title {
-  font-size: clamp(2.5rem, 6.5vw, 5rem);
-  line-height: 1.05;
+  font-size: clamp(2rem, 6.8vw, 5rem);
+  line-height: 1.1;
   letter-spacing: -0.035em;
   font-weight: 800;
   margin: 28px 0 20px;
   color: #ffffff;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+
+.section-sub,
+.hero__sub,
+.about-portfolio__body,
+.cta-footer__sub,
+.bento__desc,
+.step-card__desc,
+.who-card__hint,
+.timeline__desc,
+.faq-item__inner,
+.info-row__value,
+.who-row__title,
+.process-row__title,
+.work-item__sub {
+  text-wrap: pretty;
 }
 
 .section-sub {
@@ -319,11 +343,30 @@ svg {
     display: none;
   }
   .site-header {
-    padding: 8px 10px 8px 18px;
-    gap: 14px;
+    top: max(12px, env(safe-area-inset-top));
+    padding: 8px 10px 8px 16px;
+    gap: 10px;
+    max-width: calc(100vw - 16px);
   }
   .site-position {
     min-width: auto;
+  }
+  .site-position__name {
+    font-size: 13px;
+  }
+  .header-cta {
+    padding: 7px 14px;
+    font-size: 12.5px;
+  }
+}
+
+/* 좁은 폰(≤380px)에서 헤더 텍스트 폭 절약 */
+@media (max-width: 380px) {
+  .site-position__name {
+    display: none;
+  }
+  .site-position {
+    gap: 0;
   }
 }
 
@@ -430,8 +473,8 @@ svg {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-block: 160px 120px;
-  padding-inline: clamp(20px, 5vw, 64px);
+  padding-block: clamp(120px, 22vw, 160px) clamp(80px, 14vw, 120px);
+  padding-inline: clamp(16px, 5vw, 64px);
   isolation: isolate;
   overflow: hidden;
 }
@@ -571,7 +614,8 @@ svg {
   animation: pulseSoft 2s ease-in-out infinite;
 }
 .hero__timer-display {
-  font-size: clamp(2.4rem, 7vw, 5rem);
+  /* 4 그룹 × 2 자리 + 3 sep ≈ 10ch. 화면 폭 90% 안에 맞도록 vw 기반 size + max-width 가드. */
+  font-size: clamp(1.8rem, 9vw, 5rem);
   font-weight: 800;
   letter-spacing: -0.015em;
   color: #ffffff;
@@ -580,16 +624,17 @@ svg {
   line-height: 1;
   display: inline-flex;
   align-items: baseline;
-  gap: 0.1em;
+  gap: 0.05em;
+  max-width: 100%;
 }
 .hero__timer-display [data-cd] {
   display: inline-block;
-  min-width: 1.85ch;
+  min-width: 1.7ch;
   text-align: center;
 }
 .hero__timer-sep {
   color: #ffffff;
-  margin: 0 0.05em;
+  margin: 0 0.02em;
   font-weight: 700;
 }
 .hero__badge .dot {
@@ -604,12 +649,13 @@ svg {
 .hero__title {
   /* 2줄 유지하면서 디스플레이 타입 비례를 살림.
      line-height 0.98로 단단히 묶어 한 덩어리처럼 보이게. */
-  font-size: clamp(2.4rem, 7.6vw, 6rem);
+  font-size: clamp(2rem, 8.2vw, 6rem);
   font-weight: 800;
-  line-height: 0.98;
-  letter-spacing: -0.045em;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
   margin: 0;
   word-break: keep-all;
+  text-wrap: balance;
 }
 .hero__title .hero__title-line + .hero__title-line {
   margin-top: 0.1em;
@@ -622,8 +668,19 @@ svg {
 }
 .hero__title-word {
   display: inline-block;
+  max-width: 100%;
   transform: translateY(110%);
   will-change: transform;
+  word-break: keep-all;
+}
+
+/* 좁은 화면(≤540px)에서는 inline-word가 wrap될 수 있게 line의 overflow:hidden을 해제.
+   reveal 애니메이션은 translateY 기반이라 clip 없이도 자연스럽게 동작. */
+@media (max-width: 540px) {
+  .hero__title-line {
+    overflow: visible;
+    padding-bottom: 0;
+  }
 }
 
 .hero__sub {
@@ -645,6 +702,21 @@ svg {
   margin: 32px auto 0;
   width: fit-content;
   max-width: 100%;
+}
+
+@media (max-width: 540px) {
+  .hero__actions {
+    width: 100%;
+    gap: 10px;
+  }
+  .hero__actions .btn {
+    flex: 1 1 100%;
+  }
+  .btn--lg {
+    --btn-pad-x: 22px;
+    --btn-pad-y: 16px;
+    font-size: 15.5px;
+  }
 }
 
 .hero__meta {
@@ -1016,11 +1088,13 @@ svg {
 
 .about-portfolio__heading {
   margin: 40px 0 32px;
-  font-size: clamp(2.5rem, 7vw, 5.5rem);
-  line-height: 1.02;
-  letter-spacing: -0.045em;
+  font-size: clamp(2rem, 7vw, 5.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
   font-weight: 800;
   color: #ffffff;
+  word-break: keep-all;
+  text-wrap: balance;
 }
 
 .about-portfolio__body {
@@ -1029,6 +1103,16 @@ svg {
   color: #ffffff;
   max-width: 60ch;
   font-weight: 500;
+}
+
+/* 본문 안의 강제 줄바꿈 유틸 — 좁은 화면에서는 BR을 숨겨 두 문장이 한 흐름으로 이어지게. */
+br.br-wide {
+  display: none;
+}
+@media (min-width: 720px) {
+  br.br-wide {
+    display: inline;
+  }
 }
 
 .about-portfolio__divider {
@@ -1620,10 +1704,12 @@ svg {
     radial-gradient(ellipse 60% 70% at 50% 100%, rgba(30, 64, 175, 0.32), transparent 60%);
 }
 .cta-footer__title {
-  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-size: clamp(2rem, 6.4vw, 5rem);
   font-weight: 800;
   letter-spacing: -0.035em;
-  line-height: 1;
+  line-height: 1.1;
+  word-break: keep-all;
+  text-wrap: balance;
 }
 .cta-footer__sub {
   margin-top: 24px;
@@ -1652,6 +1738,22 @@ svg {
   color: var(--ink-400);
   font-size: 12.5px;
 }
+
+@media (max-width: 540px) {
+  .cta-footer__meta {
+    margin-top: 56px;
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  .cta-footer__actions {
+    width: 100%;
+    gap: 10px;
+  }
+  .cta-footer__actions .btn {
+    flex: 1 1 100%;
+  }
+}
 .cta-footer__meta a {
   color: var(--ink-200);
   transition: color 0.2s;
@@ -1665,10 +1767,10 @@ svg {
    ============================================================ */
 .sticky-cta {
   position: fixed;
-  bottom: 16px;
+  bottom: max(16px, calc(env(safe-area-inset-bottom) + 12px));
   left: 50%;
   z-index: 40;
-  transform: translateX(-50%) translateY(140%);
+  transform: translateX(-50%) translateY(160%);
   width: min(960px, calc(100vw - 24px));
   pointer-events: none;
   transition: transform 0.5s var(--ease-out-expo), opacity 0.5s;

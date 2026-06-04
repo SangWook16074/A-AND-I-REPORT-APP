@@ -12,6 +12,19 @@ export const RECRUIT = {
   activityEnd: '2027.01.10',
 };
 
+/** "YYYY.MM.DD" → Date (현지 시각 기준). 잘못된 입력은 NaN Date 반환. */
+function parseDot(s: string, endOfDay = false): Date {
+  const [y, m, d] = s.split('.').map((v) => Number(v));
+  return endOfDay
+    ? new Date(y, (m ?? 1) - 1, d ?? 1, 23, 59, 59, 999)
+    : new Date(y, (m ?? 1) - 1, d ?? 1, 0, 0, 0, 0);
+}
+
+/** 모집 종료 시각 (현지 시각 자정 직전) — 카운트다운 타깃. */
+export const RECRUIT_END_AT: Date = parseDot(RECRUIT.recruitEnd, true);
+/** 모집 시작 시각 — 모집 전/중/후 분기용. */
+export const RECRUIT_START_AT: Date = parseDot(RECRUIT.recruitStart, false);
+
 export const WHO_WE_WANT: { num: string; title: string; hint: string }[] = [
   {
     num: '01',

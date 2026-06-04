@@ -8,6 +8,7 @@ if (typeof (globalThis as unknown as { process?: unknown }).process === 'undefin
 
 import './style.css';
 
+import { RECRUIT, RECRUIT_END_AT } from './data';
 import { heroHTML } from './sections/hero';
 import { aboutHTML } from './sections/about';
 import { whoHTML } from './sections/who';
@@ -55,7 +56,7 @@ const SITE_CHROME_HTML = /* html */ `
       <a href="#process">선발</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <a class="header-cta" href="https://forms.gle/QHuzcBn3yzm59jGX9" target="_blank" rel="noopener noreferrer">
+    <a class="header-cta" href="${RECRUIT.forms}" target="_blank" rel="noopener noreferrer">
       지원하기
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M7 17 17 7M9 7h8v8" />
@@ -68,15 +69,15 @@ const SITE_CHROME_HTML = /* html */ `
       <div class="sticky-cta__copy">
         <span class="sticky-cta__dot" aria-hidden="true"></span>
         <div>
-          <div class="sticky-cta__title">A&amp;I 4기 디자이너 모집 중</div>
-          <div class="sticky-cta__sub">2026.06.01 - 2026.08.30</div>
+          <div class="sticky-cta__title">A&amp;I ${RECRUIT.generation} 디자이너 모집 중</div>
+          <div class="sticky-cta__sub">${RECRUIT.recruitStart} - ${RECRUIT.recruitEnd}</div>
         </div>
       </div>
       <div class="sticky-cta__actions">
-        <a class="btn btn--ghost-line" href="https://open.kakao.com/o/s6u9iDxi" target="_blank" rel="noopener noreferrer">
+        <a class="btn btn--ghost-line" href="${RECRUIT.kakao}" target="_blank" rel="noopener noreferrer">
           카톡 문의
         </a>
-        <a class="btn btn--primary" href="https://forms.gle/QHuzcBn3yzm59jGX9" target="_blank" rel="noopener noreferrer">
+        <a class="btn btn--primary" href="${RECRUIT.forms}" target="_blank" rel="noopener noreferrer">
           지원하기
         </a>
       </div>
@@ -106,7 +107,7 @@ export function mount(host: HTMLElement): () => void {
   setupStickyCta(host);
   setupFaq();
   setupCursor();
-  setupCountdown(new Date(2026, 7, 30, 23, 59, 59));
+  setupCountdown(RECRUIT_END_AT);
   setupPositionIndicator(host);
 
   // 호스트 안에 동적으로 컨텐츠를 넣은 직후엔 ScrollTrigger 위치가 0으로 계산될 수 있다.
@@ -130,6 +131,23 @@ export function mount(host: HTMLElement): () => void {
   };
 }
 
+/**
+ * index.html에 하드코딩된 모집 기간 / forms / kakao 링크를 data.ts 값으로 동기화.
+ * 스탠드얼론 모드에서만 호출 — chrome을 직접 그리는 mount() 경로는 이미 data.ts 보간 중.
+ */
+function syncChromeFromData(): void {
+  const sub = document.querySelector<HTMLElement>('.sticky-cta__sub');
+  if (sub) sub.textContent = `${RECRUIT.recruitStart} - ${RECRUIT.recruitEnd}`;
+  const title = document.querySelector<HTMLElement>('.sticky-cta__title');
+  if (title) title.textContent = `A&I ${RECRUIT.generation} 디자이너 모집 중`;
+  document.querySelectorAll<HTMLAnchorElement>('a[href*="forms.gle"]').forEach((a) => {
+    a.href = RECRUIT.forms;
+  });
+  document.querySelectorAll<HTMLAnchorElement>('a[href*="open.kakao.com"]').forEach((a) => {
+    a.href = RECRUIT.kakao;
+  });
+}
+
 // 스탠드얼론 모드 (Vite dev 서버에서 /index.html로 접근하면 자동 마운트)
 if (typeof document !== 'undefined') {
   const standalone = document.getElementById('app');
@@ -138,6 +156,8 @@ if (typeof document !== 'undefined') {
       // index.html이 이미 chrome을 갖고 있다면 main에만 채움. 없다면 전체 마운트.
       const hasChrome = document.querySelector('.site-header');
       if (hasChrome) {
+        // index.html의 하드코딩된 모집기간/링크를 data.ts 단일 출처로 덮어쓴다.
+        syncChromeFromData();
         standalone.innerHTML = SECTIONS_HTML();
         setupSmoothScroll();
         setupScrollAnimations();
@@ -147,7 +167,7 @@ if (typeof document !== 'undefined') {
         setupStickyCta();
         setupFaq();
         setupCursor();
-        setupCountdown(new Date(2026, 7, 30, 23, 59, 59));
+        setupCountdown(RECRUIT_END_AT);
         setupPositionIndicator();
         window.addEventListener('load', () => ScrollTrigger.refresh());
       } else {

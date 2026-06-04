@@ -11,7 +11,7 @@ export function aboutHTML(): string {
           </h2>
 
           <p class="about-portfolio__body reveal">
-            지난 4년 동안 30명+ 동료들과 함께 프로젝트를 만들어왔어요.<br/>
+            지난 4년 동안 30명+ 동료들과 함께 프로젝트를 만들어왔어요.<br class="br-wide"/>
             이번 ${RECRUIT.generation}에도 함께할 UX/UI 디자이너를 모집합니다.
           </p>
 
