@@ -11,7 +11,7 @@ export function heroHTML(): string {
       <div class="container" style="position: relative;">
         <h1 class="hero__title">
           <span class="hero__title-line"><span class="hero__title-word">A&amp;I ${RECRUIT.generation}</span></span>
-          <span class="hero__title-line"><span class="hero__title-word"><em class="gradient-text" style="font-style:normal;">UX/UI 디자이너</em> 모집</span></span>
+          <span class="hero__title-line"><span class="hero__title-word"><em class="hero__title-grad" style="font-style:normal;">UX/UI 디자이너</em> 모집</span></span>
         </h1>
 
         <div class="hero__timer" data-anim="hero-badge">
