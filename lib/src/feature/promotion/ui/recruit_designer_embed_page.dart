@@ -20,6 +20,10 @@ class RecruitDesignerEmbedPage extends StatefulWidget {
 
 class _RecruitDesignerEmbedPageState extends State<RecruitDesignerEmbedPage> {
   static const String _cssLinkId = 'recruit-designer-stylesheet';
+  // GoRouter 가 페이지를 rebuild 할 때 old State 의 dispose 가 new State 의
+  // initState 이후 실행돼 글로벌 link 가 한 번 끊겼다가 재진입이 안 되는
+  // race 가 있다. 활성 인스턴스 수를 세서 마지막 인스턴스가 사라질 때만 제거.
+  static int _activeInstances = 0;
   late final String _viewType;
   bool _registered = false;
 
@@ -34,12 +38,13 @@ class _RecruitDesignerEmbedPageState extends State<RecruitDesignerEmbedPage> {
   void _registerView() {
     if (_registered) return;
     _registered = true;
+    _activeInstances++;
 
     final base = RecruitDesignerEmbedPage._resolveBaseUrl();
     final cssHref = '$base/recruit-designer/recruit-designer.css';
     final jsHref = '$base/recruit-designer/recruit-designer.js';
 
-    // 전역 CSS 1회 주입 (재진입 시 중복 방지)
+    // 전역 CSS 주입 — 이미 있으면 skip, 사라진 상태면 다시 붙임.
     if (web.document.getElementById(_cssLinkId) == null) {
       final link = web.HTMLLinkElement()
         ..id = _cssLinkId
@@ -81,9 +86,15 @@ class _RecruitDesignerEmbedPageState extends State<RecruitDesignerEmbedPage> {
 
   @override
   void dispose() {
-    // 라우트를 떠날 때 글로벌 CSS 제거 — Flutter 다른 화면에 스타일 누수 방지
-    final link = web.document.getElementById(_cssLinkId);
-    link?.remove();
+    if (_registered) {
+      _activeInstances--;
+    }
+    // 마지막 인스턴스가 사라질 때만 글로벌 CSS 제거 — Flutter 다른 화면에 스타일 누수 방지.
+    if (_activeInstances <= 0) {
+      _activeInstances = 0;
+      final link = web.document.getElementById(_cssLinkId);
+      link?.remove();
+    }
     super.dispose();
   }
 
