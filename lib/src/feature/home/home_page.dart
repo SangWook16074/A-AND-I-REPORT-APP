@@ -6,7 +6,7 @@ import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_vi
 import 'package:a_and_i_report_web_server/src/feature/auth/ui/viewModels/user_view_state.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/home_theme.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_cta_section.dart';
-import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_designer_cta_section.dart';
+import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_designer_top_banner_section.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_footer_section.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_hero_section.dart';
 import 'package:a_and_i_report_web_server/src/feature/home/presentation/views/sections/home_latest_posts_section.dart';
@@ -33,48 +33,54 @@ class HomePage extends ConsumerWidget {
       extendBodyBehindAppBar: true,
       extendBody: true,
       backgroundColor: HomeTheme.background,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            elevation: 0,
-            backgroundColor: Colors.white.withValues(alpha: 0.92),
-            surfaceTintColor: Colors.transparent,
-            titleSpacing: 0,
-            title: HomeTopBarSection(
-              nickname: nickname,
-              publicCode: publicCode,
-              profileImageUrl: profileImageUrl,
-              isLoggedIn: isLoggedIn,
-              onGoHome: () => context.go('/'),
-              onGoIntro: () => context.go(
-                isDesignerRecruiting ? "/recruit-designer" : "/promotion",
-              ),
-              onGoEducation: () => context.go('/course'),
-              onGoPosts: () => context.go('/articles'),
-              onGoMaterials: () => context.go('/materials'),
-              onGoFaq: () => context.go('/faq'),
-              onGoMyAccount: () => context.go('/my-account'),
-              onLogin: () => context.go('/sign-in'),
-              onLogout: () async {
-                await ref
-                    .read(authViewModelProvider.notifier)
-                    .onEvent(const SignOut());
-                await ref
-                    .read(userViewModelProvider.notifier)
-                    .onEvent(const UserViewEvent.clear());
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                const HomeHeroSection(),
-                const HomeDesignerCtaSection(),
-                const HomeLatestPostsSection(),
-                if (isLoggedIn) const HomeLatestMaterialsSection(),
-                const HomeCtaSection(),
-                const HomeFooterSection(),
+      body: Column(
+        children: [
+          const HomeDesignerTopBannerSection(),
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  pinned: true,
+                  elevation: 0,
+                  backgroundColor: Colors.white.withValues(alpha: 0.92),
+                  surfaceTintColor: Colors.transparent,
+                  titleSpacing: 0,
+                  title: HomeTopBarSection(
+                    nickname: nickname,
+                    publicCode: publicCode,
+                    profileImageUrl: profileImageUrl,
+                    isLoggedIn: isLoggedIn,
+                    onGoHome: () => context.go('/'),
+                    onGoIntro: () => context.go(
+                      isDesignerRecruiting ? "/recruit-designer" : "/promotion",
+                    ),
+                    onGoEducation: () => context.go('/course'),
+                    onGoPosts: () => context.go('/articles'),
+                    onGoMaterials: () => context.go('/materials'),
+                    onGoFaq: () => context.go('/faq'),
+                    onGoMyAccount: () => context.go('/my-account'),
+                    onLogin: () => context.go('/sign-in'),
+                    onLogout: () async {
+                      await ref
+                          .read(authViewModelProvider.notifier)
+                          .onEvent(const SignOut());
+                      await ref
+                          .read(userViewModelProvider.notifier)
+                          .onEvent(const UserViewEvent.clear());
+                    },
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      const HomeHeroSection(),
+                      const HomeLatestPostsSection(),
+                      if (isLoggedIn) const HomeLatestMaterialsSection(),
+                      const HomeCtaSection(),
+                      const HomeFooterSection(),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
