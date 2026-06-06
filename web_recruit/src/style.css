@@ -1727,21 +1727,33 @@ br.br-wide {
   text-align: left;
 }
 .faq-item__icon {
+  position: relative;
   width: 28px;
   height: 28px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  font-weight: 800;
   color: var(--ink-200);
   transition: transform 0.3s var(--ease-out-expo), background 0.3s, color 0.3s, border-color 0.3s;
   flex-shrink: 0;
 }
+.faq-item__icon::before,
+.faq-item__icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+}
+.faq-item__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
 .faq-item.is-open .faq-item__icon {
   transform: rotate(45deg);
-  background: var(--grad-primary);
+  background: radial-gradient(circle at 50% 50%, #3b82f6 0%, #1e40af 100%);
   color: white;
   border-color: transparent;
 }
