@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:a_and_i_report_web_server/src/core/constants/api_url.dart';
 import 'package:a_and_i_report_web_server/src/core/providers/study_theme_provider.dart';
 import 'package:a_and_i_report_web_server/src/core/utils/api_error_mapper.dart';
@@ -36,6 +38,7 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
   Widget build(BuildContext context) {
     final isDarkMode = ref.watch(studyDarkModeProvider);
     final palette = _CoursePalette.fromMode(isDarkMode);
+    final isServiceActive = ref.watch(courseServiceActiveProvider);
     final courseListAsync = ref.watch(courseListProvider);
     final isLoggedIn = ref.watch(authViewModelProvider).status ==
         AuthenticationStatus.authenticated;
@@ -46,69 +49,80 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
 
     return Scaffold(
       backgroundColor: palette.pageBackground,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1080),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: isMobile ? 18 : 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _TopNavigationBar(
-                      palette: palette,
-                      profileImageUrl: profileImageUrl,
-                      isLoggedIn: isLoggedIn,
-                      onTapLogo: () => context.go('/'),
-                      onTapContrast: () {
-                        ref.read(studyDarkModeProvider.notifier).state =
-                            !isDarkMode;
-                      },
-                      onTapAvatar: () =>
-                          context.go(isLoggedIn ? '/my-account' : '/sign-in'),
-                      onTapBack: () {
-                        if (context.canPop()) {
-                          context.pop();
-                          return;
-                        }
-                        context.go('/');
-                      },
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1080),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: isMobile ? 18 : 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _TopNavigationBar(
+                          palette: palette,
+                          profileImageUrl: profileImageUrl,
+                          isLoggedIn: isLoggedIn,
+                          onTapLogo: () => context.go('/'),
+                          onTapContrast: () {
+                            ref.read(studyDarkModeProvider.notifier).state =
+                                !isDarkMode;
+                          },
+                          onTapAvatar: () => context
+                              .go(isLoggedIn ? '/my-account' : '/sign-in'),
+                          onTapBack: () {
+                            if (context.canPop()) {
+                              context.pop();
+                              return;
+                            }
+                            context.go('/');
+                          },
+                        ),
+                        SizedBox(height: isMobile ? 34 : 44),
+                        Text(
+                          '내 학습 코스',
+                          style: TextStyle(
+                            color: palette.textPrimary,
+                            fontSize: isMobile ? 36 : 44,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.9,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '현재 수강 가능한 강의 목록입니다.',
+                          style: TextStyle(
+                            color: palette.textMuted,
+                            fontSize: isMobile ? 16 : 18,
+                            height: 1.5,
+                          ),
+                        ),
+                        SizedBox(height: isMobile ? 24 : 32),
+                        ..._buildCourseSections(
+                          context: context,
+                          palette: palette,
+                          courseListAsync: courseListAsync,
+                        ),
+                        SizedBox(height: isMobile ? 72 : 108),
+                        _FooterSection(palette: palette),
+                        const SizedBox(height: 20),
+                      ],
                     ),
-                    SizedBox(height: isMobile ? 34 : 44),
-                    Text(
-                      '내 학습 코스',
-                      style: TextStyle(
-                        color: palette.textPrimary,
-                        fontSize: isMobile ? 36 : 44,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.9,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '현재 수강 가능한 강의 목록입니다.',
-                      style: TextStyle(
-                        color: palette.textMuted,
-                        fontSize: isMobile ? 16 : 18,
-                        height: 1.5,
-                      ),
-                    ),
-                    SizedBox(height: isMobile ? 24 : 32),
-                    ..._buildCourseSections(
-                      context: context,
-                      palette: palette,
-                      courseListAsync: courseListAsync,
-                    ),
-                    SizedBox(height: isMobile ? 72 : 108),
-                    _FooterSection(palette: palette),
-                    const SizedBox(height: 20),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+          if (!isServiceActive)
+            _CourseServiceDimOverlay(
+              palette: palette,
+              isDarkMode: isDarkMode,
+              onTapBack: () => context.go('/'),
+            ),
+        ],
       ),
     );
   }
@@ -600,6 +614,177 @@ class _FooterSection extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// 학습 코스 서비스가 비활성화되었을 때 화면 전체를 덮는 딤 오버레이입니다.
+///
+/// 하단 콘텐츠를 블러+스크림으로 가려 진입을 차단하고,
+/// 중앙 글래스 카드로 비활성화 상태를 안내합니다.
+class _CourseServiceDimOverlay extends StatelessWidget {
+  const _CourseServiceDimOverlay({
+    required this.palette,
+    required this.isDarkMode,
+    required this.onTapBack,
+  });
+
+  final _CoursePalette palette;
+  final bool isDarkMode;
+  final VoidCallback onTapBack;
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+
+    final scrimColor =
+        isDarkMode ? const Color(0xD905050A) : const Color(0x73111114);
+    final accent = const Color(0xFF3B82F6);
+    final badgeBackground =
+        isDarkMode ? const Color(0xFF1E2A44) : const Color(0xFFE8F0FF);
+
+    return Positioned.fill(
+      // 빈 onTap으로 하단 카드 탭이 통과되지 않도록 흡수합니다.
+      child: GestureDetector(
+        onTap: () {},
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          child: Container(
+            color: scrimColor,
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 32),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 26 : 36,
+                  vertical: isMobile ? 32 : 40,
+                ),
+                decoration: BoxDecoration(
+                  color: palette.cardBackground,
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(color: palette.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDarkMode
+                          ? const Color(0x66000000)
+                          : const Color(0x1F000000),
+                      blurRadius: 40,
+                      offset: const Offset(0, 18),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 76,
+                      height: 76,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: badgeBackground,
+                      ),
+                      child: Icon(
+                        Icons.flag_rounded,
+                        size: 36,
+                        color: accent,
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: badgeBackground,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        '코스 안내',
+                        style: TextStyle(
+                          color: accent,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      '4기 스터디 과정이 종료되었어요.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: palette.textPrimary,
+                        fontSize: isMobile ? 22 : 25,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.6,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      '정규 교육과정은 모두 마무리되었어요.\n'
+                      '프레임워크 과정은 계속 진행되고 있어요.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: palette.textMuted,
+                        fontSize: 15,
+                        height: 1.6,
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    SizedBox(
+                      width: double.infinity,
+                      child: _DimPrimaryButton(
+                        palette: palette,
+                        label: '홈으로 돌아가기',
+                        onTap: onTapBack,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DimPrimaryButton extends StatelessWidget {
+  const _DimPrimaryButton({
+    required this.palette,
+    required this.label,
+    required this.onTap,
+  });
+
+  final _CoursePalette palette;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      child: Container(
+        height: 52,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: palette.actionButtonBackground,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: palette.actionButtonForeground,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.3,
+          ),
+        ),
+      ),
     );
   }
 }
