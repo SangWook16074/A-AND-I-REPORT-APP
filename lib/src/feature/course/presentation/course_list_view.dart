@@ -18,6 +18,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final courseListProvider =
     FutureProvider.autoDispose<List<Course>>((ref) async {
+  // 서비스가 비활성(딤)이면 코스 목록 API도 호출하지 않습니다.
+  if (!ref.watch(courseServiceActiveProvider)) {
+    return const <Course>[];
+  }
   ref.watch(authSessionRevisionProvider);
   return ref.read(getCoursesUsecaseProvider).call();
 });
@@ -50,6 +54,9 @@ class _CourseListViewState extends ConsumerState<CourseListView> {
     return Scaffold(
       backgroundColor: palette.pageBackground,
       body: Stack(
+        // 콘텐츠가 짧아도 Stack이 화면 전체를 채우도록 해
+        // 딤 오버레이가 항상 중앙에 노출되게 한다.
+        fit: StackFit.expand,
         children: [
           SafeArea(
             child: SingleChildScrollView(

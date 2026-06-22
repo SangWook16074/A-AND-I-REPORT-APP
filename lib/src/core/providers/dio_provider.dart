@@ -4,6 +4,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:a_and_i_report_web_server/src/core/constants/api_url.dart';
 import 'package:a_and_i_report_web_server/src/core/interceptors/api_interceptor.dart';
 import 'package:a_and_i_report_web_server/src/core/interceptors/auth_interceptor.dart';
+import 'package:a_and_i_report_web_server/src/core/interceptors/service_gate_interceptor.dart';
+import 'package:a_and_i_report_web_server/src/core/providers/study_theme_provider.dart';
 import 'package:a_and_i_report_web_server/src/core/utils/app_messenger.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/providers/local_auth_datasource_provider.dart';
 import 'package:a_and_i_report_web_server/src/feature/auth/providers/auth_session_revision_provider.dart';
@@ -23,6 +25,13 @@ Dio dio(Ref ref) {
   final dio = Dio(BaseOptions(
     baseUrl: baseUrl,
   ));
+
+  // 학습 코스 서비스가 비활성(딤)일 때 REPORT/ONLINE-JUDGE 호출을 가장 먼저 차단합니다.
+  dio.interceptors.add(
+    ServiceGateInterceptor(
+      isServiceActive: () => ref.read(courseServiceActiveProvider),
+    ),
+  );
 
   dio.interceptors.add(
     ApiInterceptor(
