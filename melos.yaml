@@ -20,3 +20,6 @@ scripts:
   format:
     description: 워크스페이스 전체 코드를 포맷합니다.
     run: dart run melos exec --fail-fast -- "dart format ."
+  web:bridge:
+    description: Dart 비즈니스 로직 브릿지를 JS로 컴파일합니다. (web/app/aandi_bridge.js)
+    run: dart compile js -O2 -DAPI_URL=${API_URL:-https://api.aandiclub.com} -o web/app/aandi_bridge.js packages/aandi_web_bridge/bin/aandi_web_bridge.dart && rm -f web/app/aandi_bridge.js.deps web/app/aandi_bridge.js.map

@@ -1,0 +1,17 @@
+name: aandi_web_bridge
+description: HTML/CSS/JS UI에서 호출하는 A&I 비즈니스 로직 JS 브릿지 패키지
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  aandi_tech_blog:
+    path: ../blog_api
+  dio: ^5.9.0
+  markdown: ^7.2.2
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.0

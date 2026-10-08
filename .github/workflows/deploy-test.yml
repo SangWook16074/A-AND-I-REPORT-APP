@@ -41,6 +41,11 @@ jobs:
         working-directory: web_recruit
         run: npm run build
 
+      - name: Compile Dart bridge (outputs to web/app/aandi_bridge.js)
+        run: |
+          dart pub get --directory packages/aandi_web_bridge
+          dart compile js -O2 -DAPI_URL=${{ secrets.BASE_URL }} -o web/app/aandi_bridge.js packages/aandi_web_bridge/bin/aandi_web_bridge.dart
+
       - name: Build Flutter Web
         run: flutter build web --release --dart-define=API_URL=${{ secrets.BASE_URL }} --pwa-strategy=none
 

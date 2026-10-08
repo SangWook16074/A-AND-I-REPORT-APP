@@ -1,196 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="함께 성장하는 IT 동아리, A&I">
-    <meta property="og:title" content="A&I">
-    <meta property="og:description" content="함께 성장하는 IT 동아리, A&I">
-    <meta property="og:image" content="https://aandiclub.com/og_img_v2.png">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:width" content="1535">
-    <meta property="og:image:height" content="1024">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://aandiclub.com/og_img_v2.png">
-
-    <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="A&I">
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-
-    <!-- Favicon -->
-    <link rel="icon" href="favicon.ico"/>
-
-    <title>A&I</title>
-    <link rel="manifest" href="manifest.json">
-    <style>
-      @font-face {
-        font-family: 'Pretendard';
-        src: url('assets/assets/fonts/Pretendard-Regular.otf') format('opentype');
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-      }
-
-      @font-face {
-        font-family: 'Pretendard';
-        src: url('assets/assets/fonts/Pretendard-Bold.otf') format('opentype');
-        font-weight: 700;
-        font-style: normal;
-        font-display: swap;
-      }
-
-      html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        position: fixed;
-        inset: 0;
-        font-family: 'Pretendard', sans-serif;
-      }
-
-      body {
-        /* iOS: Large Viewport Height 강제 (툴바 숨김 상태 기준) */
-        height: 100lvh !important;
-        max-height: 100lvh !important;
-        font-family: 'Pretendard', sans-serif;
-      }
-
-      /* Flutter 컨테이너 - 절대 위치로 전체 화면 강제 */
-      flt-glass-pane,
-      flt-scene-host,
-      flutter-view {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100vw !important;
-        height: 100lvh !important;
-        max-height: 100lvh !important;
-        font-family: 'Pretendard', sans-serif;
-      }
-    </style>
-    <script>
-      // Flutter 초기화 **전에** innerHeight 조작 (iOS Safari 동적 viewport 대응)
-      (function() {
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-        if (!isIOS || !window.visualViewport) return;
-
-        // iOS 최대 화면 높이 계산
-        const getMaxHeight = () => {
-          const screenHeight = window.screen.height;
-          const vvHeight = window.visualViewport.height;
-          const vvOffset = window.visualViewport.offsetTop || 0;
-          return Math.max(screenHeight, vvHeight + vvOffset, window.innerHeight);
-        };
-
-        const maxHeight = getMaxHeight();
-        console.log('[iOS Viewport Fix] maxHeight:', maxHeight, 'innerHeight:', window.innerHeight);
-
-        // innerHeight를 덮어쓰기 - Flutter가 초기화 시 최대값 읽도록
-        const originalDescriptor = Object.getOwnPropertyDescriptor(window, 'innerHeight');
-
-        Object.defineProperty(window, 'innerHeight', {
-          get: function() {
-            return maxHeight;
-          },
-          configurable: true
-        });
-
-        // Flutter 초기화 완료 후 원래대로 복원
-        window.addEventListener('flutter-initialized', () => {
-          if (originalDescriptor) {
-            Object.defineProperty(window, 'innerHeight', originalDescriptor);
-          }
-        });
-
-        // Fallback: 1초 후 복원
-        setTimeout(() => {
-          if (originalDescriptor) {
-            Object.defineProperty(window, 'innerHeight', originalDescriptor);
-            console.log('[iOS Viewport Fix] Restored original innerHeight');
-          }
-        }, 1000);
-      })();
-    </script>
-    <script>
-      // 과거 Flutter 서비스워커/캐시가 남아 있으면 새 배포 반영이 지연될 수 있어 선제 정리한다.
-      window.__prepareFlutterAppLoad = async function() {
-        const flutterCachePrefixes = [
-          'flutter-app-cache',
-          'flutter-temp-cache',
-          'flutter-app-manifest',
-          'workbox',
-        ];
-
-        const shouldDeleteCache = (key) => {
-          if (!key) return false;
-          return flutterCachePrefixes.some((prefix) => key.startsWith(prefix));
-        };
-
-        if ('serviceWorker' in navigator) {
-          try {
-            const registrations = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(
-              registrations.map((registration) => registration.unregister()),
-            );
-          } catch (error) {
-            console.warn('[Flutter Cache Reset] service worker cleanup failed:', error);
-          }
-        }
-
-        if ('caches' in window) {
-          try {
-            const cacheKeys = await window.caches.keys();
-            await Promise.all(
-              cacheKeys
-                .filter(shouldDeleteCache)
-                .map((cacheKey) => window.caches.delete(cacheKey)),
-            );
-          } catch (error) {
-            console.warn('[Flutter Cache Reset] cache cleanup failed:', error);
-          }
-        }
-      };
-    </script>
-</head>
-<body>
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:title" content="A&I">
+  <meta property="og:description" content="함께 성장하는 IT 동아리, A&I">
+  <meta property="og:image" content="https://aandiclub.com/og_img_v2.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1535">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://aandiclub.com/og_img_v2.png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="icon" href="/favicon.ico">
+  <title>A&I</title>
+  <link rel="stylesheet" href="/app/app.css">
   <script>
-    (async function() {
-      if (typeof window.__prepareFlutterAppLoad === 'function') {
-        await window.__prepareFlutterAppLoad();
+    // 과거 Flutter 서비스워커/캐시가 남아 있으면 새 HTML UI 대신 구 앱이 뜰 수 있어 정리한다.
+    (async function () {
+      try {
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map((r) => r.unregister()));
+        }
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(
+            keys.filter((k) => /^(flutter-|workbox)/.test(k)).map((k) => caches.delete(k)),
+          );
+        }
+      } catch (error) {
+        console.warn('[cache cleanup] failed:', error);
       }
-
-      const flutterBootstrapScript = document.createElement('script');
-      flutterBootstrapScript.src = `flutter_bootstrap.js?v=${Date.now()}`;
-      flutterBootstrapScript.async = true;
-      document.body.appendChild(flutterBootstrapScript);
     })();
   </script>
+</head>
+<body>
+  <header class="top-bar" data-header>
+    <div class="top-bar__inner">
+      <a class="top-bar__logo" href="/" data-link aria-label="A&I 홈">
+        <img src="/app/logo.webp" alt="A&I">
+      </a>
+      <nav class="top-bar__nav" aria-label="주 메뉴" data-nav></nav>
+      <div class="top-bar__menu" data-menu-root>
+        <button class="top-bar__menu-button" type="button" aria-label="메뉴 열기" aria-haspopup="menu" aria-expanded="false" data-menu-button></button>
+        <div class="popup-menu" role="menu" hidden data-menu></div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="site-main" data-view tabindex="-1"></main>
+
+  <footer class="footer" data-footer>
+    <div class="footer__inner">
+      <img class="footer__logo" src="/app/logo.webp" alt="A&I">
+      <p class="footer__copy">© 2026 A&I. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js" defer></script>
+  <script src="/app/app.js" type="module"></script>
 </body>
 </html>
