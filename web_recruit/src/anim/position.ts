@@ -6,11 +6,12 @@
  */
 const SECTIONS: { id: string; num: string; name: string }[] = [
   { id: 'about', num: '01', name: '소개' },
-  { id: 'who', num: '02', name: '인재상' },
-  { id: 'activity', num: '03', name: '활동' },
-  { id: 'schedule', num: '04', name: '일정' },
-  { id: 'process', num: '05', name: '선발' },
-  { id: 'faq', num: '06', name: 'FAQ' },
+  { id: 'mentors', num: '02', name: '멘토' },
+  { id: 'who', num: '03', name: '인재상' },
+  { id: 'activity', num: '04', name: '활동' },
+  { id: 'schedule', num: '05', name: '일정' },
+  { id: 'process', num: '06', name: '선발' },
+  { id: 'faq', num: '07', name: 'FAQ' },
 ];
 
 const SCROLL_OFFSET = 80;

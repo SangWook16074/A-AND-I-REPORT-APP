@@ -81,6 +81,16 @@ export const TEAM = {
   ],
 };
 
+/** 멘토 이미지 경로 — public/mentors/ (dev는 루트, 배포는 /recruit-designer/ 아래). */
+const MENTOR_IMG_BASE = import.meta.env.DEV ? '/mentors' : '/recruit-designer/mentors';
+
+/** 멘토 및 운영진 — Flutter `PromotionMentors`(promotion_mentors.dart)의 멘토 A · C · E. */
+export const MENTORS: { image: string; name: string; role: string; achievements: string[] }[] = [
+  { image: `${MENTOR_IMG_BASE}/mentor_a.webp`, name: '한상욱', role: 'Mobile', achievements: ['1년차 모바일 엔지니어', '부스트캠프 Web/Mobile 9기 수료', 'Flutter Seoul 바이브코딩 해커톤 3위'] },
+  { image: `${MENTOR_IMG_BASE}/mentor_c.webp`, name: '허동현', role: 'Backend', achievements: ['우아한 테크코스 수료', 'A&I 2기 백엔드과정'] },
+  { image: `${MENTOR_IMG_BASE}/mentor_e.webp`, name: '구승민', role: 'AI', achievements: ['부스트캠프 AI Tech 8기 수료', '교육 과정 프로젝트 1위', 'A&I 3기 백엔드과정'] },
+];
+
 export const WHO_WE_WANT: { num: string; title: string; hint: string }[] = [
   {
     num: '01',

@@ -2084,6 +2084,132 @@ button {
 }
 
 /* ============================================================
+   Mentors — 3인 고정 그리드 (모바일은 가로 스와이프)
+   카드 톤은 Flutter MentorCard(그라데이션 배경 · 역할 pill · 파란 점 목록)를 따른다.
+   ============================================================ */
+.mentor-grid-wrap {
+  max-width: 1120px;
+  margin-top: 56px;
+}
+.mentor-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.mentor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 36px 32px 40px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  text-align: left;
+  transition: transform 0.35s var(--ease-out-expo), border-color 0.35s;
+}
+.mentor-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(59, 131, 246, 0.45);
+}
+/* 상단: 이모지(왼쪽) + 이름/분야 세로 정렬(오른쪽) */
+.mentor-card__top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+.mentor-card__photo {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+.mentor-card__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+.mentor-card__name {
+  font-size: clamp(1.5rem, 2.2vw, 1.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+/* 분야: 이름 아래 담백한 보조 텍스트 */
+.mentor-card__role {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--brand-400);
+}
+.mentor-card__list {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 24px 0 0;
+  /* 구분선은 카드 내부 폭 전체로 고정 — 이름/경력 길이와 무관 */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mentor-card__list li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+}
+.mentor-card__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand-500);
+}
+
+/* 태블릿 이하: 가로 스와이프 — 다음 카드가 살짝 보이게 */
+@media (max-width: 900px) {
+  .mentor-grid-wrap {
+    max-width: none;
+    margin-inline: calc(var(--page-pad) * -1);
+    width: auto;
+  }
+  .mentor-grid {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-pad);
+    padding-inline: var(--page-pad);
+    scrollbar-width: none;
+  }
+  .mentor-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .mentor-card {
+    flex: 0 0 min(82%, 360px);
+    scroll-snap-align: start;
+    padding: 28px 24px 32px;
+  }
+  .mentor-card:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
    인재상(#who)부터 아래 섹션 제목은 그라데이션 없이 흰색으로 고정.
    ============================================================ */
 :is(#who, #activity, #schedule, #process, #faq, #apply) :is(.section-title, .cta-footer__title) .gradient-text {

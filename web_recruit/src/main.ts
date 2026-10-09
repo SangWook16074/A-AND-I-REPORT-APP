@@ -12,6 +12,7 @@ import './team.css';
 import { RECRUIT, RECRUIT_END_AT } from './data';
 import { heroHTML } from './sections/hero';
 import { aboutHTML } from './sections/about';
+import { mentorsHTML } from './sections/mentors';
 import { teamHTML } from './sections/team';
 import { whoHTML } from './sections/who';
 import { activityHTML } from './sections/activity';
@@ -34,6 +35,7 @@ const SECTIONS_HTML = () =>
   [
     heroHTML(),
     aboutHTML(),
+    mentorsHTML(),
     whoHTML(),
     activityHTML(),
     scheduleHTML(),
@@ -53,6 +55,7 @@ const SITE_CHROME_HTML = /* html */ `
     </div>
     <nav class="site-nav" aria-label="섹션 이동">
       <a href="#about">소개</a>
+      <a href="#mentors">멘토</a>
             <a href="#who">인재상</a>
       <a href="#activity">활동</a>
       <a href="#schedule">일정</a>
