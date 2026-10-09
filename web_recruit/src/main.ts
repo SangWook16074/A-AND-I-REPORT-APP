@@ -8,9 +8,10 @@ if (typeof (globalThis as unknown as { process?: unknown }).process === 'undefin
 
 import './style.css';
 
-import { RECRUIT, RECRUIT_END_AT } from './data';
+import { PAGES, RECRUIT, RECRUIT_END_AT } from './data';
 import { heroHTML } from './sections/hero';
 import { aboutHTML } from './sections/about';
+import { projectHTML } from './sections/project';
 import { whoHTML } from './sections/who';
 import { activityHTML } from './sections/activity';
 import { scheduleHTML } from './sections/schedule';
@@ -23,7 +24,6 @@ import { setupTilt } from './anim/tilt';
 import { setupMagnet } from './anim/magnet';
 import { setupStickyCta } from './anim/sticky';
 import { setupFaq } from './anim/faq';
-import { setupCursor } from './anim/cursor';
 import { setupSmoothScroll } from './anim/smooth';
 import { setupScrollAnimations, ScrollTrigger } from './anim/scroll';
 import { setupCountdown } from './anim/countdown';
@@ -41,8 +41,10 @@ const SECTIONS_HTML = () =>
     footerHTML(),
   ].join('\n');
 
+/** 팀 소개 페이지(`/recruit-designer/team/`) 본문. */
+const TEAM_SECTIONS_HTML = () => [projectHTML(), footerHTML()].join('\n');
+
 const SITE_CHROME_HTML = /* html */ `
-  <div id="cursor" class="cursor" aria-hidden="true"></div>
   <header class="site-header" data-anim="header">
     <div class="site-position" id="site-position" aria-live="polite">
       <span class="site-position__num" id="position-num">01</span>
@@ -50,7 +52,7 @@ const SITE_CHROME_HTML = /* html */ `
     </div>
     <nav class="site-nav" aria-label="섹션 이동">
       <a href="#about">소개</a>
-      <a href="#who">인재상</a>
+            <a href="#who">인재상</a>
       <a href="#activity">활동</a>
       <a href="#schedule">일정</a>
       <a href="#process">선발</a>
@@ -69,7 +71,7 @@ const SITE_CHROME_HTML = /* html */ `
       <div class="sticky-cta__copy">
         <span class="sticky-cta__dot" aria-hidden="true"></span>
         <div>
-          <div class="sticky-cta__title">A&amp;I ${RECRUIT.generation} 디자이너 모집 중</div>
+          <div class="sticky-cta__title">A&amp;I UX/UI 디자이너 모집 중</div>
           <div class="sticky-cta__sub">${RECRUIT.recruitStart} - ${RECRUIT.recruitEnd}</div>
         </div>
       </div>
@@ -106,7 +108,6 @@ export function mount(host: HTMLElement): () => void {
   setupMagnet();
   setupStickyCta(host);
   setupFaq();
-  setupCursor();
   setupCountdown(RECRUIT_END_AT);
   setupPositionIndicator(host);
 
@@ -139,12 +140,15 @@ function syncChromeFromData(): void {
   const sub = document.querySelector<HTMLElement>('.sticky-cta__sub');
   if (sub) sub.textContent = `${RECRUIT.recruitStart} - ${RECRUIT.recruitEnd}`;
   const title = document.querySelector<HTMLElement>('.sticky-cta__title');
-  if (title) title.textContent = `A&I ${RECRUIT.generation} 디자이너 모집 중`;
+  if (title) title.textContent = 'A&I UX/UI 디자이너 모집 중';
   document.querySelectorAll<HTMLAnchorElement>('a[href*="forms.gle"]').forEach((a) => {
     a.href = RECRUIT.forms;
   });
   document.querySelectorAll<HTMLAnchorElement>('a[href*="open.kakao.com"]').forEach((a) => {
     a.href = RECRUIT.kakao;
+  });
+  document.querySelectorAll<HTMLAnchorElement>('a[data-link="main"]').forEach((a) => {
+    a.href = PAGES.main;
   });
 }
 
@@ -153,6 +157,15 @@ if (typeof document !== 'undefined') {
   const standalone = document.getElementById('app');
   if (standalone && !standalone.dataset.embedded) {
     const start = () => {
+      if (standalone.dataset.page === 'team') {
+        syncChromeFromData();
+        standalone.innerHTML = TEAM_SECTIONS_HTML();
+        setupSmoothScroll();
+        setupScrollAnimations();
+        setupMagnet();
+        window.addEventListener('load', () => ScrollTrigger.refresh());
+        return;
+      }
       // index.html이 이미 chrome을 갖고 있다면 main에만 채움. 없다면 전체 마운트.
       const hasChrome = document.querySelector('.site-header');
       if (hasChrome) {
@@ -166,7 +179,6 @@ if (typeof document !== 'undefined') {
         setupMagnet();
         setupStickyCta();
         setupFaq();
-        setupCursor();
         setupCountdown(RECRUIT_END_AT);
         setupPositionIndicator();
         window.addEventListener('load', () => ScrollTrigger.refresh());

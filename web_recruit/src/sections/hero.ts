@@ -2,7 +2,7 @@ import { RECRUIT } from '../data';
 
 export function heroHTML(): string {
   return /* html */ `
-    <section class="hero" id="hero" aria-label="A&I 4기 디자이너 모집">
+    <section class="hero" id="hero" aria-label="A&I UX/UI 디자이너 모집">
       <div class="hero__mesh" aria-hidden="true">
         <div class="hero__mesh-third"></div>
       </div>
@@ -10,13 +10,14 @@ export function heroHTML(): string {
 
       <div class="container" style="position: relative;">
         <h1 class="hero__title">
-          <span class="hero__title-line"><span class="hero__title-word">A&amp;I ${RECRUIT.generation}</span></span>
+          <span class="hero__title-line"><span class="hero__title-word">A&amp;I</span></span>
           <span class="hero__title-line"><span class="hero__title-word"><em class="hero__title-grad" style="font-style:normal;">UX/UI 디자이너</em> 모집</span></span>
         </h1>
 
         <div class="hero__timer" data-anim="hero-badge">
           <div class="hero__timer-display" id="countdown">
-            <span data-cd="d">00</span><span class="hero__timer-sep">:</span><span data-cd="h">00</span><span class="hero__timer-sep">:</span><span data-cd="m">00</span><span class="hero__timer-sep">:</span><span data-cd="s">00</span>
+            <span class="hero__timer-text">마감까지</span>
+            <span class="hero__timer-group"><span data-cd="d">00</span><span class="hero__timer-sep">:</span><span data-cd="h">00</span><span class="hero__timer-sep">:</span><span data-cd="m">00</span><span class="hero__timer-sep">:</span><span data-cd="s">00</span></span>
           </div>
         </div>
 

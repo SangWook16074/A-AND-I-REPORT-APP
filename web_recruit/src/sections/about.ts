@@ -1,4 +1,4 @@
-import { RECRUIT } from '../data';
+import { PAGES, RECRUIT } from '../data';
 
 export function aboutHTML(): string {
   return /* html */ `
@@ -11,29 +11,16 @@ export function aboutHTML(): string {
           </h2>
 
           <p class="about-portfolio__body reveal">
-            지난 4년 동안 30명+ 동료들과 함께 프로젝트를 만들어왔어요.<br class="br-wide"/>
-            이번 ${RECRUIT.generation}에도 함께할 UX/UI 디자이너를 모집합니다.
+            지난 <strong class="about-portfolio__num">4년</strong> 동안 <strong class="about-portfolio__num">30명+</strong> 동료들과 함께 <strong class="about-portfolio__num">${RECRUIT.shippedAppCount}개 이상</strong>의 프로젝트를 진행했었습니다.<br class="br-wide"/>
+            지금 진행 중인 모아모아 프로젝트를 함께 완성해 갈 UX/UI 디자이너를 모집합니다.
           </p>
 
-          <hr class="about-portfolio__divider reveal"/>
-
-          <ul class="about-portfolio__stats reveal-stagger">
-            <li class="about-stat">
-              <div class="about-stat__num">04</div>
-              <div class="about-stat__label">YEARS</div>
-              <div class="about-stat__sub">since 2022</div>
-            </li>
-            <li class="about-stat">
-              <div class="about-stat__num">30<small>+</small></div>
-              <div class="about-stat__label">MEMBERS</div>
-              <div class="about-stat__sub">누적 동료</div>
-            </li>
-            <li class="about-stat">
-              <div class="about-stat__num">${String(RECRUIT.shippedAppCount).padStart(2, '0')}<small>+</small></div>
-              <div class="about-stat__label">PROJECTS</div>
-              <div class="about-stat__sub">출시 앱</div>
-            </li>
-          </ul>
+          <a class="about-portfolio__link reveal" href="${PAGES.team}">
+            합류하실 팀이 궁금하다면?
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </a>
         </div>
       </div>
     </section>

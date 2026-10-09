@@ -6,11 +6,16 @@ export const RECRUIT = {
   university: '인덕대학교',
   club: 'A&I',
   shippedAppCount: 8,
-  recruitStart: '2026.06.01',
-  recruitEnd: '2026.08.30',
-  activityStart: '2026.07.01',
+  recruitStart: '2026.10.09',
+  recruitEnd: '2026.10.30',
+  activityStart: '2026.11.01',
   activityEnd: '2027.01.10',
 };
+
+/** 페이지 경로 — dev 서버는 web_recruit 루트, 배포는 /recruit-designer/ 아래에서 서빙된다. */
+export const PAGES = import.meta.env.DEV
+  ? { main: '/', team: '/team/' }
+  : { main: '/recruit-designer', team: '/recruit-designer/team/' };
 
 /** "YYYY.MM.DD" → Date (현지 시각 기준). 잘못된 입력은 NaN Date 반환. */
 function parseDot(s: string, endOfDay = false): Date {
@@ -25,15 +30,36 @@ export const RECRUIT_END_AT: Date = parseDot(RECRUIT.recruitEnd, true);
 /** 모집 시작 시각 — 모집 전/중/후 분기용. */
 export const RECRUIT_START_AT: Date = parseDot(RECRUIT.recruitStart, false);
 
+/** 팀 모아모아 소개 — project 섹션에서 사용. */
+export const PROJECT: {
+  name: string;
+  intro: string;
+  mission: string;
+  ways: { num: string; title: string }[];
+  closing: string;
+} = {
+  name: '모아모아',
+  intro: 'A&I 4기 수료생들이 현업 개발자 멘토들과 함께 모임 서비스 모아모아를 만들어 나가고 있어요.',
+  mission:
+    '모임 활동은 쉬우면서도 어려워요. 첫 모임부터 체계적인 운영까지, 소프트웨어로 누구나 더 쉽게 모임을 이어갈 수 있도록 만들고 싶어요.',
+  ways: [
+    { num: '01', title: '실제 사용자의 모임 문제에서 출발해 기능을 정의해요' },
+    { num: '02', title: '기획 · 디자인 · 개발이 한 팀에서 함께 움직여요' },
+    { num: '03', title: '현업 멘토의 리뷰로 실무 수준의 결과물을 만들어요' },
+    { num: '04', title: '스토어 출시까지 직접 완주해요' },
+  ],
+  closing: '우리 서비스를 빛내줄 UX/UI 디자이너님을 모시고 있습니다.',
+};
+
 export const WHO_WE_WANT: { num: string; title: string; hint: string }[] = [
   {
     num: '01',
-    title: '프로젝트 기간 중 충분한 시간을 함께 쓸 수 있는 분',
-    hint: '활동 기간 동안 팀 일정에 맞춰 꾸준히 참여하실 수 있어요.',
+    title: '합류 후 바로 팀과 함께 달릴 수 있는 분',
+    hint: '진행 중인 프로젝트 일정에 맞춰 꾸준히 참여하실 수 있어요.',
   },
   {
     num: '02',
-    title: 'UX/UI 포트폴리오를 진짜 출시 프로젝트로 채우고 싶은 분',
+    title: '실제 출시되는 앱을 포트폴리오에 담고 싶은 분',
     hint: '실제 앱 출시까지 함께하며 결과물을 만들어요.',
   },
   {
@@ -67,14 +93,18 @@ export const PROCESS_STEPS = [
   {
     num: '03',
     title: '최종 합격 안내',
-    desc: '문자 메시지로 결과를 안내드리고, 4기 활동에 함께해요.',
+    desc: '문자 메시지로 결과를 안내드리고, 바로 프로젝트에 합류해요.',
   },
 ];
 
 export const FAQS = [
   {
+    q: '이미 진행 중인 프로젝트에 합류해도 괜찮을까요?',
+    a: '물론이에요. 기획과 개발이 진행 중이라 바로 실제 화면 작업에 참여할 수 있고, 합류 초기에 지금까지의 진행 상황을 함께 공유해 드려요.',
+  },
+  {
     q: '활동 시간과 장소는 어떻게 되나요?',
-    a: '팀별 일정에 따라 자율적으로 조율합니다. 오프라인은 서울 노원구를 기본으로 하되, 팀 위치에 따라 조정될 수 있어요.',
+    a: '모아모아 프로젝트 일정에 맞춰 함께 조율합니다. 오프라인은 서울 노원구를 기본으로 해요.',
   },
   {
     q: '모집 인원은 몇 명인가요?',
@@ -86,7 +116,7 @@ export const FAQS = [
   },
   {
     q: '활동 내용에 어떤 게 포함되나요?',
-    a: 'UI 디자인, 미디어·이미지·아이콘 제작, 개발팀 협업, 출시 준비까지 앱 출시의 전 과정을 함께해요.',
+    a: '모아모아 앱의 UI 디자인, 디자인 시스템 정리, 미디어·이미지·아이콘 제작, 개발팀 협업, 출시 준비까지 함께해요.',
   },
   {
     q: '어떤 툴을 주로 사용하나요?',

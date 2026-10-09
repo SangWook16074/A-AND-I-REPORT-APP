@@ -484,35 +484,6 @@ svg {
 }
 
 /* ============================================================
-   Magnetic button cursor
-   ============================================================ */
-.cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  mix-blend-mode: difference;
-  pointer-events: none;
-  z-index: 200;
-  transform: translate3d(-100px, -100px, 0);
-  transition: width 0.25s var(--ease-out-expo), height 0.25s var(--ease-out-expo), background 0.25s;
-  display: none;
-}
-@media (hover: hover) and (pointer: fine) {
-  .cursor {
-    display: block;
-  }
-}
-.cursor.is-active {
-  width: 56px;
-  height: 56px;
-  background: rgba(255, 255, 255, 0.95);
-}
-
-/* ============================================================
    Hero
    ============================================================ */
 .hero {
@@ -663,8 +634,9 @@ svg {
   animation: pulseSoft 2s ease-in-out infinite;
 }
 .hero__timer-display {
-  /* 4 그룹 × 2 자리 + 3 sep ≈ 10ch. 화면 폭 90% 안에 맞도록 vw 기반 size + max-width 가드. */
-  font-size: clamp(1.8rem, 9vw, 5rem);
+  /* "마감까지" + 4 그룹 × 2 자리 + 3 sep. 타이틀(최대 6rem)보다 확실히 작게 두어 보조 정보로 읽히도록.
+     5vw면 375px 폭에서도 한 줄에 들어가고, 더 좁으면 "마감까지"가 윗줄로 넘어간다. */
+  font-size: clamp(1.25rem, 5vw, 2.5rem);
   font-weight: 800;
   letter-spacing: -0.015em;
   color: #ffffff;
@@ -672,9 +644,17 @@ svg {
   font-feature-settings: 'tnum' 1;
   line-height: 1;
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.05em 0.3em;
+  max-width: 100%;
+}
+.hero__timer-group {
+  display: inline-flex;
   align-items: baseline;
   gap: 0.05em;
-  max-width: 100%;
+  white-space: nowrap;
 }
 .hero__timer-display [data-cd] {
   display: inline-block;
@@ -721,6 +701,19 @@ svg {
   transform: translateY(110%);
   will-change: transform;
   word-break: keep-all;
+  /* 각 줄은 어떤 폭에서도 줄바꿈하지 않는다 (예: "UX/UI" / "디자이너 모집" 분리 방지). */
+  white-space: nowrap;
+}
+
+/* "UX/UI 디자이너 모집"(≈7.9em)을 원래 크기 그대로 한 줄에 두기 위해 Hero만 본문 폭(720px)보다 넓힌다. */
+.hero > .container {
+  max-width: 960px;
+}
+/* 아주 좁은 폰(≤360px)에서만 vw로 내려 한 줄을 유지. */
+@media (max-width: 360px) {
+  .hero__title {
+    font-size: 11vw;
+  }
 }
 
 /* 좁은 화면(≤540px)에서는 inline-word가 wrap될 수 있게 line의 overflow:hidden을 해제.
@@ -1187,6 +1180,29 @@ br.br-wide {
   }
 }
 
+.about-portfolio__num {
+  font-weight: 800;
+  color: var(--brand-500);
+}
+
+.about-portfolio__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 700;
+  color: var(--brand-300);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+.about-portfolio__link:hover {
+  color: #ffffff;
+  gap: 12px;
+}
+
 .about-portfolio__divider {
   border: 0;
   height: 1px;
@@ -1234,6 +1250,49 @@ br.br-wide {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.55);
   letter-spacing: -0.005em;
+}
+
+/* Project — 미션 카드 + process 리스트 재사용 + 마무리 문장. */
+.project__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--brand-300);
+}
+.project__mission {
+  margin-top: 48px;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+.project__mission-text {
+  margin: 16px auto 0;
+  max-width: 34ch;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+.project__ways {
+  margin-top: 72px;
+}
+.project__ways .process-list {
+  margin-top: 20px;
+}
+.project__closing {
+  margin: 64px auto 0;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  word-break: keep-all;
+  text-wrap: balance;
 }
 
 @media (max-width: 560px) {
@@ -2022,4 +2081,14 @@ br.br-wide {
 
 button {
   font-family: inherit;
+}
+
+/* ============================================================
+   인재상(#who)부터 아래 섹션 제목은 그라데이션 없이 흰색으로 고정.
+   ============================================================ */
+:is(#who, #activity, #schedule, #process, #faq, #apply) :is(.section-title, .cta-footer__title) .gradient-text {
+  background: none;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  animation: none;
 }

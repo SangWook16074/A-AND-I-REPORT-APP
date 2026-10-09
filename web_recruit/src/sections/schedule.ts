@@ -5,8 +5,8 @@ export function scheduleHTML(): string {
     <section class="section schedule" id="schedule">
       <div class="container">
         <h2 class="section-title reveal">
-          예정된<br/>
-          <em class="gradient-text" style="font-style:normal;">여정</em>이에요.
+          <em class="gradient-text" style="font-style:normal;">합류 여정</em>을<br/>
+          안내해드려요.
         </h2>
 
         <ul class="info-list reveal-stagger">
@@ -24,7 +24,7 @@ export function scheduleHTML(): string {
           </li>
           <li class="info-row">
             <span class="info-row__label">활동 마무리</span>
-            <span class="info-row__value">팀별 앱 출시 & 활동 종료</span>
+            <span class="info-row__value">모아모아 출시 & 활동 종료</span>
           </li>
         </ul>
       </div>

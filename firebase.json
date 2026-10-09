@@ -14,6 +14,10 @@
           "destination": "/recruit-designer/index.html"
         },
         {
+          "source": "/recruit-designer/team",
+          "destination": "/recruit-designer/team/index.html"
+        },
+        {
           "source": "**",
           "destination": "/index.html"
         }
@@ -132,6 +136,10 @@
         {
           "source": "/recruit-designer",
           "destination": "/recruit-designer/index.html"
+        },
+        {
+          "source": "/recruit-designer/team",
+          "destination": "/recruit-designer/team/index.html"
         },
         {
           "source": "**",

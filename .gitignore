@@ -72,6 +72,9 @@ PRODUCT_SPEC.docx
 # 단, index.html은 손수 작성한 standalone 진입점이므로 추적
 web/recruit-designer/*
 !web/recruit-designer/index.html
+!web/recruit-designer/team/
+web/recruit-designer/team/*
+!web/recruit-designer/team/index.html
 
 # Dart 브릿지 빌드 산출물 (melos run web:bridge / CI에서 생성)
 web/app/aandi_bridge.js*
