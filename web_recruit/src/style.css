@@ -2200,12 +2200,48 @@ button {
     display: none;
   }
   .mentor-card {
-    flex: 0 0 min(82%, 360px);
+    flex: 0 0 min(78%, 340px);
     scroll-snap-align: start;
     padding: 28px 24px 32px;
   }
   .mentor-card:hover {
     transform: none;
+  }
+}
+
+/* 스와이프 위치 점 — 활성 점은 길쭉한 파란 바 */
+.mentor-dots {
+  display: none;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 16px;
+}
+.mentor-dots__dot {
+  /* 터치 영역은 넉넉히, 보이는 점은 작게 */
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.mentor-dots__dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  transition: width 0.3s var(--ease-out-expo), background 0.3s;
+}
+.mentor-dots__dot.is-active::before {
+  width: 20px;
+  background: var(--brand-500);
+}
+@media (max-width: 900px) {
+  .mentor-dots {
+    display: flex;
   }
 }
 

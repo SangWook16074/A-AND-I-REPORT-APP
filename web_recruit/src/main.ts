@@ -30,6 +30,7 @@ import { setupSmoothScroll } from './anim/smooth';
 import { setupScrollAnimations, ScrollTrigger } from './anim/scroll';
 import { setupCountdown } from './anim/countdown';
 import { setupPositionIndicator } from './anim/position';
+import { setupMentorDots } from './anim/mentors';
 
 const SECTIONS_HTML = () =>
   [
@@ -113,6 +114,7 @@ export function mount(host: HTMLElement): () => void {
   setupStickyCta(host);
   setupFaq();
   setupCountdown(RECRUIT_END_AT);
+  setupMentorDots();
   setupPositionIndicator(host);
 
   // 호스트 안에 동적으로 컨텐츠를 넣은 직후엔 ScrollTrigger 위치가 0으로 계산될 수 있다.
@@ -181,6 +183,7 @@ if (typeof document !== 'undefined') {
         setupStickyCta();
         setupFaq();
         setupCountdown(RECRUIT_END_AT);
+        setupMentorDots();
         setupPositionIndicator();
         window.addEventListener('load', () => ScrollTrigger.refresh());
       } else {

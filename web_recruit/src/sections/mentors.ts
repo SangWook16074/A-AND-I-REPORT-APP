@@ -31,6 +31,10 @@ export function mentorsHTML(): string {
         <ul class="mentor-grid reveal-stagger">
           ${MENTORS.map(card).join('')}
         </ul>
+        <!-- 모바일 스와이프 위치 표시 (데스크톱에선 숨김) -->
+        <div class="mentor-dots" role="tablist" aria-label="멘토 카드 위치">
+          ${MENTORS.map((m, i) => `<button type="button" class="mentor-dots__dot${i === 0 ? ' is-active' : ''}" aria-label="${m.name} 카드로 이동"></button>`).join('')}
+        </div>
       </div>
     </section>
   `;
