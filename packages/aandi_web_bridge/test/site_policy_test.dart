@@ -8,7 +8,29 @@ void main() {
     final status = policy.status();
     expect(status.headline, '내년에 만나요!');
     expect(status.nextSeasonYear, 2027);
-    expect(status.detail, contains('2027년'));
+    expect(status.detail, '개발 분야 신규 기수는 2027년에 모집해요.');
+  });
+
+  group('디자이너 모집 공고', () {
+    SiteStatus statusAt(DateTime now) => SitePolicy(now: () => now).status();
+
+    test('모집 기간에는 공고를 노출한다', () {
+      final recruit = statusAt(DateTime(2026, 10, 9)).recruit;
+      expect(recruit, isNotNull);
+      expect(recruit!.pagePath, '/recruit-designer/');
+      expect(statusAt(DateTime(2026, 10, 30, 23, 59)).recruit, isNotNull);
+    });
+
+    test('모집 기간 밖에는 공고를 숨긴다', () {
+      expect(statusAt(DateTime(2026, 10, 8, 23, 59)).recruit, isNull);
+      expect(statusAt(DateTime(2026, 10, 31)).recruit, isNull);
+    });
+
+    test('JSON에 recruit 필드를 포함한다', () {
+      final json = statusAt(DateTime(2026, 10, 15)).toJson();
+      expect((json['recruit'] as Map)['title'], 'A&I UX/UI 디자이너 모집');
+      expect(statusAt(DateTime(2026, 11, 1)).toJson()['recruit'], isNull);
+    });
   });
 
   test('공개 메뉴는 홈과 블로그뿐이다', () {

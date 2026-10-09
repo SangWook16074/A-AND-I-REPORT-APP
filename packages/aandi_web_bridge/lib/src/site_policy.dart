@@ -14,14 +14,28 @@ class SitePolicy {
     SiteMenu(id: 'blog', label: '블로그', path: '/articles'),
   ];
 
+  /// 진행 중인 UX/UI 디자이너 모집 공고입니다.
+  ///
+  /// 기간은 정적 모집 페이지(`web_recruit/src/data.ts`의 `RECRUIT`)와 같게 유지합니다.
+  static final RecruitNotice designerRecruit = RecruitNotice(
+    title: 'A&I UX/UI 디자이너 모집',
+    periodLabel: '2026.10.09 – 2026.10.30',
+    startAt: DateTime(2026, 10, 9),
+    endExclusiveAt: DateTime(2026, 10, 31),
+    pagePath: '/recruit-designer/',
+    applyUrl: 'https://forms.gle/QHuzcBn3yzm59jGX9',
+  );
+
   /// 현재 운영 상태를 반환합니다.
   SiteStatus status() {
-    final nextYear = _now().year + 1;
+    final now = _now();
+    final nextYear = now.year + 1;
     return SiteStatus(
       headline: '내년에 만나요!',
       subtitle: 'A&I는 지금 프로젝트를 진행하고 있어요.',
-      detail: '$nextYear년, 새로운 기수 모집과 함께 다시 찾아올게요.',
+      detail: '개발 분야 신규 기수는 $nextYear년에 모집해요.',
       nextSeasonYear: nextYear,
+      recruit: designerRecruit.isOpenAt(now) ? designerRecruit : null,
     );
   }
 
@@ -75,6 +89,47 @@ class SiteMenu {
   Map<String, Object?> toJson() => {'id': id, 'label': label, 'path': path};
 }
 
+/// 홈에 노출하는 모집 공고입니다. 모집 기간 안에서만 [SiteStatus.recruit]로 전달됩니다.
+class RecruitNotice {
+  const RecruitNotice({
+    required this.title,
+    required this.periodLabel,
+    required this.startAt,
+    required this.endExclusiveAt,
+    required this.pagePath,
+    required this.applyUrl,
+  });
+
+  /// 배너 타이틀입니다.
+  final String title;
+
+  /// 화면에 표시할 모집 기간 문구입니다.
+  final String periodLabel;
+
+  /// 모집 시작 시각(포함)입니다.
+  final DateTime startAt;
+
+  /// 모집 종료 시각(미포함)입니다. 마감일 다음 날 0시입니다.
+  final DateTime endExclusiveAt;
+
+  /// 모집 상세 페이지 경로입니다.
+  final String pagePath;
+
+  /// 지원서 링크입니다.
+  final String applyUrl;
+
+  /// [now]가 모집 기간 안인지 반환합니다.
+  bool isOpenAt(DateTime now) =>
+      !now.isBefore(startAt) && now.isBefore(endExclusiveAt);
+
+  Map<String, Object?> toJson() => {
+        'title': title,
+        'periodLabel': periodLabel,
+        'pagePath': pagePath,
+        'applyUrl': applyUrl,
+      };
+}
+
 /// 첫 접속(홈) 화면에 노출하는 운영 상태 안내입니다.
 class SiteStatus {
   const SiteStatus({
@@ -82,6 +137,7 @@ class SiteStatus {
     required this.subtitle,
     required this.detail,
     required this.nextSeasonYear,
+    this.recruit,
   });
 
   /// 히어로 타이틀입니다.
@@ -96,11 +152,15 @@ class SiteStatus {
   /// 다음 기수 모집 연도입니다.
   final int nextSeasonYear;
 
+  /// 진행 중인 모집 공고입니다. 모집 기간이 아니면 `null`입니다.
+  final RecruitNotice? recruit;
+
   Map<String, Object?> toJson() => {
         'headline': headline,
         'subtitle': subtitle,
         'detail': detail,
         'nextSeasonYear': nextSeasonYear,
+        'recruit': recruit?.toJson(),
         'menus': SitePolicy.menus.map((menu) => menu.toJson()).toList(),
       };
 }

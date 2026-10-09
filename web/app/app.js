@@ -14,6 +14,7 @@ const ICONS = {
   arrowBack: 'M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z',
   person: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z',
   article: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z',
+  arrowForward: 'M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z',
   arrowDown: 'M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z',
   arrowForwardIos: 'M7.38 21.01c.49.49 1.28.49 1.77 0l8.31-8.31c.39-.39.39-1.02 0-1.41L9.15 2.98c-.49-.49-1.28-.49-1.77 0s-.49 1.28 0 1.77L14.62 12l-7.25 7.25c-.48.48-.48 1.28.01 1.76z',
   terminal: 'M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4-4 4z',
@@ -182,12 +183,32 @@ function sectionHeader(title, subtitle) {
   ];
 }
 
+/**
+ * 디자이너 모집 배너 — Flutter HomeDesignerCtaSection(_DesignerAdBanner) 이식.
+ * 카드 전체는 모집 페이지로(정적 페이지라 SPA 라우팅 없이 전체 이동), 버튼은 지원서로 연결한다.
+ */
+function renderRecruitBanner(recruit) {
+  return h('div', { class: 'recruit-banner fade-up', style: 'animation-delay: 1000ms' },
+    h('div', { class: 'recruit-banner__copy' },
+      h('a', { class: 'recruit-banner__title', href: recruit.pagePath }, recruit.title),
+      h('p', { class: 'recruit-banner__period' },
+        h('span', { class: 'recruit-banner__dot', 'aria-hidden': 'true' }),
+        recruit.periodLabel,
+      ),
+    ),
+    h('a', { class: 'recruit-banner__cta', href: recruit.applyUrl, target: '_blank', rel: 'noopener noreferrer' },
+      '지원하러 가기', icon('arrowForward'),
+    ),
+  );
+}
+
 function renderPromoHero(status) {
   const hero = h('section', { class: 'promo-hero' },
     h('div', { class: 'promo-hero__content' },
       h('h1', { class: 'promo-hero__title fade-up', style: 'animation-delay: 400ms' }, status.headline),
       h('p', { class: 'promo-hero__subtitle fade-up', style: 'animation-delay: 600ms' }, status.subtitle),
       h('p', { class: 'promo-hero__detail fade-up', style: 'animation-delay: 800ms' }, status.detail),
+      status.recruit && renderRecruitBanner(status.recruit),
     ),
     h('button', {
       class: 'promo-hero__scroll',
@@ -302,7 +323,8 @@ function renderPromoSchedule(status) {
   const items = [
     { icon: 'school', label: '4기 정규 교육과정', content: '기초 · CS · 프레임워크 과정 완료' },
     { icon: 'groups', label: '팀 프로젝트', content: '4기 멤버들이 프로젝트 진행 중' },
-    { icon: 'notifications', label: `${status.nextSeasonYear} 신규 동아리원 모집`, content: '모집 일정은 추후 공지됩니다.' },
+    status.recruit && { icon: 'person', label: 'UX/UI 디자이너 모집', content: `${status.recruit.periodLabel} 모집 중` },
+    { icon: 'notifications', label: `${status.nextSeasonYear} 개발 분야 신규 기수 모집`, content: '모집 일정은 추후 공지됩니다.' },
   ];
   return h('section', { class: 'promo-section' },
     h('div', { class: 'glow glow--tl', 'aria-hidden': 'true' }),
@@ -311,7 +333,7 @@ function renderPromoSchedule(status) {
       ...sectionHeader('다음 시즌 안내', `${status.nextSeasonYear}년, 새로운 기수와 함께 다시 만나요!`),
       h('div', { class: 'schedule reveal reveal--slow' },
         h('div', { class: 'schedule__line', 'aria-hidden': 'true' }),
-        items.map((item) => h('div', { class: 'schedule__item' },
+        items.filter(Boolean).map((item) => h('div', { class: 'schedule__item' },
           h('div', { class: 'schedule__icon' }, icon(item.icon)),
           h('div', { class: 'schedule__body' },
             h('p', { class: 'schedule__label' }, item.label),
