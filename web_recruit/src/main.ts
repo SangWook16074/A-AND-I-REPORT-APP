@@ -7,11 +7,12 @@ if (typeof (globalThis as unknown as { process?: unknown }).process === 'undefin
 }
 
 import './style.css';
+import './team.css';
 
-import { PAGES, RECRUIT, RECRUIT_END_AT } from './data';
+import { RECRUIT, RECRUIT_END_AT } from './data';
 import { heroHTML } from './sections/hero';
 import { aboutHTML } from './sections/about';
-import { projectHTML } from './sections/project';
+import { teamHTML } from './sections/team';
 import { whoHTML } from './sections/who';
 import { activityHTML } from './sections/activity';
 import { scheduleHTML } from './sections/schedule';
@@ -42,7 +43,7 @@ const SECTIONS_HTML = () =>
   ].join('\n');
 
 /** 팀 소개 페이지(`/recruit-designer/team/`) 본문. */
-const TEAM_SECTIONS_HTML = () => [projectHTML(), footerHTML()].join('\n');
+const TEAM_SECTIONS_HTML = () => teamHTML();
 
 const SITE_CHROME_HTML = /* html */ `
   <header class="site-header" data-anim="header">
@@ -147,9 +148,6 @@ function syncChromeFromData(): void {
   document.querySelectorAll<HTMLAnchorElement>('a[href*="open.kakao.com"]').forEach((a) => {
     a.href = RECRUIT.kakao;
   });
-  document.querySelectorAll<HTMLAnchorElement>('a[data-link="main"]').forEach((a) => {
-    a.href = PAGES.main;
-  });
 }
 
 // 스탠드얼론 모드 (Vite dev 서버에서 /index.html로 접근하면 자동 마운트)
@@ -158,7 +156,7 @@ if (typeof document !== 'undefined') {
   if (standalone && !standalone.dataset.embedded) {
     const start = () => {
       if (standalone.dataset.page === 'team') {
-        syncChromeFromData();
+        document.body.classList.add('page-team');
         standalone.innerHTML = TEAM_SECTIONS_HTML();
         setupSmoothScroll();
         setupScrollAnimations();

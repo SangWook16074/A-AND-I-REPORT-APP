@@ -30,25 +30,55 @@ export const RECRUIT_END_AT: Date = parseDot(RECRUIT.recruitEnd, true);
 /** 모집 시작 시각 — 모집 전/중/후 분기용. */
 export const RECRUIT_START_AT: Date = parseDot(RECRUIT.recruitStart, false);
 
-/** 팀 모아모아 소개 — project 섹션에서 사용. */
-export const PROJECT: {
-  name: string;
-  intro: string;
-  mission: string;
-  ways: { num: string; title: string }[];
-  closing: string;
-} = {
+/** 팀 소개 페이지(모아모아) 콘텐츠 — sections/team.ts에서 사용. */
+export const TEAM = {
   name: '모아모아',
-  intro: 'A&I 4기 수료생들이 현업 개발자 멘토들과 함께 모임 서비스 모아모아를 만들어 나가고 있어요.',
-  mission:
-    '모임 활동은 쉬우면서도 어려워요. 첫 모임부터 체계적인 운영까지, 소프트웨어로 누구나 더 쉽게 모임을 이어갈 수 있도록 만들고 싶어요.',
-  ways: [
-    { num: '01', title: '실제 사용자의 모임 문제에서 출발해 기능을 정의해요' },
-    { num: '02', title: '기획 · 디자인 · 개발이 한 팀에서 함께 움직여요' },
-    { num: '03', title: '현업 멘토의 리뷰로 실무 수준의 결과물을 만들어요' },
-    { num: '04', title: '스토어 출시까지 직접 완주해요' },
+  intro:
+    'A&I 4기 수료생들이 현업 개발자 멘토들과 함께 모임 서비스 모아모아를 만들어 나가고 있어요.',
+  features: [
+    {
+      key: 'schedule',
+      label: '일정 조율',
+      title: '가장 많이 모일 수 있는 시간을 자동으로 추천해요',
+      desc: '관리자가 후보 날짜와 시간을 올리면 멤버들이 가능한 시간에 투표하고, 모아모아가 최적의 시간대를 골라줘요.',
+    },
+    {
+      key: 'attendance',
+      label: '출석',
+      title: '출석 인증과 관리를 한 번에',
+      desc: '멤버는 간편하게 출석을 인증하고, 관리자는 출석 현황을 한눈에 확인해요.',
+    },
+    {
+      key: 'fee',
+      label: '회비 · 정산',
+      title: '납부 현황과 정산 내역을 투명하게',
+      desc: '회비 납부 여부와 정산 내역을 모두가 같은 화면에서 확인해요.',
+    },
+    {
+      key: 'notice',
+      label: '공지',
+      title: '공지는 공지대로, 따로 모아서',
+      desc: '중요한 공지가 대화에 묻히지 않도록 별도로 모아 보여줘요.',
+    },
   ],
+  tech: 'OCR · 위치 기반 인증 같은 기술로 실제 운영 과정의 번거로움을 줄여요.',
   closing: '우리 서비스를 빛내줄 UX/UI 디자이너님을 모시고 있습니다.',
+  /** 팀 구성 */
+  members: ['현업 개발자를 포함한 멘토 3명', '개발팀원 6명 (A&I 4기 수료생)', '그리고 UX/UI 디자이너 1명 — 바로 당신'],
+  /** 합류 후 맡게 될 일 */
+  duties: [
+    '모아모아의 첫 화면부터 UX/UI를 처음부터 설계해요.',
+    '일정 투표, 출석 인증, 회비 정산 등 핵심 기능의 사용자 흐름을 정의해요.',
+    '아이콘, 이미지 등 서비스에 필요한 시각 요소를 만들어요.',
+    '개발팀과 함께 리뷰하며 디자인이 실제 앱으로 구현되도록 협업해요.',
+    '스토어 출시에 필요한 디자인까지 함께 준비해요.',
+  ],
+  /** 우대 사항 */
+  preferred: [
+    'Figma로 앱 화면을 설계해 본 경험이 있는 분',
+    '동아리·스터디 등 모임을 직접 운영해 본 분',
+    '개발자와 협업하며 디자인을 구현해 본 경험이 있는 분',
+  ],
 };
 
 export const WHO_WE_WANT: { num: string; title: string; hint: string }[] = [

@@ -1,0 +1,382 @@
+/* ============================================================
+   팀 소개 페이지(/recruit-designer/team/) 전용 — 기업 채용 공고 스타일.
+   화이트 배경 + 블랙 텍스트 + 블루 포인트. 카드 대신 문서형 블록.
+   모든 셀렉터는 body.page-team 아래로 한정해 모집 페이지와 섞이지 않게 한다.
+   ============================================================ */
+body.page-team {
+  --jp-black: #111113;
+  --jp-gray-50: #f6f7f9;
+  --jp-gray-200: #e5e7eb;
+  --jp-gray-500: #6b7280;
+  --jp-gray-700: #374151;
+  --jp-blue: #2563eb;
+  --jp-blue-soft: #eef3ff;
+  background: #ffffff;
+  background-image: none;
+  color: var(--jp-black);
+}
+/* 전역 overflow-x: hidden은 position: sticky(지원 카드)를 깨뜨리므로 clip으로 교체. */
+html:has(body.page-team),
+body.page-team {
+  overflow-x: clip;
+}
+body.page-team ::selection {
+  background: rgba(37, 99, 235, 0.18);
+  color: var(--jp-black);
+}
+
+/* ---------- 헤더 ---------- */
+.page-team .jp-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 60px;
+  padding: 0 var(--page-pad);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--jp-gray-200);
+}
+.page-team .jp-header__back {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--jp-gray-500);
+}
+.page-team .jp-header__back:hover {
+  color: var(--jp-black);
+}
+.page-team .jp-header__brand {
+  font-size: 15px;
+  font-weight: 800;
+}
+.page-team .jp-header__brand i {
+  font-style: normal;
+  color: var(--jp-blue);
+  margin: 0 4px;
+}
+
+/* ---------- 페이지 골격 ---------- */
+.page-team .jp-page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 132px var(--page-pad) 120px;
+}
+.page-team .jp-head {
+  padding-bottom: 40px;
+  border-bottom: 2px solid var(--jp-black);
+}
+.page-team .jp-head__company {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--jp-blue);
+}
+.page-team .jp-head__title {
+  margin: 10px 0 0;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+.page-team .jp-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+}
+.page-team .jp-tags li {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: var(--jp-gray-50);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--jp-gray-700);
+}
+
+.page-team .jp-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 64px;
+  align-items: start;
+}
+
+/* ---------- 본문 블록 ---------- */
+.page-team .jp-block {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--jp-gray-200);
+}
+.page-team .jp-block__title {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.page-team .jp-block__body {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--jp-gray-700);
+}
+.page-team .jp-block__body p {
+  margin: 0 0 14px;
+}
+.page-team .jp-block__body p:last-child {
+  margin-bottom: 0;
+}
+.page-team .jp-block__body strong {
+  color: var(--jp-black);
+  font-weight: 700;
+  box-shadow: inset 0 -0.45em 0 var(--jp-blue-soft);
+}
+.page-team .jp-lead {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--jp-black);
+}
+
+.page-team .jp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.page-team .jp-list li {
+  position: relative;
+  padding-left: 18px;
+}
+.page-team .jp-list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.75em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--jp-blue);
+}
+
+.page-team .jp-features {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.page-team .jp-features div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+}
+.page-team .jp-features dt {
+  font-weight: 700;
+  color: var(--jp-blue);
+}
+.page-team .jp-features dd {
+  margin: 0;
+}
+.page-team .jp-note {
+  margin-top: 20px !important;
+  padding: 14px 16px;
+  border-left: 3px solid var(--jp-blue);
+  background: var(--jp-gray-50);
+  font-size: 15px;
+}
+
+.page-team .jp-steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.page-team .jp-steps li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  column-gap: 12px;
+}
+.page-team .jp-steps li::before {
+  content: counter(step);
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--jp-black);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+.page-team .jp-steps b {
+  color: var(--jp-black);
+}
+.page-team .jp-steps span {
+  font-size: 15px;
+}
+
+.page-team .jp-meta {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.page-team .jp-meta div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+}
+.page-team .jp-meta dt {
+  color: var(--jp-gray-500);
+}
+.page-team .jp-meta dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--jp-black);
+}
+
+.page-team .jp-closing {
+  margin: 56px 0 0;
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  font-weight: 800;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+}
+
+/* ---------- 지원 카드 ---------- */
+.page-team .jp-apply {
+  position: sticky;
+  top: 92px;
+  padding-top: 48px;
+}
+.page-team .jp-apply__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  border: 1px solid var(--jp-gray-200);
+  border-radius: 16px;
+  background: #ffffff;
+}
+.page-team .jp-apply__top {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.page-team .jp-apply__dday {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--jp-blue);
+}
+.page-team .jp-apply__until {
+  font-size: 13px;
+  color: var(--jp-gray-500);
+}
+.page-team .jp-apply__role {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.page-team .jp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s;
+}
+.page-team .jp-btn--primary {
+  background: var(--jp-blue);
+  color: #ffffff;
+}
+.page-team .jp-btn--primary:hover {
+  background: #1d4ed8;
+}
+.page-team .jp-btn--ghost {
+  border: 1px solid var(--jp-gray-200);
+  color: var(--jp-black);
+}
+.page-team .jp-btn--ghost:hover {
+  background: var(--jp-gray-50);
+}
+
+/* ---------- 푸터 ---------- */
+.page-team .jp-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 28px var(--page-pad);
+  border-top: 1px solid var(--jp-gray-200);
+  font-size: 13px;
+  color: var(--jp-gray-500);
+}
+.page-team .jp-footer a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- 반응형: 모바일은 지원 카드를 하단 고정 바로 ---------- */
+@media (max-width: 900px) {
+  .page-team .jp-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .page-team .jp-apply {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 90;
+    padding: 0;
+  }
+  .page-team .jp-apply__card {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 12px var(--page-pad) calc(12px + env(safe-area-inset-bottom));
+    border-radius: 0;
+    border-width: 1px 0 0;
+  }
+  .page-team .jp-apply__top {
+    flex-direction: column;
+    gap: 0;
+    margin-right: auto;
+  }
+  .page-team .jp-apply__dday {
+    font-size: 18px;
+  }
+  .page-team .jp-apply__role,
+  .page-team .jp-btn--ghost {
+    display: none;
+  }
+  .page-team .jp-btn--primary {
+    padding: 0 22px;
+    height: 46px;
+  }
+  .page-team .jp-footer {
+    flex-direction: column;
+    padding-bottom: 100px;
+  }
+}
+@media (max-width: 540px) {
+  .page-team .jp-header__brand {
+    font-size: 14px;
+  }
+  .page-team .jp-features div,
+  .page-team .jp-meta div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
