@@ -42,6 +42,7 @@ body.page-team ::selection {
 }
 .page-team .jp-header__back {
   justify-self: start;
+  padding: 12px 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -325,6 +326,8 @@ body.page-team ::selection {
   color: var(--jp-gray-500);
 }
 .page-team .jp-footer a {
+  display: inline-block;
+  padding: 10px 0;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
