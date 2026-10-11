@@ -48,7 +48,7 @@ export function teamHTML(): string {
         <p class="jp-head__company reveal">${TEAM.name} · A&amp;I</p>
         <h1 class="jp-head__title reveal">${RECRUIT.role}</h1>
         <ul class="jp-tags reveal">
-          <li>모임 서비스</li><li>신규 앱</li><li>0 → 1 디자인</li><li>현업 멘토</li>
+          <li>모임 서비스</li><li>신규 앱</li><li>현업 멘토</li>
         </ul>
       </div>
 
