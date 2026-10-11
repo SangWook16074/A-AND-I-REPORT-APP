@@ -515,6 +515,13 @@ async function renderBlogDetail(bridge, id, signal) {
 
 let controller = null;
 
+/** Firebase Analytics PV에 쓰는 화면 식별자 (`resolved.view` → screen_name). */
+const SCREEN_NAMES = {
+  home: 'home',
+  blogList: 'blog_list',
+  blogDetail: 'blog_detail',
+};
+
 function route(bridge) {
   const resolved = bridge.site.resolve(location.pathname);
   if (resolved.redirectTo) {
@@ -530,6 +537,8 @@ function route(bridge) {
   document.title = resolved.title;
   document.body.dataset.view = resolved.view;
   window.scrollTo(0, 0);
+
+  window.aandiAnalytics?.pageView(SCREEN_NAMES[resolved.view] ?? resolved.view);
 
   switch (resolved.view) {
     case 'home':
