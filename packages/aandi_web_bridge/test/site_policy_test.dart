@@ -18,18 +18,18 @@ void main() {
       final recruit = statusAt(DateTime(2026, 10, 9)).recruit;
       expect(recruit, isNotNull);
       expect(recruit!.pagePath, '/recruit-designer/');
-      expect(statusAt(DateTime(2026, 10, 30, 23, 59)).recruit, isNotNull);
+      expect(statusAt(DateTime(2026, 12, 31, 23, 59)).recruit, isNotNull);
     });
 
     test('모집 기간 밖에는 공고를 숨긴다', () {
       expect(statusAt(DateTime(2026, 10, 8, 23, 59)).recruit, isNull);
-      expect(statusAt(DateTime(2026, 10, 31)).recruit, isNull);
+      expect(statusAt(DateTime(2027, 1, 1)).recruit, isNull);
     });
 
     test('JSON에 recruit 필드를 포함한다', () {
       final json = statusAt(DateTime(2026, 10, 15)).toJson();
       expect((json['recruit'] as Map)['title'], 'A&I UX/UI 디자이너 모집');
-      expect(statusAt(DateTime(2026, 11, 1)).toJson()['recruit'], isNull);
+      expect(statusAt(DateTime(2027, 1, 1)).toJson()['recruit'], isNull);
     });
   });
 

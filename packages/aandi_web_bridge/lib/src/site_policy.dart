@@ -19,9 +19,9 @@ class SitePolicy {
   /// 기간은 정적 모집 페이지(`web_recruit/src/data.ts`의 `RECRUIT`)와 같게 유지합니다.
   static final RecruitNotice designerRecruit = RecruitNotice(
     title: 'A&I UX/UI 디자이너 모집',
-    periodLabel: '2026.10.09 – 2026.10.30',
+    periodLabel: '2026.10.09 – 2026.12.31',
     startAt: DateTime(2026, 10, 9),
-    endExclusiveAt: DateTime(2026, 10, 31),
+    endExclusiveAt: DateTime(2027, 1, 1),
     pagePath: '/recruit-designer/',
     applyUrl: 'https://forms.gle/QHuzcBn3yzm59jGX9',
   );

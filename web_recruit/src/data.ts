@@ -7,7 +7,7 @@ export const RECRUIT = {
   club: 'A&I',
   shippedAppCount: 8,
   recruitStart: '2026.10.09',
-  recruitEnd: '2026.10.30',
+  recruitEnd: '2026.12.31',
   activityStart: '2026.11.01',
   activityEnd: '2027.01.10',
 };
